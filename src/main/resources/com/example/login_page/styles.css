@@ -1,0 +1,62 @@
+/* App-wide */
+.root {
+    -fx-background-color: linear-gradient(to bottom, #f7f9fc, #eef2f7);
+    -fx-font-family: "Segoe UI", "SF Pro Text", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #1f2937;
+}
+
+/* Containers */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-padding: 22;
+    -fx-effect: dropshadow(gaussian, rgba(20,20,20,0.08), 16, 0.15, 0, 4);
+}
+
+/* Headings */
+.h1 { -fx-font-size: 20px; -fx-font-weight: 700; -fx-text-fill: #111827; }
+.muted { -fx-text-fill: #6b7280; }
+
+/* Inputs */
+.text-field, .password-field {
+    -fx-background-color: #fff;
+    -fx-background-radius: 10;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 10;
+    -fx-padding: 10 12 10 12;
+}
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #2563eb; /* blue-600 */
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.18), 8, 0.2, 0, 2);
+}
+
+/* Buttons */
+.button {
+    -fx-background-radius: 10;
+    -fx-font-weight: 600;
+    -fx-padding: 10 14 10 14;
+}
+.btn-primary {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+}
+.btn-primary:hover { -fx-background-color: #1d4ed8; }
+.btn-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2563eb;
+}
+.btn-ghost:hover {
+    -fx-background-color: rgba(37,99,235,0.08);
+}
+
+/* Links */
+.hyperlink {
+    -fx-text-fill: #2563eb;
+    -fx-underline: false;
+}
+.hyperlink:hover { -fx-underline: true; }
+
+/* Messages */
+.success { -fx-text-fill: #15803d; }
+.error   { -fx-text-fill: #b91c1c; }
