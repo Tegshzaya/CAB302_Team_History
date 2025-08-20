@@ -1,0 +1,43 @@
+DailyArt:
+Positives-
+ + Informative
+ + Easy to understand UI
+ + Collections & Search functionality
+Negatives-
+- No real gamification or strong interactive elements to keep users engaged
+
+Takeaways-
+? Database functionality is important to make sure people can re-visit learned materials
+
+
+--------------------------------------------
+
+Art Quiz
+Positives-
++Good mix of text and image prompts
++Certificate at the end
+
+Negatives-
+- UI is very basic to look at, despite being quite readable
+- Heavily ad dependent
+- Allegedly, some of the information wasn't correct
+
+Takeaways-
+? An achievement system would help reward and incentivize users to get better
+? Our UI has to strike a balance between readability and visual appeal
+? Make sure that our app's information is correct, wherever we pull our information from
+
+-------------------------------------------
+
+Trivia Vault: Art Trivia
+Positives-
+ + Gamification elements, such as 50/50 and other "Game show" ideas
+ + Achievement system
+Negatives-
+ - Costs money upfront (barrier to entry)
+ - All answers are text based
+ - No additional information provided after getting an answer
+
+Takeaways-
+ ? Gamification beyond trivia might help keep people engaged
+ ? Try and make questions and answers a mix between text and visual

@@ -1,0 +1,33 @@
+Asana: 
+Asana is strong at time tracking, any allows team members to easily log and see how much time each member is spending on a task. However, we are already keeping track of our time on individual tasks in our journals. Therefore, this feature is not necessary for us.  One of the biggest downsides to Asana is that only one user can be assigned to a task at a time. Based on group discussions on collaborating on the different required elements of this project, Asana may not be a great fit for our requirements. 
+
+Notion:
+Notion's biggest advantage is its flexibility, allowing users to set it up and organize it in whatever way is required across however many pages are required. While this functionality would be useful on a larger scale,  Notion is also notable for its steep learning curve and difficulty in initial setup, which like Jira would present a challenge to our requirements.
+
+Trello:
+Trello is the simplest researched, focusing almost entirely on a "board" system with "cards" that allow team members to easily track what's being done. Trello also has integrations with GitHub, which could potentially be leveraged as this will be where our repository is located. The biggest flaw with Trello is that it's simplicity means it lacks features that the other software's have, however it doesn't appear that we would require more then core functionality so this may not be an issue for our requirements.  
+
+Jira:
+Jira is one of the more popular project management tools due to its various features and integrations with other software. However, the biggest detriment to Jira is its complexity as it is considered difficult to learn and set up as required. As Jira and Trello are both by the same developer, they have a number of similarities however Jira is the slightly more advanced of the two. 
+
+Conclusion:
+
+After looking at multiple different available project management software and comparing them against our requirements, the best option for our program is Trello. The advantages of using Trello in comparison to other project management software is it's easy-to-learn design and simplistic layout, meaning that we can focus more on the task and learning Java and not have to worry about learning a whole new platform at the same time. The biggest disadvantage of Trello compared to other platform options is that it's not as feature rich as other platforms. However, given the relative simplicity of what our group is aiming to accomplish these features may not be necessary to be effective anyway, and given the short time frame and lack of knowledge of these tools the simplicity of Trello is considered more valuable for our requirements. Therefore, the project management software that will be used is Trello.  
+
+
+
+
+Sources Used:
+
+https://www.uctoday.com/collaboration/jira-review-exploring-jira-project-management/
+
+https://www.simplilearn.com/tutorials/project-management-tutorial/what-is-trello
+
+https://www.freshbooks.com/hub/projects-management/asana-pros-and-cons?srsltid=AfmBOoo-KGxByhD1-1SEMM6LcEsc9FmjUV_eh9ciB-RpvOfRcKehn4KZ
+
+https://www.bugreporting.co/pros-and-cons/asana
+
+https://www.forbes.com/advisor/business/software/notion-review/
+
+https://www.atlassian.com/blog/project-management/trello-vs-jira
+
