@@ -1,0 +1,29 @@
+1. As a user, I want to learn about art history so that I have more wordly knowledge.
+
+2. As a user, I want to have something fun to play on the train while feeling like I'm learning something so that I don't feel like I'm wasting time
+
+3. As a user, I want to see my high score compared to previous attempts so that I can feel like I'm improving
+
+4. As a user, I want to transfer my scores between devices so that I can keep my previous achievements
+
+5. As a user, I want to show other people my results so that I can brag about my accomplishments
+
+6. As a user, I want to go see what the correct answer is to questions I get wrong so that I can improve next time I try
+
+7. As a user, I want a good mix of question types so that I can keep engaged instead of getting bored by monotony
+
+8. As a user, I want to have a straight-forward but likeable interface so that I don't feel like I'm spending more time fighting menus then playing & learning.
+
+9. As a user, I want to know that my login information is secure so that my password doesn't end up in the hands of ill-doers.
+
+10. As a user, I want to know that the information I'm receving is correct so that I'm not getting ill-informed
+
+11. As a user, I want to be able to delete my account so that I can keep my privacy if I decide.
+
+12. As a user, I want to be able to able to change my password so that I feel my login details are secure
+
+13. As a user, I want to earn achievements so that I feel a sense of accomplishment each time I play
+
+14. As a user, I want to be able to play the game offline so that I can play while I'm on a plane.
+
+15. As a user, I want to 
