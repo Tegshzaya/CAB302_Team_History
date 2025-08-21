@@ -9,5 +9,5 @@ Able to use generative AI to give the description of the historical image after 
  - Make a sample of at least 100 historical images(of art, sculpture, or photography) with dates, and location.
  - Make a type selection of what type of game. (Current ones are: Time period, Location).
  - Giving an Estimate of time period.
- - Giving an Estimate of the location.
+ - Giving an Estimate of the location. (can use GMapsFX)
  - Adding a GPT or any LLM API code to give descriptions after it, if they want.
