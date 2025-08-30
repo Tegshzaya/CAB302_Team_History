@@ -1,0 +1,16 @@
+Team Meeting Notes
+Date: 30/08/2025
+Duration: 30 minutes
+Platform: Zoom
+
+Discussion Points:
+- Nana will work on the medium fidelity prototype
+- Minsel will work on the low fidelity prototype
+- Even and Diyor will focus on coding and researching technical features
+- Matt will combine and prepare the user stories
+- Weekly meetings will be held every Wednesday at 12 pm
+- Tasks will be divided and tracked through Trello (our project management tool)
+
+Next Steps:
+- Each member continues with their assigned tasks
+- Progress should be updated on Trello before the next meeting
