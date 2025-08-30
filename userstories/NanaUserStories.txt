@@ -1,0 +1,19 @@
+1. As a competitive player, I want to see my rank on a global or friends-only leaderboard so that I can see how I stack up against other players. (This expands on sharing/bragging by adding direct competition.)
+
+2. As a curious learner, I want to be able to tap a 'learn more' button after a question so that I can read a short biography or history about the artwork or artist featured. (This deepens the core learning goal beyond just a correct answer.)
+
+3. As a daily player, I want a new 'daily challenge' each day so that I have a consistent reason to return and can build a play streak. (This adds a new engagement loop to encourage retention.)
+
+4. As a student of art, I want a 'practice mode' that focuses on questions I have previously answered incorrectly so that I can effectively reinforce my weakest areas of knowledge. (This provides a more targeted learning tool.)
+
+5. As a user with a specific interest, I want to be able to play quizzes based on specific art movements or time periods (e.g., "Impressionism," "Baroque") so that I can deepen my knowledge in areas I'm passionate about. (This adds content categorization and choice.)
+
+6. As a new player, I want to be able to select a difficulty level so that I'm not overwhelmed by questions I have no chance of answering correctly. (This addresses user skill levels.)
+
+7. As a player seeking a challenge, I want a timed 'blitz' mode so that I can test the speed of my recall and compete against the clock. (This introduces a new game mode and varies the experience.)
+
+8. As a user with visual impairments, I want to be able to adjust the font size so that the app is accessible and comfortable for me to use. (This introduces an accessibility feature.)
+
+9. As a player, I want to be able to customize my profile with an avatar or color theme so that I can express my personality within the app. (This adds a layer of personalization.)
+
+10. As a thoughtful user, I want to be able to suggest a new question or report an error in an existing one so that I can help improve the quality of the content for everyone.
