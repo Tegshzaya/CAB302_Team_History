@@ -11,3 +11,8 @@ Able to use generative AI to give the description of the historical image after 
  - Giving an Estimate of time period.
  - Giving an Estimate of the location. (can use GMapsFX)
  - Adding a GPT or any LLM API code to give descriptions after it, if they want.
+
+## Notes for Even
+ - Replace the temporary database with a permanent one with MySQL.
+ - Now we have fully functional sign-up and log-in pages with ready logic.
+ - We need to use the UI that Nana provided for us. For now, I used the one that I had before.
