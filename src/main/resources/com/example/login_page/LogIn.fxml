@@ -2,25 +2,22 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import java.net.URL?>
+
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.login_page.LogInController"
       alignment="CENTER">
 
-    <stylesheets>
-        <URL value="@styles.css" />
-    </stylesheets>
-
+    <stylesheets><URL value="@styles.css"/></stylesheets>
     <padding><Insets top="32" right="24" bottom="32" left="24"/></padding>
 
     <VBox spacing="14" maxWidth="360" styleClass="card">
         <Label text="Login" styleClass="h1"/>
         <Label text="Welcome back. Please sign in." styleClass="muted"/>
 
-        <TextField promptText="Username"/>
-        <PasswordField promptText="Password"/>
+        <TextField fx:id="usernameField" promptText="Username"/>
+        <PasswordField fx:id="passwordField" promptText="Password"/>
 
         <Button text="Login" onAction="#onLogin" styleClass="btn-primary" maxWidth="Infinity"/>
 
@@ -30,4 +27,3 @@
         </HBox>
     </VBox>
 </VBox>
-
