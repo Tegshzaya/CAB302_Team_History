@@ -26,7 +26,7 @@ public class HelloApplication extends Application {
     }
 
     public void loadScene(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(fxml));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/com/example/cab302_javafx/" + fxml));
         Parent root = fxmlLoader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);

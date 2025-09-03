@@ -3,15 +3,20 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.cab302_javafx.HelloController">
+
+<VBox alignment="CENTER" spacing="24.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.cab302_javafx.HelloController" stylesheets="@style.css">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="32.0" left="32.0" right="32.0" top="32.0"/>
     </padding>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-    <Button text="Historical Image Game" onAction="#onGameButtonClick"/>
+    <Label text="Historical Art Guesser" styleClass="title"/>
+    <Label text="Test your knowledge of historical art and artifacts" styleClass="subtitle"/>
+    
+    <VBox spacing="16" alignment="CENTER">
+        <Label fx:id="welcomeText" styleClass="welcome-text"/>
+        <Button text="Hello!" onAction="#onHelloButtonClick" styleClass="game-button"/>
+        <Button text="Historical Image Game" onAction="#onGameButtonClick" styleClass="game-button"/>
+    </VBox>
 </VBox>

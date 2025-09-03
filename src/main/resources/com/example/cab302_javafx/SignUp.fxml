@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302_javafx.SignUpController"
+            prefWidth="420" prefHeight="560" stylesheets="@style.css">
+    <center>
+        <VBox spacing="24" alignment="CENTER" styleClass="card fade-in" maxWidth="380">
+            <Label text="Create an Account" styleClass="title"/>
+            <Label text="Join us and start your adventure." styleClass="subtitle"/>
+
+            <VBox styleClass="form-section">
+                <Label text="Username"/>
+                <TextField fx:id="usernameField" promptText="Choose a username"/>
+            </VBox>
+
+            <VBox styleClass="form-section">
+                <Label text="Email"/>
+                <TextField fx:id="emailField" promptText="you@example.com"/>
+            </VBox>
+
+            <VBox styleClass="form-section">
+                <Label text="Password"/>
+                <PasswordField fx:id="passwordField" promptText="••••••••"/>
+            </VBox>
+
+            <Button text="Sign Up" onAction="#handleSignUp" prefWidth="320" styleClass="slide-up"/>
+
+            <HBox alignment="CENTER" spacing="6">
+                <Label text="Already have an account?"/>
+                <Hyperlink text="Sign in" onAction="#goToLogin"/>
+            </HBox>
+        </VBox>
+    </center>
+    <padding>
+        <Insets top="24" right="24" bottom="24" left="24"/>
+    </padding>
+</BorderPane>
