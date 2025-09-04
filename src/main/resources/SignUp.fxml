@@ -3,14 +3,18 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302_javafx.LoginController"
-            prefWidth="420" prefHeight="520" stylesheets="@style.css">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cab302_javafx.SignUpController"
+            prefWidth="420" prefHeight="560" stylesheets="@../style.css">
     <center>
         <VBox spacing="24" alignment="CENTER" styleClass="card fade-in" maxWidth="380">
-            <Label text="Welcome Back!" styleClass="title"/>
-            <Label text="Sign in to continue your journey." styleClass="subtitle"/>
+            <Label text="Create an Account" styleClass="title"/>
+            <Label text="Join us and start your adventure." styleClass="subtitle"/>
+
+            <VBox styleClass="form-section">
+                <Label text="Username"/>
+                <TextField fx:id="usernameField" promptText="Choose a username"/>
+            </VBox>
 
             <VBox styleClass="form-section">
                 <Label text="Email"/>
@@ -22,11 +26,11 @@
                 <PasswordField fx:id="passwordField" promptText="••••••••"/>
             </VBox>
 
-            <Button text="Sign In" onAction="#handleLogin" prefWidth="320" styleClass="slide-up"/>
+            <Button text="Sign Up" onAction="#handleSignUp" prefWidth="320" styleClass="slide-up"/>
 
             <HBox alignment="CENTER" spacing="6">
-                <Label text="Don't have an account?"/>
-                <Hyperlink text="Sign up" onAction="#goToSignup"/>
+                <Label text="Already have an account?"/>
+                <Hyperlink text="Sign in" onAction="#goToLogin"/>
             </HBox>
         </VBox>
     </center>
