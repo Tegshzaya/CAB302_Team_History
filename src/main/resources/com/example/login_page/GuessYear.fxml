@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.login_page.GuessYearController" spacing="12" alignment="CENTER">
+    <padding>
+        <Insets topRightBottomLeft="20"/>
+    </padding>
+
+    <ImageView fx:id="photoView" fitWidth="600" preserveRatio="true"/>
+
+    <HBox spacing="8" alignment="CENTER">
+        <Label text="Your guess:"/>
+        <TextField fx:id="yearField" promptText="e.g., 1989" prefWidth="100"/>
+        <Button text="Submit" onAction="#onSubmit"/>
+        <Button fx:id="nextBtn" text="Next" onAction="#onNext" disable="true"/>
+    </HBox>
+
+    <Label fx:id="feedbackLabel"/>
+</VBox>

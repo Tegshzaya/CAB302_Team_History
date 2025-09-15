@@ -10,6 +10,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class LogInController {
 
     // Text fields for entering the user info
@@ -17,18 +19,19 @@ public class LogInController {
     @FXML private PasswordField passwordField;
 
     @FXML
-    protected void onLogin() {
+    protected void onLogin(ActionEvent event) throws java.io.IOException {
         // String u = username
         // String p = password
         // Check if the user exists in the database, if the field is empty safe it as ""
         String u = usernameField.getText() == null ? "" : usernameField.getText().trim();
         String p = passwordField.getText() == null ? "" : passwordField.getText();
         if (UserStore.validate(u, p)) {
-            Alert ok = new Alert(Alert.AlertType.INFORMATION);
-            ok.setTitle("Welcome");
-            ok.setHeaderText(null);
-            ok.setContentText("Logged in as " + u);
-            ok.showAndWait();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SelectionScreen.fxml"));
+            Scene selectionScreen = new Scene(loader.load(), 450, 450);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setTitle("Selection Screen");
+            stage.setScene(selectionScreen);
+            stage.show();
         } else {
             Alert err = new Alert(Alert.AlertType.ERROR);
             err.setTitle("Login Failed");

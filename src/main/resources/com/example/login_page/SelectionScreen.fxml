@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.login_page.SelectionScreenController"
+      spacing="16" alignment="CENTER" stylesheets="@styles.css">
+    <padding><Insets top="32" right="24" bottom="32" left="24"/></padding>
+
+    <Label text="Choose a Game" styleClass="h1"/>
+
+    <HBox spacing="16" alignment="CENTER">
+        <!-- Card: Guess the Image by Location -->
+        <VBox spacing="10" styleClass="card" maxWidth="360">
+            <ImageView fx:id="imgLocation" fitWidth="320" fitHeight="180" preserveRatio="true">
+                <image>
+                    <Image url="@guessLocation.jpg" />
+                </image>
+            </ImageView>
+            <Label text="Guess the Image (by Location)" styleClass="h2"/>
+            <Label wrapText="true" styleClass="muted"
+                   text="You’ll see a picture and must guess its location (city/country)."/>
+            <Button text="Play" onAction="#onChooseLocationGame" styleClass="btn-primary" maxWidth="Infinity"/>
+        </VBox>
+
+        <!-- Card: Guess the Year -->
+        <VBox spacing="10" styleClass="card" maxWidth="360">
+            <ImageView fx:id="imgYear" fitWidth="320" fitHeight="180" preserveRatio="true">
+                <image>
+                    <Image url="@guessYear.jpg" />
+                </image>
+            </ImageView>
+            <Label text="Guess the Year" styleClass="h2"/>
+            <Label wrapText="true" styleClass="muted"
+                   text="We’ll show a picture and you have to guess the year."/>
+            <Button text="Play" onAction="#onChooseYearGame" styleClass="btn-primary" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
+
+    <Hyperlink text="Sign out" onAction="#onSignOut"/>
+</VBox>
