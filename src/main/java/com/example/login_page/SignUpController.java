@@ -11,7 +11,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class SignUpController {
+public class SignUpController extends BaseController {
 
     // -------------------------------
     // Fields connected to FXML inputs
@@ -64,42 +64,7 @@ public class SignUpController {
     // Helper method to load and display the login screen
     // Uses FXMLLoader to replace the current scene
     private void goToLogin(ActionEvent event) {
-        try {
-            // Load the Login.fxml file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
-            Scene scene = new Scene(loader.load(), 450, 450);
-
-            // Get the current stage from the event source (the button/hyperlink)
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            // Update the stage with the login scene
-            stage.setTitle("Login");
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            // If loading fails, show an error alert
-            showError("Failed to open Login screen: " + e.getMessage());
-        }
+        navigate(event, "Login.fxml", controller -> {});
     }
 
-
-
-    // Utility method to show an error popup
-    private void showError(String message) {
-        Alert a = new Alert(Alert.AlertType.ERROR);
-        a.setTitle("Sign Up Error");
-        a.setHeaderText(null); // no header, only content
-        a.setContentText(message);
-        a.showAndWait();
-    }
-
-
-    // Utility method to show an information popup
-    private void showInfo(String title, String msg) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle(title);
-        a.setHeaderText(null);
-        a.setContentText(msg);
-        a.showAndWait();
-    }
 }
