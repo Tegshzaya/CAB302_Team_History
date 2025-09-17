@@ -15,7 +15,7 @@ public class SelectionScreenController {
     @FXML
     protected void onChooseLocationGame(ActionEvent event) {
         // TODO: replace with actual Location game FXML
-        navigate(event, "GuessByLocation.fxml", controller -> {
+        navigate(event, "GuessLocation.fxml", controller -> {
         });
     }
 

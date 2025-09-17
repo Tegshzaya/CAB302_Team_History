@@ -1,59 +1,73 @@
 <!doctype html>
 <html>
 <head>
-
-
     <meta charset="utf-8"/>
     <title>Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Leaflet (no integrity/crossorigin for WebView compatibility) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <style>
         html, body {
             width: 100%;
             height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden;   /* prevent scrollbars */
+            overflow: hidden; /* avoid scrollbars in WebView */
+            background: #f3f3f3;
         }
         #map {
             position: absolute;
-            top: 0; bottom: 0; left: 0; right: 0;
+            inset: 0; /* top:0; right:0; bottom:0; left:0 */
             width: 100%;
             height: 100%;
         }
     </style>
-
 </head>
 <body>
 <div id="map"></div>
+
 <script>
-    const map = L.map('map', { worldCopyJump: true }).setView([20, 0], 2);
+    // Build the map and EXPOSE IT globally so Java can call invalidateSize()
+    window.map = L.map('map', { worldCopyJump: true }).setView([20, 0], 2);
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
         attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    }).addTo(window.map);
 
-    let guess = null, marker = null, line = null;
+    let marker = null, line = null;
 
-    map.on('click', e => {
+    // Click handler → send guess back to Java
+    window.map.on('click', e => {
         const { lat, lng } = e.latlng;
-        guess = [lat, lng];
-        if (marker) marker.setLatLng(guess);
-        else marker = L.marker(guess).addTo(map);
+        if (marker) marker.setLatLng([lat, lng]);
+        else marker = L.marker([lat, lng]).addTo(window.map);
         if (window.app && typeof window.app.onMapClick === 'function') {
-            window.app.onMapClick(lat, lng);
+            try { window.app.onMapClick(lat, lng); } catch(err) { console.error(err); }
         }
     });
 
-    function showResultLine(fromLat, fromLng, toLat, toLng) {
-        if (line) line.remove();
-        line = L.polyline([[fromLat, fromLng], [toLat, toLng]], { weight: 3 }).addTo(map);
-        map.fitBounds([[fromLat, fromLng], [toLat, toLng]], { padding: [30, 30] });
-    }
-    window.showResultLine = showResultLine;
+    // Callable from Java to show result
+    window.showResultLine = (fromLat, fromLng, toLat, toLng) => {
+        try {
+            if (line) line.remove();
+            line = L.polyline([[fromLat, fromLng], [toLat, toLng]], { weight: 3 }).addTo(window.map);
+            window.map.fitBounds([[fromLat, fromLng], [toLat, toLng]], { padding: [30,30] });
+        } catch (e) {
+            console.error('showResultLine error:', e);
+        }
+    };
+
+    // Optional: quick debug – prints Leaflet size when page finishes
+    setTimeout(() => {
+        if (window.map) {
+            const s = window.map.getSize();
+            console.log('Leaflet initial size:', s.x + 'x' + s.y);
+        }
+    }, 0);
 </script>
 </body>
 </html>

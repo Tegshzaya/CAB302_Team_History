@@ -1,5 +1,6 @@
 package com.example.login_page;
 
+import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -49,18 +50,45 @@ public class GuessLocationController {
         catch (IOException e) { fail("❌ Could not load dataset: " + e.getMessage()); return; }
 
         engine = mapView.getEngine();
-        engine.getLoadWorker().stateProperty().addListener((obs, o, s) -> {
-            if (s == Worker.State.SUCCEEDED) {
+        engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
                 window = (JSObject) engine.executeScript("window");
-                window.setMember("app", this); // enable window.app.onMapClick(...)
+                window.setMember("app", this);
+
+                // (Optional) Route console logs to Java to see errors
+                engine.executeScript("""
+                  (function(){
+                    var L=console.log, E=console.error;
+                    console.log=function(){ try{app.javaLog('LOG', Array.prototype.join.call(arguments,' '));}catch(_){} L.apply(console, arguments); };
+                    console.error=function(){ try{app.javaLog('ERR', Array.prototype.join.call(arguments,' '));}catch(_){} E.apply(console, arguments); };
+                  })();
+                """);
+
+                // 1) Kick Leaflet once after WebView has layout
+                Platform.runLater(this::refreshLeafletSize);
+
+                // 2) Kick again on future resizes
+                mapView.widthProperty().addListener((o, ov, nv) -> refreshLeafletSize());
+                mapView.heightProperty().addListener((o, ov, nv) -> refreshLeafletSize());
             }
         });
 
-        // load local HTML by URL so Leaflet CDN works fine
+        // Load local HTML via URL (keeps proper base for relative paths)
         String url = Objects.requireNonNull(getClass().getResource(MAP_HTML)).toExternalForm();
         engine.load(url);
 
         nextRound();
+    }
+
+    /** Optional: see JS logs in your IDE console */
+    public void javaLog(String level, String msg) {
+        System.out.println("[WebView " + level + "] " + msg);
+    }
+
+    private void refreshLeafletSize() {
+        try {
+            engine.executeScript("if (window.map) { window.map.invalidateSize(true); }");
+        } catch (Exception ignored) {}
     }
 
     private void loadDataset() throws IOException {
@@ -72,9 +100,14 @@ public class GuessLocationController {
                 if (line.isEmpty() || line.startsWith("#")) continue;
                 String[] parts = line.split(",", 4); // filename,lat,lon,label
                 if (parts.length < 3) throw new IOException("Invalid row " + row + ": " + line);
-                String f = parts[0].trim(); double la = Double.parseDouble(parts[1].trim());
-                double lo = Double.parseDouble(parts[2].trim()); String label = (parts.length>=4?parts[3].trim():f);
-                if (getClass().getResourceAsStream(IMG_DIR + f) == null) throw new IOException("Image not found: " + IMG_DIR + f);
+                String f = parts[0].trim();
+                double la = Double.parseDouble(parts[1].trim());
+                double lo = Double.parseDouble(parts[2].trim());
+                String label = (parts.length >= 4) ? parts[3].trim() : f;
+
+                if (getClass().getResourceAsStream(IMG_DIR + f) == null)
+                    throw new IOException("Image not found: " + IMG_DIR + f);
+
                 rounds.add(new Round(f, la, lo, label));
             }
         }
@@ -84,18 +117,22 @@ public class GuessLocationController {
 
     private void nextRound() {
         index++;
-        if (index >= rounds.size()) { feedbackLabel.setText("✅ Finished! Final score: " + score + " / " + rounds.size());
-            submitBtn.setDisable(true); nextBtn.setDisable(true); return; }
-
+        if (index >= rounds.size()) {
+            feedbackLabel.setText("✅ Finished! Final score: " + score + " / " + rounds.size());
+            submitBtn.setDisable(true); nextBtn.setDisable(true);
+            return;
+        }
         Round r = rounds.get(index);
         photoView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(IMG_DIR + r.filename))));
         roundLabel.setText("Round " + (index+1) + " / " + rounds.size());
         scoreLabel.setText("Score: " + score);
-        guessLat = guessLon = null; answered = false; submitBtn.setDisable(false); nextBtn.setDisable(true);
+
+        guessLat = guessLon = null; answered = false;
+        submitBtn.setDisable(false); nextBtn.setDisable(true);
         feedbackLabel.setText("Drop a pin on the map, then click Submit Guess.");
     }
 
-    /** Called from JS (map.html) when user clicks */
+    /** Called from JS when user clicks on the map */
     public void onMapClick(double lat, double lon) {
         guessLat = lat; guessLon = lon;
         feedbackLabel.setText(String.format("Selected: %.4f, %.4f — click Submit Guess.", lat, lon));
@@ -126,12 +163,12 @@ public class GuessLocationController {
 
     @FXML private void onNext() { if (answered) nextRound(); }
 
-    private void fail(String m){ feedbackLabel.setText(m); submitBtn.setDisable(true); nextBtn.setDisable(true); }
-
     private static double haversineKm(double lat1,double lon1,double lat2,double lon2){
         final double R=6371.0088;
         double dLat=Math.toRadians(lat2-lat1), dLon=Math.toRadians(lon2-lon1);
         double a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(Math.toRadians(lat1))*Math.cos(Math.toRadians(lat2))*Math.sin(dLon/2)*Math.sin(dLon/2);
         return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
     }
+
+    private void fail(String m){ feedbackLabel.setText(m); submitBtn.setDisable(true); nextBtn.setDisable(true); }
 }

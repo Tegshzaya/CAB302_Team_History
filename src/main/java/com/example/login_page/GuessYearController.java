@@ -1,12 +1,17 @@
 package com.example.login_page;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.util.*;
@@ -107,5 +112,14 @@ public class GuessYearController {
     @FXML
     private void onNext() {
         nextRound();
+    }
+
+    private void onSelectionScreen(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SelectionScreen.fxml"));
+        Scene selectionScene = new Scene(loader.load(), 450, 450);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setTitle("Selection Screen");
+        stage.setScene(selectionScene);
+        stage.show();
     }
 }
