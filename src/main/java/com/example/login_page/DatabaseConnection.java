@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.io.IOException;
 
 
@@ -34,13 +35,24 @@ public class DatabaseConnection {
         return instance;
     }
     // Adds a user
-    public void insertUser(Connection conn, int userId, String username, String password) throws SQLException {
-        String sql = "INSERT INTO UserTable (User_ID, Username, Password) VALUES (?, ?, ?)";
+    public static void insertUser(Connection conn, String username, String password) throws SQLException {
+        String sql = "INSERT INTO UserTable ( Username, Password) VALUES ( ?, ?)";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, userId);
-            pstmt.setString(2, username);
-            pstmt.setString(3, password);
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
             pstmt.executeUpdate();
         }
     }
+    // Checks a user
+    public static boolean checkUser(Connection conn, String username, String password) throws SQLException {
+        String sql = "SELECT * FROM UserTable WHERE Username = ? AND Password = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next(); // true if user exists
+            }
+        }
+    }
+
 }

@@ -46,24 +46,22 @@ public class SignUpController extends BaseController {
         if (!password.equals(confirm)) { showError("Passwords do not match."); return; }
         if (UserStore.exists(username)) { showError("This username is already taken."); return; }
 
-        // TODO: Creating to a database. Then Adding the User to it.
+        // Done: Creating to a database. Then Adding the User to it.
         Connection connection = DatabaseConnection.getInstance();
         try {
             Statement statement = connection.createStatement();
             statement.execute("CREATE TABLE IF NOT EXISTS UserTable (" +
                     "User_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "Username VARCHAR, Password VARCHAR" +
+                    "Username VARCHAR UNIQUE, Password VARCHAR" +
                     ")");
-            DatabaseConnection.insertUser(username,password);
+            DatabaseConnection.insertUser(connection,username,password);
 
             connection.close();
         } catch (SQLException sqle) {
             System.err.println(sqle);
         }
 
-
-
-        // Save the new user account
+        // Save the new user account(Redundant).
         UserStore.save(username, password);
 
         // Show a success message

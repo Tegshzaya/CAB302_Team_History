@@ -10,6 +10,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import java.io.IOException;
 
 public class LogInController extends BaseController{
@@ -27,10 +31,18 @@ public class LogInController extends BaseController{
         String p = passwordField.getText() == null ? "" : passwordField.getText();
 
 
-        if (UserStore.validate(u, p)) {
-            navigate(event,"SelectionScreen.fxml", controller -> {});
-        } else {
-            showInfo("Login Failed","Invalid username or password");
+        // Check if user can exist
+        Connection connection = DatabaseConnection.getInstance();
+
+        try {
+            if (DatabaseConnection.checkUser(connection,u, p)) {
+                navigate(event,"SelectionScreen.fxml", controller -> {});
+                connection.close();
+            } else {
+                showInfo("Login Failed","Invalid username or password");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
