@@ -1,6 +1,7 @@
 module com.example.login_page {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
     requires org.kordamp.bootstrapfx.core;
     requires javafx.base;

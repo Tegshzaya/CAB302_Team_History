@@ -25,6 +25,8 @@ public class LogInController extends BaseController{
         // Check if the user exists in the database, if the field is empty safe it as ""
         String u = usernameField.getText() == null ? "" : usernameField.getText().trim();
         String p = passwordField.getText() == null ? "" : passwordField.getText();
+
+
         if (UserStore.validate(u, p)) {
             navigate(event,"SelectionScreen.fxml", controller -> {});
         } else {

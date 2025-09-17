@@ -11,6 +11,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class SignUpController extends BaseController {
 
     // -------------------------------
@@ -41,6 +45,23 @@ public class SignUpController extends BaseController {
         if (password.length() < 6) { showError("Password must be at least 6 characters."); return; }
         if (!password.equals(confirm)) { showError("Passwords do not match."); return; }
         if (UserStore.exists(username)) { showError("This username is already taken."); return; }
+
+        // TODO: Creating to a database. Then Adding the User to it.
+        Connection connection = DatabaseConnection.getInstance();
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute("CREATE TABLE IF NOT EXISTS UserTable (" +
+                    "User_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "Username VARCHAR, Password VARCHAR" +
+                    ")");
+            DatabaseConnection.insertUser(username,password);
+
+            connection.close();
+        } catch (SQLException sqle) {
+            System.err.println(sqle);
+        }
+
+
 
         // Save the new user account
         UserStore.save(username, password);

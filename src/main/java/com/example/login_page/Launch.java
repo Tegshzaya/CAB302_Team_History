@@ -12,7 +12,7 @@ public class Launch extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Launch.class.getResource("Login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 450, 450);
-        stage.setTitle("MyApp");
+        stage.setTitle("Login");
         scene.getStylesheets().add(Launch.
                 class.getResource("styles.css").toExternalForm()); // adding the CSS
         stage.setScene(scene);
