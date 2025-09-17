@@ -5,19 +5,26 @@
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.login_page.GuessYearController" spacing="12" alignment="CENTER">
+      fx:controller="com.example.login_page.GuessYearController" 
+      styleClass="game-container vbox" 
+      spacing="20" alignment="CENTER">
     <padding>
-        <Insets topRightBottomLeft="20"/>
+        <Insets topRightBottomLeft="32"/>
     </padding>
 
-    <ImageView fx:id="photoView" fitWidth="600" preserveRatio="true"/>
+    <Label text="Historical Art Guesser" styleClass="title"/>
+    
+    <VBox styleClass="image-container vbox" spacing="12" alignment="CENTER">
+        <ImageView fx:id="photoView" styleClass="image-view" fitWidth="500" fitHeight="400" preserveRatio="true"/>
+    </VBox>
 
-    <HBox spacing="8" alignment="CENTER">
-        <Label text="Your guess:"/>
-        <TextField fx:id="yearField" promptText="e.g., 1989" prefWidth="100"/>
-        <Button text="Submit" onAction="#onSubmit"/>
-        <Button fx:id="nextBtn" text="Next" onAction="#onNext" disable="true"/>
+    <HBox styleClass="hbox" spacing="16" alignment="CENTER">
+        <Label text="Your guess:" styleClass="h3"/>
+        <TextField fx:id="yearField" promptText="e.g., 1801" prefWidth="120" styleClass="text-field"/>
+        <Button text="Submit" onAction="#onSubmit" styleClass="button"/>
+        <Button fx:id="nextBtn" text="Next" onAction="#onNext" disable="true" styleClass="game-button"/>
+        <Button fx:id="skipBtn" text="Skip" onAction="#onSkip" styleClass="btn-warning"/>
     </HBox>
 
-    <Label fx:id="feedbackLabel"/>
+    <Label fx:id="feedbackLabel" styleClass="feedback-label"/>
 </VBox>

@@ -67,7 +67,8 @@ public class SignUpController {
         try {
             // Load the Login.fxml file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
-            Scene scene = new Scene(loader.load(), 450, 450);
+            Scene scene = new Scene(loader.load(), 800, 700);
+            scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
 
             // Get the current stage from the event source (the button/hyperlink)
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

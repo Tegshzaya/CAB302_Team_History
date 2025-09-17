@@ -14,8 +14,8 @@ import java.util.Objects;
 public class SelectionScreenController {
     @FXML
     protected void onChooseLocationGame(ActionEvent event) {
-        // TODO: replace with actual Location game FXML
-        navigate(event, "GuessByLocation.fxml", controller -> {
+        // TODO: Location game FXML not implemented yet - using Year game for now
+        navigate(event, "GuessYear.fxml", controller -> {
         });
     }
 
@@ -28,8 +28,8 @@ public class SelectionScreenController {
 
     @FXML
     protected void onSignOut(ActionEvent event) {
-        // Back to Login screen
-        navigate(event, "Login.fxml", controller -> {});
+        // Back to Selection screen (Login.fxml not available)
+        navigate(event, "SelectionScreen.fxml", controller -> {});
     }
 
     // Utility method for switching between different FXML screens
@@ -49,7 +49,12 @@ public class SelectionScreenController {
 
             // Get the current stage (window) and set the new scene
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene newScene = new Scene(root);
+            
+            // Apply the stylesheet to the new scene
+            newScene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+            
+            stage.setScene(newScene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

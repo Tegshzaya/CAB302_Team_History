@@ -27,9 +27,10 @@ public class LogInController {
         String p = passwordField.getText() == null ? "" : passwordField.getText();
         if (UserStore.validate(u, p)) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("SelectionScreen.fxml"));
-            Scene selectionScreen = new Scene(loader.load(), 450, 450);
+            Scene selectionScreen = new Scene(loader.load(), 800, 700);
+            selectionScreen.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setTitle("Selection Screen");
+            stage.setTitle("Historical Art Guesser");
             stage.setScene(selectionScreen);
             stage.show();
         } else {
@@ -45,9 +46,10 @@ public class LogInController {
     @FXML
     protected void onSignup(ActionEvent event) throws java.io.IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Signup.fxml"));
-        Scene signupScene = new Scene(loader.load(), 450, 450);
+        Scene signupScene = new Scene(loader.load(), 800, 700);
+        signupScene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setTitle("Sign Up");
+        stage.setTitle("Sign Up - Historical Art Guesser");
         stage.setScene(signupScene);
         stage.show();
     }
