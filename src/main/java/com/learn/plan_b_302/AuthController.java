@@ -1,5 +1,6 @@
 package com.learn.plan_b_302;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,7 +8,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-public class AuthController {
+public class AuthController extends BaseController{
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Button loginButton;
@@ -44,7 +45,7 @@ public class AuthController {
     }
 
     @FXML
-    private void handleSignup() {
+    private void handleSignup(ActionEvent event) {
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
 
@@ -65,7 +66,7 @@ public class AuthController {
 
         if (dbManager.createUser(username, password)) {
             showMessage("Signup successful! Please login.", true);
-            switchToLogin();
+            navigate(event, "fxml/login.fxml",controller -> {});
         } else {
             showMessage("Username already exists", false);
         }
@@ -84,34 +85,8 @@ public class AuthController {
         }
     }
 
-    @FXML
-    private void switchToLogin() {
-        try {
-            Stage stage = (Stage) signupButton.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
-            Scene scene = new Scene(loader.load(), 800, 600);
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private void openGameScene(User user) {
-        try {
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/game.fxml"));
-            Scene scene = new Scene(loader.load(), 1000, 700);
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
-            GameController gameController = loader.getController();
-            gameController.setCurrentUser(user);
-
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void showMessage(String message, boolean isSuccess) {
         if (messageLabel != null) {

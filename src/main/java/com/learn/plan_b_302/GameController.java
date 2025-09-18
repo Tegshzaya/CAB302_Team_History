@@ -13,11 +13,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-public class GameController {
+public class GameController extends BaseController{
 
     @FXML private Label welcomeLabel;
     @FXML private Label scoreLabel;
@@ -59,10 +60,6 @@ public class GameController {
             optionButtons = new Button[]{option1Button, option2Button, option3Button, option4Button};
         }
 
-        // Show menu pane by default
-        if (menuPane != null) {
-            showMenuPane();
-        }
     }
 
     public void setCurrentUser(User user) {
@@ -103,8 +100,8 @@ public class GameController {
     }
 
     @FXML
-    private void handleLogout() {
-        Main.showLoginScreen();
+    private void handleLogout(ActionEvent event) {
+        navigate(event, "fxml/login.fxml", controller -> {});
     }
 
     // Game functionality
@@ -265,49 +262,20 @@ public class GameController {
         startNewGame();
     }
 
-    @FXML
-    private void handleReturnToMenu() {
-        updateUserInfo(); // Refresh user info
-        showMenuPane();
-    }
 
     @FXML
-    private void handleLogoutFromEnd() {
-        Main.showLoginScreen();
-    }
-
-    @FXML
-    private void handleLocationGame(ActionEvent event) throws IOException {
-        var url = Objects.requireNonNull(
-                getClass().getResource("/fxml/GuessLocation.fxml"),
-                "GuessLocation.fxml not found at /com/learn/plan_b_302/fxml/"
-        );
-
-        FXMLLoader loader = new FXMLLoader(url);
-        Scene scene = new Scene(loader.load(), 450, 450);
-        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setTitle("Location Game");
-        stage.setScene(scene);
-        stage.show();
+    private void handleLogoutFromEnd(ActionEvent event) {
+        navigate(event, "fxml/login.fxml",controller -> {});
     }
 
 
-    // UI Navigation helpers
-    private void showMenuPane() {
-        menuPane.setVisible(true);
-        gamePane.setVisible(false);
-        endGamePane.setVisible(false);
-    }
 
     private void showGamePane() {
-        menuPane.setVisible(false);
         gamePane.setVisible(true);
         endGamePane.setVisible(false);
     }
 
     private void showEndGamePane() {
-        menuPane.setVisible(false);
         gamePane.setVisible(false);
         endGamePane.setVisible(true);
     }

@@ -15,8 +15,6 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,7 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class GuessLocationController {
+public class LocationController {
 
     @FXML private ImageView photoView;
     @FXML private WebView mapView;
