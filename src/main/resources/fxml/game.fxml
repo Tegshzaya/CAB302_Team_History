@@ -51,6 +51,11 @@
                                         <Font size="18.0" />
                                     </font>
                                 </Button>
+                                <Button onAction="#handleLocationGame" prefWidth="200.0" styleClass="primary-button" text="📍Location Game">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Button>
                                 <Button onAction="#handleViewScores" prefWidth="200.0" styleClass="secondary-button" text="📊 View Statistics">
                                     <font>
                                         <Font size="16.0" />

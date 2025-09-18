@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Leaflet (no integrity/crossorigin for WebView compatibility) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;           /* avoid scrollbars in WebView */
+            background: #f3f3f3;
+        }
+        /* Fill the WebView viewport */
+        #map {
+            position: absolute;
+            inset: 0;                   /* top/right/bottom/left = 0 */
+            width: 100vw;               /* explicit viewport sizing helps WebKit */
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+
+<script>
+    // ---- Important fix for JavaFX WebView on macOS ----
+    // Disable 3D transforms so tiles don't get stuck as grey patches
+    L.Browser.any3d = false;
+
+    // Globals
+    window.map = null;
+    let marker = null, line = null;
+
+    function forceRedraw() {
+        if (!window.map) return;
+        // Two-step nudge: resize + a no-op pan to fully repaint tiles in WebKit
+        window.map.invalidateSize(true);
+        window.map.panBy([0, 0]);
+    }
+    window.forceRedraw = forceRedraw;
+
+    // Java calls this AFTER the WebView has a real size
+    window.initMap = function initMap() {
+        if (window.map) return;
+
+        window.map = L.map('map', { worldCopyJump: true }).setView([20, 0], 2);
+
+        // Default OSM tiles (you can switch to the FR mirror if needed)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(window.map);
+
+        window.map.on('click', e => {
+            const { lat, lng } = e.latlng;
+            if (marker) marker.setLatLng([lat, lng]);
+            else marker = L.marker([lat, lng]).addTo(window.map);
+            if (window.app && typeof window.app.onMapClick === 'function') {
+                try { window.app.onMapClick(lat, lng); } catch (err) { console.error(err); }
+            }
+        });
+
+        // Keep things in sync on internal resizes
+        window.addEventListener('resize', () => forceRedraw());
+
+        // First sanity log (optional)
+        setTimeout(() => {
+            if (window.map) {
+                const s = window.map.getSize();
+                console.log('Leaflet size:', s.x + 'x' + s.y);
+            }
+        }, 0);
+    };
+
+    // Draw result line from Java
+    window.showResultLine = (fromLat, fromLng, toLat, toLng) => {
+        try {
+            if (!window.map) return;
+            if (line) line.remove();
+            line = L.polyline([[fromLat, fromLng], [toLat, toLng]], { weight: 3 }).addTo(window.map);
+            window.map.fitBounds([[fromLat, fromLng], [toLat, toLng]], { padding: [30,30] });
+        } catch (e) {
+            console.error('showResultLine error:', e);
+        }
+    };
+</script>
+</body>
+</html>

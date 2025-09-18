@@ -1,13 +1,19 @@
 package com.learn.plan_b_302;
 
 import javafx.animation.PauseTransition;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -269,6 +275,23 @@ public class GameController {
     private void handleLogoutFromEnd() {
         Main.showLoginScreen();
     }
+
+    @FXML
+    private void handleLocationGame(ActionEvent event) throws IOException {
+        var url = Objects.requireNonNull(
+                getClass().getResource("/fxml/GuessLocation.fxml"),
+                "GuessLocation.fxml not found at /com/learn/plan_b_302/fxml/"
+        );
+
+        FXMLLoader loader = new FXMLLoader(url);
+        Scene scene = new Scene(loader.load(), 450, 450);
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setTitle("Location Game");
+        stage.setScene(scene);
+        stage.show();
+    }
+
 
     // UI Navigation helpers
     private void showMenuPane() {

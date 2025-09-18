@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.learn.plan_b_302.GuessLocationController"
+            prefWidth="1000" prefHeight="680">
+
+    <top>
+        <HBox spacing="16">
+            <padding><Insets topRightBottomLeft="12"/></padding>
+            <Label text="Guess the Location" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="roundLabel" text="Round 1 / 1"/>
+            <Label fx:id="scoreLabel" text="Score: 0" style="-fx-padding: 0 0 0 8;"/>
+        </HBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.45">
+            <items>
+                <VBox spacing="8">
+                    <padding><Insets topRightBottomLeft="12"/></padding>
+                    <ImageView fx:id="photoView" preserveRatio="true" fitWidth="420" fitHeight="320"/>
+                    <Label text="Drop a pin on the map where you think this photo was taken." wrapText="true"/>
+                    <HBox spacing="8">
+                        <Button text="Submit Guess" onAction="#onSubmit" fx:id="submitBtn"/>
+                        <Button text="Next" onAction="#onNext" fx:id="nextBtn" disable="true"/>
+                        <Button text="Selection" onAction="#onSelectionScreen"/>
+                    </HBox>
+                    <Label fx:id="feedbackLabel" wrapText="true"/>
+                </VBox>
+
+                <VBox fillWidth="true" VBox.vgrow="ALWAYS" minWidth="0" minHeight="0">
+                    <padding><Insets topRightBottomLeft="12"/></padding>
+                    <WebView fx:id="mapView"
+                             prefWidth="560" prefHeight="560"
+                             minWidth="0" minHeight="0"
+                             VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </items>
+        </SplitPane>
+    </center>
+</BorderPane>
