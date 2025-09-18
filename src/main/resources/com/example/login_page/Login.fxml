@@ -43,6 +43,16 @@
         </HBox>
     </VBox>
 
+    <!-- Demo Users Info -->
+    <VBox styleClass="card" spacing="12" alignment="CENTER" prefWidth="400">
+        <Label text="🧪 Demo Accounts" styleClass="h3"/>
+        <VBox spacing="4" alignment="CENTER">
+            <Label text="Username: demo | Password: demo123" styleClass="demo-account"/>
+            <Label text="Username: test | Password: test123" styleClass="demo-account"/>
+            <Label text="Username: admin | Password: admin123" styleClass="demo-account"/>
+        </VBox>
+    </VBox>
+
     <!-- Footer -->
     <Label text="Test your knowledge of famous artworks and their history!" styleClass="muted" wrapText="true" maxWidth="400"/>
 </VBox>

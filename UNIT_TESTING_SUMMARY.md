@@ -1,9 +1,5 @@
 # Unit Testing Implementation Summary
 
-## Assignment Requirements Met
-
-Your assignment requires: "Unit Testing: Your application should include suitable unit tests with reasonable overall code coverage. If you are following test-driven development (TDD) practices, outline your approach and indicate who wrote the tests and who implemented each part of the application."
-
 ## Test Results Summary
 
 ### Test Execution Results
