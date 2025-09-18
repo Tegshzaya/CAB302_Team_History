@@ -1,5 +1,6 @@
 package com.learn.plan_b_302;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
@@ -22,7 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class LocationController {
+public class LocationController extends BaseController {
 
     @FXML private ImageView photoView;
     @FXML private WebView mapView;
@@ -206,13 +207,7 @@ public class LocationController {
 
     @FXML
     private void onSelectionScreen(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/game.fxml"));
-        Scene selectionScene = new Scene(loader.load(), 450, 450);
-        selectionScene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setTitle("Selection Screen");
-        stage.setScene(selectionScene);
-        stage.show();
+        navigate(event, "/fxml/Menu.fxml",controller -> {});
     }
 
     private void fail(String m){ feedbackLabel.setText(m); submitBtn.setDisable(true); nextBtn.setDisable(true); }

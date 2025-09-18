@@ -26,7 +26,8 @@ public class AuthController extends BaseController{
     }
 
     @FXML
-    private void handleLogin() {
+    public void handleLogin(ActionEvent event) {
+        System.out.println("Handling login");
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
 
@@ -38,14 +39,15 @@ public class AuthController extends BaseController{
         User user = dbManager.authenticateUser(username, password);
         if (user != null) {
             showMessage("Login successful!", true);
-            openGameScene(user);
+            navigate(event, "/fxml/Menu.fxml",controller -> {});
         } else {
             showMessage("Invalid username or password", false);
         }
     }
 
     @FXML
-    private void handleSignup(ActionEvent event) {
+    public void handleSignup(ActionEvent event) {
+        System.out.println("Handling Signup");
         String username = usernameField.getText().trim();
         String password = passwordField.getText();
 
@@ -66,25 +68,23 @@ public class AuthController extends BaseController{
 
         if (dbManager.createUser(username, password)) {
             showMessage("Signup successful! Please login.", true);
-            navigate(event, "fxml/login.fxml",controller -> {});
+            navigate(event, "/fxml/login.fxml",controller -> {});
         } else {
             showMessage("Username already exists", false);
         }
     }
 
     @FXML
-    private void switchToSignup() {
-        try {
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/signup.fxml"));
-            Scene scene = new Scene(loader.load(), 800, 600);
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void switchToSignup(ActionEvent event) {
+        System.out.println("Switching to Signup...");
+        navigate(event, "/fxml/signup.fxml",controller -> {});
     }
 
+    @FXML
+    public void switchToLogin(ActionEvent event) {
+        System.out.println("Switching to Login...");
+        navigate(event, "/fxml/login.fxml", controller -> {});
+    }
 
 
 

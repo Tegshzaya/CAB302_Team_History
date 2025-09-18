@@ -56,9 +56,9 @@ public class GameController extends BaseController{
     @FXML
     private void initialize() {
         // Initialize option buttons array for easy access
-        if (option1Button != null) {
-            optionButtons = new Button[]{option1Button, option2Button, option3Button, option4Button};
-        }
+
+        optionButtons = new Button[]{option1Button, option2Button, option3Button, option4Button};
+        startNewGame();
 
     }
 
@@ -75,29 +75,7 @@ public class GameController extends BaseController{
         }
     }
 
-    // Menu actions
-    @FXML
-    private void handleStartGame() {
-        startNewGame();
-    }
 
-    @FXML
-    private void handleViewScores() {
-        // Refresh user data to get latest scores
-        currentUser = DatabaseManager.refreshUser(currentUser.getId());
-        updateUserInfo();
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Your Statistics");
-        alert.setHeaderText(currentUser.getUsername() + "'s Game Statistics");
-        alert.setContentText(
-                "Best Score: " + currentUser.getBestScore() + "\n" +
-                        "Games Played: " + currentUser.getGamesPlayed() + "\n" +
-                        "Average Score: " + (currentUser.getGamesPlayed() > 0 ?
-                        String.format("%.1f", (double) currentUser.getHighScoreInt() / currentUser.getGamesPlayed()) : "0")
-        );
-        alert.showAndWait();
-    }
 
     @FXML
     private void handleLogout(ActionEvent event) {

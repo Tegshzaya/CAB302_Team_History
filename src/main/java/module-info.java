@@ -10,6 +10,7 @@ module com.learn.plan_b_302 {
     requires jdk.jsobject;
     requires javafx.graphics;
     requires java.desktop;
+    requires com.fasterxml.jackson.databind;
 
     opens com.learn.plan_b_302 to javafx.fxml;
     exports com.learn.plan_b_302;
