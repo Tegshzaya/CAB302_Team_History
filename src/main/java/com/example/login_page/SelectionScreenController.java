@@ -12,10 +12,16 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class SelectionScreenController {
+    
+    @FXML
+    public void initialize() {
+        System.out.println("SelectionScreenController: Initialized successfully");
+    }
+    
     @FXML
     protected void onChooseLocationGame(ActionEvent event) {
-        // TODO: Location game FXML not implemented yet - using Year game for now
-        navigate(event, "GuessYear.fxml", controller -> {
+        System.out.println("SelectionScreenController: Location game button clicked - navigating to GuessLocation.fxml");
+        navigate(event, "GuessLocation.fxml", controller -> {
         });
     }
 
@@ -28,18 +34,20 @@ public class SelectionScreenController {
 
     @FXML
     protected void onSignOut(ActionEvent event) {
-        // Back to Selection screen (Login.fxml not available)
-        navigate(event, "SelectionScreen.fxml", controller -> {});
+        System.out.println("SelectionScreenController: Sign out button clicked - navigating to Login.fxml");
+        navigate(event, "Login.fxml", controller -> {});
     }
 
     // Utility method for switching between different FXML screens
     private void navigate(ActionEvent event, String fxmlPath, ControllerConsumer controllerConsumer) {
         try {
+            System.out.println("SelectionScreenController: Navigating to " + fxmlPath);
             // Load the requested FXML file
             FXMLLoader loader = new FXMLLoader(
                     Objects.requireNonNull(getClass().getResource(fxmlPath),
                             "Missing FXML: " + fxmlPath));
             Parent root = loader.load();
+            System.out.println("SelectionScreenController: Successfully loaded " + fxmlPath);
 
             // Get the controller of the new FXML and pass data if needed
             Object controller = loader.getController();
@@ -47,15 +55,20 @@ public class SelectionScreenController {
                 controllerConsumer.accept(controller);
             }
 
-            // Get the current stage (window) and set the new scene
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            // Use the primary stage instead of creating new ones
+            Stage stage = HelloApplication.getPrimaryStage();
+            if (stage == null) {
+                System.err.println("SelectionScreenController: Primary stage is null, falling back to event source");
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            }
+            
             Scene newScene = new Scene(root);
             
             // Apply the stylesheet to the new scene
             newScene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
             
+            System.out.println("SelectionScreenController: Setting new scene on stage");
             stage.setScene(newScene);
-            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
             // Shows the console errors for developers, can be removed in end product or replaced with user-friendly message

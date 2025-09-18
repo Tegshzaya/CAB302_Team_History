@@ -1,13 +1,19 @@
 package com.example.login_page;
 
 import javafx.concurrent.Worker;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 
 import java.io.BufferedReader;
@@ -23,6 +29,7 @@ public class GuessLocationController {
     @FXML private Label feedbackLabel;
     @FXML private Label roundLabel;
     @FXML private Label scoreLabel;
+    @FXML private Label artworkInfo;
     @FXML private Button nextBtn;
     @FXML private Button submitBtn;
 
@@ -45,20 +52,47 @@ public class GuessLocationController {
 
     @FXML
     public void initialize() {
-        try { loadDataset(); }
-        catch (IOException e) { fail("❌ Could not load dataset: " + e.getMessage()); return; }
+        System.out.println("GuessLocationController: Initializing...");
+        
+        try { 
+            loadDataset(); 
+            System.out.println("GuessLocationController: Dataset loaded successfully");
+        }
+        catch (IOException e) { 
+            System.err.println("GuessLocationController: Failed to load dataset: " + e.getMessage());
+            fail("❌ Could not load dataset: " + e.getMessage()); 
+            return; 
+        }
 
-        engine = mapView.getEngine();
-        engine.getLoadWorker().stateProperty().addListener((obs, o, s) -> {
-            if (s == Worker.State.SUCCEEDED) {
-                window = (JSObject) engine.executeScript("window");
-                window.setMember("app", this); // enable window.app.onMapClick(...)
-            }
-        });
+        try {
+            engine = mapView.getEngine();
+            System.out.println("GuessLocationController: WebEngine created");
+            
+            engine.getLoadWorker().stateProperty().addListener((obs, o, s) -> {
+                System.out.println("GuessLocationController: Map load state: " + s);
+                if (s == Worker.State.SUCCEEDED) {
+                    try {
+                        window = (JSObject) engine.executeScript("window");
+                        window.setMember("app", this); // enable window.app.onMapClick(...)
+                        System.out.println("GuessLocationController: Map loaded and app member set");
+                    } catch (Exception e) {
+                        System.err.println("GuessLocationController: Error setting up map: " + e.getMessage());
+                    }
+                } else if (s == Worker.State.FAILED) {
+                    System.err.println("GuessLocationController: Map failed to load");
+                    fail("❌ Map failed to load. Please check your internet connection.");
+                }
+            });
 
-        // load local HTML by URL so Leaflet CDN works fine
-        String url = Objects.requireNonNull(getClass().getResource(MAP_HTML)).toExternalForm();
-        engine.load(url);
+            // load local HTML by URL so Leaflet CDN works fine
+            String url = Objects.requireNonNull(getClass().getResource(MAP_HTML)).toExternalForm();
+            System.out.println("GuessLocationController: Loading map from: " + url);
+            engine.load(url);
+        } catch (Exception e) {
+            System.err.println("GuessLocationController: Error initializing map: " + e.getMessage());
+            fail("❌ Error initializing map: " + e.getMessage());
+            return;
+        }
 
         nextRound();
     }
@@ -84,47 +118,105 @@ public class GuessLocationController {
 
     private void nextRound() {
         index++;
-        if (index >= rounds.size()) { feedbackLabel.setText("✅ Finished! Final score: " + score + " / " + rounds.size());
-            submitBtn.setDisable(true); nextBtn.setDisable(true); return; }
+        if (index >= rounds.size()) { 
+            feedbackLabel.setText("🎉 Congratulations! You completed the game!\nFinal Score: " + score + " / " + (rounds.size() * 3) + " points");
+            submitBtn.setDisable(true); 
+            nextBtn.setDisable(true); 
+            return; 
+        }
 
         Round r = rounds.get(index);
         photoView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(IMG_DIR + r.filename))));
         roundLabel.setText("Round " + (index+1) + " / " + rounds.size());
         scoreLabel.setText("Score: " + score);
-        guessLat = guessLon = null; answered = false; submitBtn.setDisable(false); nextBtn.setDisable(true);
-        feedbackLabel.setText("Drop a pin on the map, then click Submit Guess.");
+        
+        // Update artwork info
+        if (artworkInfo != null) {
+            artworkInfo.setText("Can you guess where this famous artwork is located?");
+        }
+        
+        guessLat = guessLon = null; 
+        answered = false; 
+        submitBtn.setDisable(false); 
+        nextBtn.setDisable(true);
+        feedbackLabel.setText("🌍 Click anywhere on the world map to place your guess, then click Submit Guess.");
     }
 
     /** Called from JS (map.html) when user clicks */
     public void onMapClick(double lat, double lon) {
+        System.out.println("GuessLocationController: Map clicked at " + lat + ", " + lon);
         guessLat = lat; guessLon = lon;
-        feedbackLabel.setText(String.format("Selected: %.4f, %.4f — click Submit Guess.", lat, lon));
+        feedbackLabel.setText(String.format("📍 Pin placed at: %.4f°N, %.4f°E\nClick 'Submit Guess' to confirm your answer!", lat, lon));
     }
 
     @FXML
     private void onSubmit() {
+        System.out.println("GuessLocationController: Submit button clicked");
         if (answered) return;
-        if (guessLat == null || guessLon == null) { feedbackLabel.setText("Please click on the map first."); return; }
+        if (guessLat == null || guessLon == null) { 
+            System.out.println("GuessLocationController: No guess placed yet");
+            feedbackLabel.setText("⚠️ Please click on the map first to place your guess!"); 
+            return; 
+        }
+        
+        System.out.println("GuessLocationController: Processing guess at " + guessLat + ", " + guessLon);
 
         Round r = rounds.get(index);
         double distKm = haversineKm(guessLat, guessLon, r.lat, r.lon);
 
-        int pts; String msg;
-        if (distKm <= 10)       { pts=3; msg="🎯 Amazing!"; }
-        else if (distKm <= 50)  { pts=2; msg="✅ Good job!"; }
-        else if (distKm <= 200) { pts=1; msg="👍 Close!"; }
-        else                    { pts=0; msg="❌ Not close."; }
+        int pts; String msg; String emoji;
+        if (distKm <= 10)       { pts=3; msg="🎯 Amazing! Perfect guess!"; emoji="🏆"; }
+        else if (distKm <= 50)  { pts=2; msg="✅ Excellent! Very close!"; emoji="⭐"; }
+        else if (distKm <= 200) { pts=1; msg="👍 Good try! Getting closer!"; emoji="👍"; }
+        else                    { pts=0; msg="❌ Not quite right, but keep trying!"; emoji="💪"; }
 
-        score += pts; scoreLabel.setText("Score: " + score);
-        feedbackLabel.setText(String.format("%s You were %.1f km away. Correct: %s (%.5f, %.5f). Click Next.",
-                msg, distKm, r.label, r.lat, r.lon));
+        score += pts; 
+        scoreLabel.setText("Score: " + score);
+        
+        String feedback = String.format("%s %s\n\n📍 Your guess: %.4f°N, %.4f°E\n🎯 Correct location: %s\n📏 Distance: %.1f km\n\n%s points earned! Click 'Next Round' to continue.",
+                emoji, msg, guessLat, guessLon, r.label, distKm, pts);
+        
+        feedbackLabel.setText(feedback);
 
-        try { if (window != null) window.call("showResultLine", guessLat, guessLon, r.lat, r.lon); } catch (Exception ignored) {}
+        try { 
+            if (window != null) window.call("showResultLine", guessLat, guessLon, r.lat, r.lon); 
+        } catch (Exception ignored) {}
 
-        answered = true; submitBtn.setDisable(true); nextBtn.setDisable(false);
+        answered = true; 
+        submitBtn.setDisable(true); 
+        nextBtn.setDisable(false);
     }
 
     @FXML private void onNext() { if (answered) nextRound(); }
+
+    @FXML
+    private void onBackToMenu(ActionEvent event) {
+        try {
+            System.out.println("GuessLocationController: Back to menu button clicked");
+            FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getResource("SelectionScreen.fxml"),
+                            "Missing FXML: SelectionScreen.fxml"));
+            Parent root = loader.load();
+
+            // Use the primary stage instead of creating new ones
+            Stage stage = HelloApplication.getPrimaryStage();
+            if (stage == null) {
+                System.err.println("GuessLocationController: Primary stage is null, falling back to event source");
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            }
+            
+            Scene newScene = new Scene(root);
+            
+            // Apply the stylesheet to the new scene
+            newScene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+            
+            System.out.println("GuessLocationController: Setting selection screen on stage");
+            stage.setScene(newScene);
+        } catch (IOException e) {
+            e.printStackTrace();
+            feedbackLabel.setText("❌ Error returning to menu. Please restart the application.");
+        }
+    }
 
     private void fail(String m){ feedbackLabel.setText(m); submitBtn.setDisable(true); nextBtn.setDisable(true); }
 

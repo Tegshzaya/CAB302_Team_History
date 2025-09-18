@@ -11,6 +11,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class SignUpController {
 
     // -------------------------------
@@ -29,12 +31,11 @@ public class SignUpController {
     @FXML
     protected void onSubmit(ActionEvent event) {
         // Collect values from text fields
-        // If null safe ""
         String username = usernameField.getText() == null ? "" : usernameField.getText().trim();
         String password = passwordField.getText() == null ? "" : passwordField.getText();
         String confirm  = confirmPasswordField.getText() == null ? "" : confirmPasswordField.getText();
 
-        // Validation rules n errors
+        // Validation rules
         if (username.isEmpty()) { showError("Username is required."); return; }
         if (username.length() < 3) { showError("Username must be at least 3 characters."); return; }
         if (password.isEmpty()) { showError("Password is required."); return; }
@@ -65,19 +66,24 @@ public class SignUpController {
     // Uses FXMLLoader to replace the current scene
     private void goToLogin(ActionEvent event) {
         try {
+            System.out.println("SignUpController: Navigating to login screen");
             // Load the Login.fxml file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
             Scene scene = new Scene(loader.load(), 800, 700);
             scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
 
-            // Get the current stage from the event source (the button/hyperlink)
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            // Use the primary stage instead of creating new ones
+            Stage stage = HelloApplication.getPrimaryStage();
+            if (stage == null) {
+                System.err.println("SignUpController: Primary stage is null, falling back to event source");
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            }
 
             // Update the stage with the login scene
-            stage.setTitle("Login");
+            stage.setTitle("Login - Historical Art Guesser");
             stage.setScene(scene);
-            stage.show();
         } catch (Exception e) {
+            System.err.println("SignUpController: Failed to navigate to login: " + e.getMessage());
             // If loading fails, show an error alert
             showError("Failed to open Login screen: " + e.getMessage());
         }
