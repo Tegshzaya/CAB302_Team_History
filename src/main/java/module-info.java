@@ -1,16 +1,12 @@
-module com.example.cab302_javafx {
+module com.learn.plan_b_302 {
     requires javafx.controls;
     requires javafx.fxml;
-    requires javafx.web;
+    requires jbcrypt;
 
-    requires org.controlsfx.controls;
-    requires com.dlsc.formsfx;
-    requires net.synedra.validatorfx;
-    requires org.kordamp.ikonli.javafx;
-    requires org.kordamp.bootstrapfx.core;
-    requires eu.hansolo.tilesfx;
-    requires com.almasb.fxgl.all;
 
-    opens com.example.cab302_javafx to javafx.fxml;
-    exports com.example.cab302_javafx;
+
+    requires java.sql;
+
+    opens com.learn.plan_b_302 to javafx.fxml;
+    exports com.learn.plan_b_302;
 }

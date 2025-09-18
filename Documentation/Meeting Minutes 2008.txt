@@ -1,9 +1,0 @@
-Meeting Minutes 20/08:
-
-- Voted on Matthew as leader
-- Discussed competitor analysis, and what features/unique selling points we can take-away from this.
-- Discussed scope of assignment, agreed on core features and discussed what optional features we can build on afterwards
-- Set up Trello board and set up cards, initial assignments and due dates we expect to get things done
-- Set up shared Sheet for diary entries to make sure that everyone's keep on top of their notes
-- In future, will record Zoom meetings to transcribe discussion instead of relying on summaries
-- All signed the Team Compact, after agreeing on and finalizing the details previously discussed in-class
