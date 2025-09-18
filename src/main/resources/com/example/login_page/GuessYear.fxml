@@ -17,6 +17,7 @@
         <TextField fx:id="yearField" promptText="e.g., 1989" prefWidth="100"/>
         <Button text="Submit" onAction="#onSubmit"/>
         <Button fx:id="nextBtn" text="Next" onAction="#onNext" disable="true"/>
+        <Button fx:id="selectionBtn" text="Selection" onAction="#onSelectionScreen" disable="true"/>
     </HBox>
 
     <Label fx:id="feedbackLabel"/>

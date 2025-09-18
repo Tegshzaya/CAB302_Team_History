@@ -29,14 +29,17 @@
                     <HBox spacing="8">
                         <Button text="Submit Guess" onAction="#onSubmit" fx:id="submitBtn"/>
                         <Button text="Next" onAction="#onNext" fx:id="nextBtn" disable="true"/>
+                        <Button text="Selection" onAction="#onSelectionScreen"/>
                     </HBox>
                     <Label fx:id="feedbackLabel" wrapText="true"/>
                 </VBox>
 
-                <VBox>
+                <VBox fillWidth="true" VBox.vgrow="ALWAYS" minWidth="0" minHeight="0">
                     <padding><Insets topRightBottomLeft="12"/></padding>
-                    <!-- Let WebView expand in VBox -->
-                    <WebView fx:id="mapView" prefWidth="560" prefHeight="560" VBox.vgrow="ALWAYS"/>
+                    <WebView fx:id="mapView"
+                             prefWidth="560" prefHeight="560"
+                             minWidth="0" minHeight="0"
+                             VBox.vgrow="ALWAYS"/>
                 </VBox>
             </items>
         </SplitPane>

@@ -2,13 +2,18 @@ package com.example.login_page;
 
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 
 import java.io.BufferedReader;
@@ -50,12 +55,16 @@ public class GuessLocationController {
         catch (IOException e) { fail("❌ Could not load dataset: " + e.getMessage()); return; }
 
         engine = mapView.getEngine();
+
+        // Optional: see JS console logs in your IDE (handy to debug)
+        engine.setOnAlert(evt -> System.out.println("[WebView ALERT] " + evt.getData()));
+
         engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
                 window = (JSObject) engine.executeScript("window");
                 window.setMember("app", this);
 
-                // (Optional) Route console logs to Java to see errors
+                // Forward console.log/error to Java output (optional)
                 engine.executeScript("""
                   (function(){
                     var L=console.log, E=console.error;
@@ -64,10 +73,17 @@ public class GuessLocationController {
                   })();
                 """);
 
-                // 1) Kick Leaflet once after WebView has layout
-                Platform.runLater(this::refreshLeafletSize);
+                // Build the map only AFTER WebView is laid out
+                Platform.runLater(() -> {
+                    engine.executeScript("if (window.initMap) window.initMap();");
 
-                // 2) Kick again on future resizes
+                    // Schedule a few redraw nudges; WebKit sometimes needs multiple passes
+                    nudgeRedraw(120);
+                    nudgeRedraw(400);
+                    nudgeRedraw(900);
+                });
+
+                // Keep it fresh on future resizes
                 mapView.widthProperty().addListener((o, ov, nv) -> refreshLeafletSize());
                 mapView.heightProperty().addListener((o, ov, nv) -> refreshLeafletSize());
             }
@@ -85,9 +101,20 @@ public class GuessLocationController {
         System.out.println("[WebView " + level + "] " + msg);
     }
 
+    /** One-shot delayed redraw helper */
+    private void nudgeRedraw(long delayMs) {
+        new Thread(() -> {
+            try { Thread.sleep(delayMs); } catch (InterruptedException ignored) {}
+            Platform.runLater(this::refreshLeafletSize);
+        }).start();
+    }
+
+    /** Force Leaflet to redraw tiles completely (fixes grey patches) */
     private void refreshLeafletSize() {
         try {
-            engine.executeScript("if (window.map) { window.map.invalidateSize(true); }");
+            engine.executeScript("""
+                if (window.forceRedraw) window.forceRedraw();
+            """);
         } catch (Exception ignored) {}
     }
 
@@ -165,9 +192,19 @@ public class GuessLocationController {
 
     private static double haversineKm(double lat1,double lon1,double lat2,double lon2){
         final double R=6371.0088;
-        double dLat=Math.toRadians(lat2-lat1), dLon=Math.toRadians(lon2-lon1);
+        double dLat=Math.toRadians(lat2-lat1), dLon=Math.toRadians(lat2-lon1);
         double a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(Math.toRadians(lat1))*Math.cos(Math.toRadians(lat2))*Math.sin(dLon/2)*Math.sin(dLon/2);
         return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+    }
+
+    @FXML
+    private void onSelectionScreen(ActionEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SelectionScreen.fxml"));
+        Scene selectionScene = new Scene(loader.load(), 450, 450);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setTitle("Selection Screen");
+        stage.setScene(selectionScene);
+        stage.show();
     }
 
     private void fail(String m){ feedbackLabel.setText(m); submitBtn.setDisable(true); nextBtn.setDisable(true); }

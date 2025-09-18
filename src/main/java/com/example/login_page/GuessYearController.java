@@ -114,6 +114,7 @@ public class GuessYearController {
         nextRound();
     }
 
+    @FXML
     private void onSelectionScreen(ActionEvent event) throws IOException{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SelectionScreen.fxml"));
         Scene selectionScene = new Scene(loader.load(), 450, 450);
