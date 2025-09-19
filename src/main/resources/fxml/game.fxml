@@ -11,7 +11,6 @@
     <center>
         <StackPane>
             <children>
-
                 <!-- GAME PANE -->
                 <VBox fx:id="gamePane" spacing="20.0" styleClass="game-container" visible="true">
                     <children>
