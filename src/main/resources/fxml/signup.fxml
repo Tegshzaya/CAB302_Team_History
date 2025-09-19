@@ -7,7 +7,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.learn.plan_b_302.AuthController"
-            prefHeight="600.0" prefWidth="800.0" styleClass="auth-container">
+            prefHeight="600.0" prefWidth="800.0" styleClass="auth-container" stylesheets="@../css/style.css">
 
     <VBox alignment="CENTER" layoutX="250.0" layoutY="150.0" prefHeight="300.0" prefWidth="300.0"
           spacing="20.0" styleClass="auth-form">

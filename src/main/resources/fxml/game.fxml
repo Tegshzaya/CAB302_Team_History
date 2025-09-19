@@ -12,7 +12,7 @@
         <StackPane>
             <children>
                 <!-- GAME PANE -->
-                <VBox fx:id="gamePane" spacing="20.0" styleClass="game-container" visible="true">
+                <VBox fx:id="gamePane" spacing="20.0" styleClass="game-container" visible="true" stylesheets="@../css/style.css">
                     <children>
                         <!-- Game Header -->
                         <HBox alignment="CENTER" spacing="50.0" styleClass="game-header">
