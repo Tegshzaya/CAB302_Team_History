@@ -11,71 +11,8 @@
     <center>
         <StackPane>
             <children>
-                <!-- MENU PANE -->
-                <VBox fx:id="menuPane" alignment="CENTER" spacing="30.0" styleClass="menu-container">
-                    <children>
-                        <VBox alignment="CENTER" spacing="10.0">
-                            <children>
-                                <Label fx:id="welcomeLabel" styleClass="welcome-title" text="Welcome, Player!">
-                                    <font>
-                                        <Font size="28.0" />
-                                    </font>
-                                </Label>
-                                <Label styleClass="subtitle" text="🎨 Art Guesser Game">
-                                    <font>
-                                        <Font size="20.0" />
-                                    </font>
-                                </Label>
-                            </children>
-                        </VBox>
-
-                        <VBox alignment="CENTER" spacing="15.0" styleClass="stats-container">
-                            <children>
-                                <Label fx:id="bestScoreLabel" styleClass="stats-label" text="Best Score: 0">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Label fx:id="gamesPlayedLabel" styleClass="stats-label" text="Games Played: 0">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                            </children>
-                        </VBox>
-
-                        <VBox alignment="CENTER" maxWidth="300.0" spacing="15.0">
-                            <children>
-                                <Button onAction="#handleStartGame" prefWidth="200.0" styleClass="primary-button" text="🎮 Start Game">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Button>
-                                <Button onAction="#handleLocationGame" prefWidth="200.0" styleClass="primary-button" text="📍Location Game">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Button>
-                                <Button onAction="#handleViewScores" prefWidth="200.0" styleClass="secondary-button" text="📊 View Statistics">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Button>
-                                <Button fx:id="logoutButton" onAction="#handleLogout" prefWidth="200.0" styleClass="logout-button" text="🚪 Logout">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Button>
-                            </children>
-                        </VBox>
-                    </children>
-                    <padding>
-                        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-                    </padding>
-                </VBox>
-
                 <!-- GAME PANE -->
-                <VBox fx:id="gamePane" spacing="20.0" styleClass="game-container" visible="false">
+                <VBox fx:id="gamePane" spacing="20.0" styleClass="game-container" visible="true">
                     <children>
                         <!-- Game Header -->
                         <HBox alignment="CENTER" spacing="50.0" styleClass="game-header">
@@ -110,38 +47,16 @@
                         </VBox>
 
                         <!-- Answer Options -->
-                        <VBox alignment="CENTER" spacing="15.0" styleClass="options-container">
-                            <children>
-                                <HBox alignment="CENTER" spacing="20.0">
-                                    <children>
-                                        <Button fx:id="option1Button" onAction="#handleOption1" prefWidth="180.0" styleClass="option-button" text="Option 1">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Button>
-                                        <Button fx:id="option2Button" onAction="#handleOption2" prefWidth="180.0" styleClass="option-button" text="Option 2">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Button>
-                                    </children>
-                                </HBox>
-                                <HBox alignment="CENTER" spacing="20.0">
-                                    <children>
-                                        <Button fx:id="option3Button" onAction="#handleOption3" prefWidth="180.0" styleClass="option-button" text="Option 3">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Button>
-                                        <Button fx:id="option4Button" onAction="#handleOption4" prefWidth="180.0" styleClass="option-button" text="Option 4">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Button>
-                                    </children>
-                                </HBox>
-                            </children>
-                        </VBox>
+                        <HBox alignment="CENTER" spacing="20.0">
+                            <Button fx:id="option1Button" onAction="#handleOption1" text="Option 1"/>
+                            <Button fx:id="option2Button" onAction="#handleOption2" text="Option 2"/>
+                        </HBox>
+
+                        <HBox alignment="CENTER" spacing="20.0">
+                            <Button fx:id="option3Button" onAction="#handleOption3" text="Option 3"/>
+                            <Button fx:id="option4Button" onAction="#handleOption4" text="Option 4"/>
+                        </HBox>
+
 
                         <!-- Feedback Section -->
                         <VBox alignment="CENTER" spacing="15.0">
@@ -200,11 +115,6 @@
                         <VBox alignment="CENTER" maxWidth="300.0" spacing="15.0">
                             <children>
                                 <Button fx:id="playAgainButton" onAction="#handlePlayAgain" prefWidth="200.0" styleClass="primary-button" text="🎮 Play Again">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Button>
-                                <Button fx:id="returnToMenuButton" onAction="#handleReturnToMenu" prefWidth="200.0" styleClass="secondary-button" text="📋 Return to Menu">
                                     <font>
                                         <Font size="16.0" />
                                     </font>
