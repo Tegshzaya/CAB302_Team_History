@@ -285,7 +285,7 @@ public class GameController extends BaseController{
 
     @FXML
     private void handleLogoutFromEnd(ActionEvent event) {
-        navigate(event, "fxml/login.fxml",controller -> {});
+        navigate(event, "/fxml/login.fxml",controller -> {});
     }
 
 
