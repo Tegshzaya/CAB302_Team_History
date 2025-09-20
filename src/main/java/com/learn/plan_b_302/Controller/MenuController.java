@@ -1,14 +1,9 @@
-package com.learn.plan_b_302;
+package com.learn.plan_b_302.Controller;
 
 
+import com.learn.plan_b_302.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-
-import javax.xml.stream.Location;
-import java.io.IOException;
 
 
 public class MenuController extends BaseController{
@@ -24,13 +19,13 @@ public class MenuController extends BaseController{
     // Year game FXML
     @FXML
     protected void handleYearGame(ActionEvent event) {
-        navigate(event,"/fxml/game.fxml",controller -> {});
+        navigate(event, "/fxml/Year.fxml", controller -> {});
     }
 
 
     // Login FXML
     @FXML
     protected void ReturnLogin(ActionEvent event) {
-        navigate(event,"/fxml/login.fxml",controller -> {});
+        navigate(event, "/fxml/Login.fxml", controller -> {});
     }
 }

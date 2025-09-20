@@ -1,20 +1,15 @@
-package com.learn.plan_b_302;
+package com.learn.plan_b_302.Controller;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 
 import java.io.BufferedReader;

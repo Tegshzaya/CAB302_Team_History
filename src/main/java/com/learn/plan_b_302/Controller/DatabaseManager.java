@@ -1,11 +1,14 @@
-package com.learn.plan_b_302;
+package com.learn.plan_b_302.Controller;
+
+import com.learn.plan_b_302.ArtImage;
+import com.learn.plan_b_302.User;
 
 import java.sql.*;
 
 public class DatabaseManager {
     private static final String DB_URL = "jdbc:sqlite:artgame.db";
 
-    public void initializeDatabase() {
+    public void DatabaseManager() {
         try (Connection conn = DriverManager.getConnection(DB_URL)) {
             // Create users table with proper schema
             String createUsersTable = """

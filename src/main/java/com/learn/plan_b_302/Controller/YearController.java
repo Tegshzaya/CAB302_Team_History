@@ -1,24 +1,20 @@
-package com.learn.plan_b_302;
+package com.learn.plan_b_302.Controller;
 
+import com.learn.plan_b_302.ArtImage;
+import com.learn.plan_b_302.User;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.swing.*;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-public class GameController extends BaseController{
+public class YearController extends BaseController {
 
     @FXML private Label welcomeLabel;
     @FXML private Label scoreLabel;
@@ -79,7 +75,7 @@ public class GameController extends BaseController{
 
     @FXML
     private void handleLogout(ActionEvent event) {
-        navigate(event, "fxml/login.fxml", controller -> {});
+        navigate(event, "fxml/Login.fxml", controller -> {});
     }
 
     // Game functionality
@@ -243,7 +239,7 @@ public class GameController extends BaseController{
 
     @FXML
     private void handleLogoutFromEnd(ActionEvent event) {
-        navigate(event, "fxml/login.fxml",controller -> {});
+        navigate(event, "fxml/Login.fxml", controller -> {});
     }
 
 

@@ -6,7 +6,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.learn.plan_b_302.MenuController"
+      fx:controller="com.learn.plan_b_302.Controller.MenuController"
       spacing="16" alignment="CENTER" stylesheets="/css/style.css">
     <padding><Insets top="32" right="24" bottom="32" left="24"/></padding>
 
