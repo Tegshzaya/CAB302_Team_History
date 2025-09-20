@@ -116,7 +116,7 @@ public class GameController extends BaseController{
         totalQuestions = artImages.size();
 
         showGamePane();
-        loadNextQuestion();       // ✅ make the first question visible
+        loadNextQuestion();       // make the first question visible
     }
 
     private void loadNextQuestion() {
@@ -165,7 +165,7 @@ public class GameController extends BaseController{
         }
 
 
-        questionReady = true; // ✅ now it’s safe to click
+        questionReady = true;
     }
 
     @FXML
@@ -251,7 +251,7 @@ public class GameController extends BaseController{
         for (Button b : optionButtons) b.setDisable(true);
         nextQuestionButton.setVisible(false);
 
-        // ✅ Guarded DB writes
+        // Guarded DB writes
         if (currentUser != null) {
             DatabaseManager.updateUserScore(currentUser.getId(), score, totalQuestions);
             currentUser = DatabaseManager.refreshUser(currentUser.getId());
