@@ -1,6 +1,8 @@
 package com.learn.plan_b_302;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseManager {
     private static final String DB_URL = "jdbc:sqlite:artgame.db";
@@ -9,36 +11,50 @@ public class DatabaseManager {
         try (Connection conn = DriverManager.getConnection(DB_URL)) {
             // Create users table with proper schema
             String createUsersTable = """
-                CREATE TABLE IF NOT EXISTS users (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    username TEXT UNIQUE NOT NULL,
-                    password TEXT NOT NULL,
-                    high_score INTEGER DEFAULT 0,
-                    games_played INTEGER DEFAULT 0
-                )
-            """;
+                        CREATE TABLE IF NOT EXISTS users (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            username TEXT UNIQUE NOT NULL,
+                            password TEXT NOT NULL,
+                            high_score INTEGER DEFAULT 0,
+                            games_played INTEGER DEFAULT 0
+                        )
+                    """;
 
             // Create art_images table
             String createImagesTable = """
-                CREATE TABLE IF NOT EXISTS art_images (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    path TEXT NOT NULL,
-                    correct_answer TEXT NOT NULL,
-                    option1 TEXT NOT NULL,
-                    option2 TEXT NOT NULL,
-                    option3 TEXT NOT NULL,
-                    option4 TEXT NOT NULL
-                )
-            """;
+                        CREATE TABLE IF NOT EXISTS art_images (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            path TEXT NOT NULL UNIQUE,
+                            correct_answer TEXT NOT NULL,
+                            option1 TEXT NOT NULL,
+                            option2 TEXT NOT NULL,
+                            option3 TEXT NOT NULL,
+                            option4 TEXT NOT NULL
+                        )
+                    """;
 
             conn.createStatement().execute(createUsersTable);
             conn.createStatement().execute(createImagesTable);
+
+            // ✅ Add unique index for path to handle old DBs without UNIQUE constraint
+            conn.createStatement().execute(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS idx_art_images_path ON art_images(path)"
+            );
+
 
             // Check and update existing schema if needed
             updateDatabaseSchema(conn);
 
             // Insert sample art data if table is empty
             insertSampleArtData(conn);
+
+            // ✅ Log total rows so you know it actually seeded
+            try (var st = conn.createStatement();
+                 var rs = st.executeQuery("SELECT COUNT(*) FROM art_images")) {
+                if (rs.next()) {
+                    System.out.println("art_images rows = " + rs.getInt(1));
+                }
+            }
 
             System.out.println("Database initialized successfully");
         } catch (SQLException e) {
@@ -155,8 +171,8 @@ public class DatabaseManager {
     }
 
     public static java.util.List<ArtImage> getAllImages() {
-        java.util.List<ArtImage> images = new java.util.ArrayList<>();
-        String sql = "SELECT * FROM art_images ORDER BY RANDOM()";
+        List<ArtImage> images = new ArrayList<>();
+        String sql = "SELECT * FROM art_images"; // no ORDER BY RANDOM()
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -199,25 +215,38 @@ public class DatabaseManager {
     }
 
     private void insertSampleArtData(Connection conn) throws SQLException {
-        // Check if data already exists
-        String checkSql = "SELECT COUNT(*) FROM art_images";
-        try (PreparedStatement checkStmt = conn.prepareStatement(checkSql);
-             ResultSet rs = checkStmt.executeQuery()) {
-            if (rs.next() && rs.getInt(1) > 0) {
-                return; // Data already exists
-            }
-        }
-
         // Insert sample data
-        String insertSql = "INSERT INTO art_images (path, correct_answer, option1, option2, option3, option4) VALUES (?, ?, ?, ?, ?, ?)";
+        String insertSql = "INSERT OR IGNORE INTO art_images " +
+                "(path, correct_answer, option1, option2, option3, option4) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(insertSql)) {
-            // Sample data
             Object[][] sampleData = {
                     {"/images/mona_lisa.jpg", "Mona Lisa", "Mona Lisa", "The Last Supper", "The Birth of Venus", "The Persistence of Memory"},
                     {"/images/starry_night.jpg", "The Starry Night", "The Starry Night", "Sunflowers", "The Potato Eaters", "Café Terrace at Night"},
                     {"/images/scream.jpg", "The Scream", "The Scream", "The Kiss", "Madonna", "The Dance of Life"},
                     {"/images/girl_pearl.jpg", "Girl with a Pearl Earring", "Girl with a Pearl Earring", "The Milkmaid", "View of Delft", "The Lacemaker"},
-                    {"/images/american_gothic.jpg", "American Gothic", "American Gothic", "Nighthawks", "A Sunday Afternoon", "Christina's World"}
+                    {"/images/american_gothic.jpg", "American Gothic", "American Gothic", "Nighthawks", "A Sunday Afternoon", "Christina's World"},
+
+                    // Your extended list
+                    {"/images/Battle_of_Borodino.png", "Battle of Borodino", "Battle of Borodino", "Battle of Austerlitz", "Battle of Leipzig", "Battle of Smolensk"},
+                    {"/images/Battle_of_Trafalgar.jpeg", "Battle of Trafalgar", "Battle of Trafalgar", "Battle of Waterloo", "Battle of the Nile", "Battle of Copenhagen"},
+                    {"/images/BattleOfWaterloo.jpeg", "Battle of Waterloo", "Battle of Waterloo", "Battle of Borodino", "Battle of Trafalgar", "Battle of Gettysburg"},
+                    {"/images/Death_of_Marat_by_David.jpg", "The Death of Marat", "The Death of Marat", "Napoleon Crossing the Alps", "Liberty Leading the People", "The Oath of the Horatii"},
+                    {"/images/Declaration_of_Independence.jpg", "Declaration of Independence", "Declaration of Independence", "Washington Crossing the Delaware", "Signing of the Constitution", "Boston Tea Party"},
+                    {"/images/Eugène_Ferdinand.jpg", "Portrait of Eugène Ferdinand Victor Delacroix", "Portrait of Eugène Ferdinand Victor Delacroix", "Portrait of Napoleon", "Portrait of Goethe", "Portrait of Chopin"},
+                    {"/images/JEAN_LOUIS.jpg", "Portrait of Jean-Louis David", "Portrait of Jean-Louis David", "Self-Portrait of Rembrandt", "Portrait of Voltaire", "Portrait of Robespierre"},
+                    {"/images/TheBattleOfGrunwald.jpg", "The Battle of Grunwald", "The Battle of Grunwald", "The Battle of Varna", "The Siege of Vienna", "The Battle of Legnica"},
+                    {"/images/TheBattleOfSanRomano.jpeg", "The Battle of San Romano", "The Battle of San Romano", "The Battle of Anghiari", "The Battle of Cascina", "The Battle of Lepanto"},
+                    {"/images/TheDeathOfGeneralWarren.jpeg", "The Death of General Warren", "The Death of General Warren", "The Death of General Wolfe", "Washington at Princeton", "The Battle of Bunker Hill"},
+                    {"/images/TheDeathOfGeneralWolfe.jpg", "The Death of General Wolfe", "The Death of General Wolfe", "The Death of General Warren", "The Death of Nelson", "Washington Crossing the Delaware"},
+                    {"/images/TheDeathOfSocrates.jpeg", "The Death of Socrates", "The Death of Socrates", "The School of Athens", "The Trial of Socrates", "The Death of Seneca"},
+                    {"/images/TheExectionOfEmperorMaximillian.jpeg", "The Execution of Emperor Maximilian", "The Execution of Emperor Maximilian", "The Execution of Lady Jane Grey", "The Massacre at Chios", "Liberty Leading the People"},
+                    {"/images/TheExecutionOfLadyJaneGrey.jpg", "The Execution of Lady Jane Grey", "The Execution of Lady Jane Grey", "The Execution of Emperor Maximilian", "Marie Antoinette on the Way to the Guillotine", "The Death of Marat"},
+                    {"/images/TheMassacreatChios.jpg", "The Massacre at Chios", "The Massacre at Chios", "Liberty Leading the People", "The Raft of the Medusa", "Scenes from the Chios War"},
+                    {"/images/TheNightAttackOnSanLorenzo.jpg", "The Night Attack on San Lorenzo", "The Night Attack on San Lorenzo", "The Battle of San Romano", "The Siege of Constantinople", "The Surrender of Breda"},
+                    {"/images/TheSchoolOfAthens.jpeg", "The School of Athens", "The School of Athens", "The Last Supper", "The Creation of Adam", "Primavera"},
+                    {"/images/TheSiegeOfConstantinople.jpg", "The Siege of Constantinople", "The Siege of Constantinople", "The Fall of Constantinople", "The Capture of Constantinople", "The Battle of Lepanto"},
+                    {"/images/Velazquez-The_Surrender_of_Breda.jpg", "The Surrender of Breda", "The Surrender of Breda", "Las Meninas", "The Triumph of Bacchus", "The Coronation of the Virgin"}
             };
 
             for (Object[] data : sampleData) {
@@ -226,7 +255,12 @@ public class DatabaseManager {
                 }
                 stmt.addBatch();
             }
-            stmt.executeBatch();
+            int[] results = stmt.executeBatch();
+
+            // Optional: log how many inserts were new vs ignored
+            System.out.println("Seeding complete. Inserted/ignored rows: " + java.util.Arrays.toString(results));
         }
+
+
     }
 }

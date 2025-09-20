@@ -17,6 +17,9 @@ import javax.swing.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.ArrayList;
+import java.util.Collections;
+
 
 public class GameController extends BaseController{
 
@@ -52,19 +55,26 @@ public class GameController extends BaseController{
     private int score;
     private int totalQuestions;
     private Button[] optionButtons;
+    private boolean questionReady = false;
+    private boolean gameOver = false;
+
 
     @FXML
     private void initialize() {
-        // Initialize option buttons array for easy access
-
         optionButtons = new Button[]{option1Button, option2Button, option3Button, option4Button};
-        startNewGame();
+        for (Button b : optionButtons) b.setDisable(true);
+        nextQuestionButton.setVisible(false);
+
+        System.out.println("[INIT] GameController@" + System.identityHashCode(this));
 
     }
 
     public void setCurrentUser(User user) {
         this.currentUser = user;
         updateUserInfo();
+
+        // Start once we have the user
+        startNewGame();
     }
 
     private void updateUserInfo() {
@@ -83,27 +93,34 @@ public class GameController extends BaseController{
     }
 
     // Game functionality
-    private void startNewGame() {
-        // Initialize game state
-        artImages = DatabaseManager.getAllImages();
-        currentQuestionIndex = 0;
-        score = 0;
-        totalQuestions = Math.min(artImages.size(), 10); // Limit to 10 questions
 
-        if (artImages.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Images Found");
-            alert.setHeaderText("No art images available");
-            alert.setContentText("Please make sure art images are properly loaded in the database.");
-            alert.showAndWait();
+    private void startNewGame() {
+        questionReady = false;
+        gameOver = false;
+
+        artImages = DatabaseManager.getAllImages();
+        System.out.println("[DEBUG] artImages size = " + (artImages == null ? "null" : artImages.size()));
+
+        if (artImages == null || artImages.isEmpty()) {
+            new Alert(Alert.AlertType.WARNING, "No art images available.").showAndWait();
             return;
         }
 
+        artImages.forEach(ai -> System.out.println("[DEBUG] " + ai.getPath() + " | " + ai.getCorrectAnswer()));
+        Collections.shuffle(artImages);
+        int cap = Math.min(artImages.size(), 10);
+        artImages = new ArrayList<>(artImages.subList(0, cap));
+
+        currentQuestionIndex = 0;
+        score = 0;
+        totalQuestions = artImages.size();
+
         showGamePane();
-        loadNextQuestion();
+        loadNextQuestion();       // ✅ make the first question visible
     }
 
     private void loadNextQuestion() {
+        questionReady = false;
         if (currentQuestionIndex >= totalQuestions || currentQuestionIndex >= artImages.size()) {
             endGame();
             return;
@@ -125,8 +142,10 @@ public class GameController extends BaseController{
             artImageView.setImage(null);
         }
 
-        // Set up answer buttons
-        List<String> options = currentImage.getAllOptions();
+        // Shuffle options per question
+        List<String> options = new ArrayList<>(currentImage.getAllOptions());
+        Collections.shuffle(options);
+
         for (int i = 0; i < optionButtons.length && i < options.size(); i++) {
             optionButtons[i].setText(options.get(i));
             optionButtons[i].setDisable(false);
@@ -137,6 +156,16 @@ public class GameController extends BaseController{
         // Clear feedback and hide next button
         feedbackLabel.setText("");
         nextQuestionButton.setVisible(false);
+
+        // Change button text depending on whether this is the last question
+        if (currentQuestionIndex == totalQuestions - 1) {
+            nextQuestionButton.setText("Finish 🎯");
+        } else {
+            nextQuestionButton.setText("Next Question");
+        }
+
+
+        questionReady = true; // ✅ now it’s safe to click
     }
 
     @FXML
@@ -160,8 +189,12 @@ public class GameController extends BaseController{
     }
 
     private void handleAnswerSelection(Button selectedButton) {
+
+        if (!questionReady || currentImage == null) return; // guard
+
         String selectedAnswer = selectedButton.getText();
         boolean isCorrect = currentImage.isCorrectAnswer(selectedAnswer);
+
 
         // Disable all buttons
         for (Button button : optionButtons) {
@@ -205,35 +238,44 @@ public class GameController extends BaseController{
 
     @FXML
     private void handleNextQuestion() {
+        if (gameOver) return;
+        questionReady = false;
         currentQuestionIndex++;
         loadNextQuestion();
+
     }
 
     private void endGame() {
-        // Update user score in database
-        DatabaseManager.updateUserScore(currentUser.getId(), score, totalQuestions);
+        gameOver = true;
+        questionReady = false;
+        for (Button b : optionButtons) b.setDisable(true);
+        nextQuestionButton.setVisible(false);
 
-        // Refresh user data
-        currentUser = DatabaseManager.refreshUser(currentUser.getId());
+        // ✅ Guarded DB writes
+        if (currentUser != null) {
+            DatabaseManager.updateUserScore(currentUser.getId(), score, totalQuestions);
+            currentUser = DatabaseManager.refreshUser(currentUser.getId());
+        } else {
+            System.out.println("[WARN] endGame(): currentUser is null — skipping score update.");
+        }
 
-        // Show end game screen
+        // Show results UI
         showEndGamePane();
 
-        // Calculate percentage
-        double percentage = (double) score / totalQuestions * 100;
-
-        // Update end game labels
+        // Calculate & show stats
+        double percentage = totalQuestions == 0 ? 0 : (double) score / totalQuestions * 100.0;
         finalScoreLabel.setText("Final Score: " + score + " / " + totalQuestions);
         finalPercentageLabel.setText("Percentage: " + String.format("%.1f", percentage) + "%");
 
-        // Check if new best score - use getHighScoreInt() instead of getBestScore()
-        if (score >= currentUser.getHighScoreInt()) {
+        // Best score banner (only if we have a user)
+        if (currentUser != null && score >= currentUser.getHighScoreInt()) {
             newBestScoreLabel.setText("🎉 New Best Score! 🎉");
             newBestScoreLabel.setVisible(true);
         } else {
             newBestScoreLabel.setVisible(false);
         }
     }
+
 
     @FXML
     private void handlePlayAgain() {

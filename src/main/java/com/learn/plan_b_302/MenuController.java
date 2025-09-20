@@ -13,7 +13,11 @@ import java.io.IOException;
 
 public class MenuController extends BaseController{
 
-    private User currentUser;
+    private User currentUser;  // store the logged-in user here
+
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
 
     // Location game FXML
     @FXML
@@ -24,7 +28,11 @@ public class MenuController extends BaseController{
     // Year game FXML
     @FXML
     protected void handleYearGame(ActionEvent event) {
-        navigate(event,"/fxml/game.fxml",controller -> {});
+        navigate(event, "/fxml/game.fxml", controller -> {
+            if (controller instanceof GameController gc) {
+                gc.setCurrentUser(currentUser);  // <-- critical  // pass the user into GameController
+            }
+        });
     }
 
 
