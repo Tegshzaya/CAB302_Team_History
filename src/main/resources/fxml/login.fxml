@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.learn.plan_b_302.AuthController"
+            prefHeight="600.0" prefWidth="800.0" styleClass="auth-container" stylesheets="@../css/style.css">
+
+    <VBox alignment="CENTER" layoutX="250.0" layoutY="150.0" prefHeight="300.0" prefWidth="300.0"
+          spacing="20.0" styleClass="auth-form">
+
+        <Label text="Art Guessing Game" styleClass="title-label">
+            <font>
+                <Font name="Arial Bold" size="24.0" />
+            </font>
+        </Label>
+
+        <Label text="Login" styleClass="subtitle-label">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+
+        <VBox spacing="10.0">
+            <Label text="Username:" styleClass="field-label" />
+            <TextField fx:id="usernameField" promptText="Enter username" styleClass="input-field" />
+        </VBox>
+
+        <VBox spacing="10.0">
+            <Label text="Password:" styleClass="field-label" />
+            <PasswordField fx:id="passwordField" promptText="Enter password" styleClass="input-field" />
+        </VBox>
+
+        <Label fx:id="messageLabel" styleClass="message-label" />
+
+        <Button fx:id="loginButton" onAction="#handleLogin" text="Login" styleClass="primary-button" />
+
+        <Button fx:id="switchToSignupButton" onAction="#switchToSignup" text="Don't have an account? Sign Up"
+                styleClass="secondary-button" />
+
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        </padding>
+    </VBox>
+</AnchorPane>

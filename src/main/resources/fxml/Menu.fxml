@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.learn.plan_b_302.MenuController"
+      spacing="16" alignment="CENTER" stylesheets="@../css/style.css">
+    <padding><Insets top="32" right="24" bottom="32" left="24"/></padding>
+
+    <Label text="Choose a Game" styleClass="h1"/>
+
+    <!-- Box: Creates a box for Menu -->
+    <HBox spacing="16" alignment="CENTER">
+        <!-- Card: Guess the Image by Location -->
+        <VBox spacing="10" styleClass="card" maxWidth="360">
+            <Label text="Guess the Location" styleClass="h2"/>
+            <Button text="Play" onAction="#handleLocationGame" styleClass="btn-primary" maxWidth="Infinity"/>
+        </VBox>
+
+        <!-- Card: Guess the Year -->
+        <VBox spacing="10" styleClass="card" maxWidth="360">
+            <Label text="  Guess the Year  " styleClass="h2"/>
+            <Button text="Play" onAction="#handleYearGame" styleClass="btn-primary" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
+
+    <Hyperlink text="Sign out" onAction="#ReturnLogin"/>
+</VBox>

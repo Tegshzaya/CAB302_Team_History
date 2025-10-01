@@ -1,0 +1,106 @@
+GuessLocationController:
+  initialize()
+    When called: Automatically by JavaFX after FXML loading.
+    Purpose: Sets up the game state and map.
+    Details:
+      Loads the dataset of rounds from the CSV.
+      Prepares the WebEngine (WebView) with console logging and a Java ↔ JS bridge.
+      Ensures map initialization after page load and forces redraws to prevent “grey tiles.”
+      Starts the first round.
+  javaLog(String level, String msg)
+    Purpose: Allows JavaScript console messages (console.log and console.error) to appear in the Java console for debugging.
+    Usage: Called indirectly from injected JavaScript.
+  nudgeRedraw(long delayMs)
+    Purpose: Fixes WebView tile rendering issues.
+    Details: Waits for a given delay, then calls refreshLeafletSize() on the JavaFX thread. Used after map load.
+  refreshLeafletSize()
+    Purpose: Tells Leaflet to recalculate its size and redraw tiles.
+    Details: Calls the JS function window.forceRedraw()
+  loadDataset()
+    Purpose: Reads the CSV file (/data/guess_location.csv) and prepares the game rounds.
+    Details:
+    Each row → filename, latitude, longitude, optional label.
+    Validates that image files exist.
+    Creates Round objects and shuffles them.
+    Throws an error if dataset is missing or empty.
+  nextRound()
+    Purpose: Advances the game to the next photo/location.
+    Details: 
+      Increments the round index.
+      If all rounds are finished, shows final score and disables buttons.
+    Otherwise:
+      Displays new photo.
+      Updates round and score labels.
+      Resets guess and UI state.
+      Prompts the user to drop a pin.
+  onMapClick(double lat, double lon)
+    Purpose: Called from JavaScript when the user clicks on the map.
+    Details:
+      Saves the clicked latitude/longitude.
+      Update the feedback label to show selected coordinates.
+  onSubmit()
+    Purpose: Submits the user’s guess for the current round.
+    Workflow:
+      Validates that a guess exists and prevents duplicate submissions.
+      Computes the distance between guess and ground truth using haversineKm.
+      Assigns points (3, 2, 1, or 0).
+      Updates score and feedback label with results.
+      Calls JS function showResultLine(...) to draw markers and line.
+      Disables Submit and enables Next.
+  onNext()
+    Purpose: Moves to the next round after a guess has been submitted.
+    Details: Calls nextRound() only if the current round was answered.
+
+  haversineKm(double lat1, double lon1, double lat2, double lon2)
+    Purpose: Calculates the distance between two points on Earth in kilometers.
+    Details:
+      Uses the Haversine formula with Earth radius = 6371.0088 km.
+      Returns great-circle distance (accurate for small and large distances).
+
+  onSelectionScreen(ActionEvent event)
+    Purpose: Navigates back to the “Selection Screen.”
+    Details:
+      Loads /fxml/game.fxml.
+      Applies /css/style.css.
+      Sets stage title to “Selection Screen.”
+      Shows a new scene.
+
+---------------------------------------------------------------------
+
+map.html:
+  forceRedraw()
+    Purpose: Fixes a WebKit/JavaFX bug where map tiles sometimes remain grey.
+    How it works:
+      Calls map.invalidateSize(true) to force Leaflet to recalc tile layout.
+      Calls a “no-op” pan (map.panBy([0,0])) which triggers a full repaint.
+      Exposed as: window.forceRedraw so Java (refreshLeafletSize()) can call it.
+
+  window.initMap()
+    Purpose: Creates the Leaflet map instance after WebView has a real size.
+    Details:
+      Skips setup if window.map already exists.
+      Creates map centered at [20,0], zoom level 2.
+      Adds OpenStreetMap tile layer.
+      Registers a click handler:
+      Places/updates a marker at the clicked location.
+      Calls window.app.onMapClick(lat, lng) (Java callback) to pass the coordinates back.
+      Hooks window.addEventListener('resize', ...) to call forceRedraw() when WebView resizes.
+      Logs Leaflet map size once to JS console (forwarded to Java console).
+
+  window.showResultLine(fromLat, fromLng, toLat, toLng)
+    Purpose: Called from Java to visualize the guess vs. the correct location.
+    Details:
+      Removes any existing polyline.
+      Draws a new L.polyline between [fromLat, fromLng] (guess) and [toLat, toLng] (truth).
+      Calls map.fitBounds() to zoom/center so both points are visible, with padding.
+      Logs errors if something goes wrong.
+
+
+
+
+
+
+
+
+
+
