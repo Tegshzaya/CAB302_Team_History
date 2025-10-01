@@ -30,7 +30,7 @@
                     <HBox spacing="8">
                         <Button text="Submit Guess" onAction="#onSubmit" fx:id="submitBtn"/>
                         <Button text="Next" onAction="#onNext" fx:id="nextBtn" disable="true"/>
-                        <Button text="Selection" onAction="#onSelectionScreen"/>
+                        <Button text="Back to Menu" onAction="#onBackToMenu" styleClass="btn-ghost"/>
                     </HBox>
                     <Label fx:id="feedbackLabel" wrapText="true"/>
                 </VBox>

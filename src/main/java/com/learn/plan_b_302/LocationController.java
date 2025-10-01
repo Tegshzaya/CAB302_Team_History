@@ -205,5 +205,10 @@ public class LocationController extends BaseController {
         navigate(event, "/fxml/Menu.fxml",controller -> {});
     }
 
+    @FXML
+    private void onBackToMenu(ActionEvent event) throws IOException{
+        navigate(event, "/fxml/Menu.fxml",controller -> {});
+    }
+
     private void fail(String m){ feedbackLabel.setText(m); submitBtn.setDisable(true); nextBtn.setDisable(true); }
 }

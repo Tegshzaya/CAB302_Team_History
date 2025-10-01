@@ -288,6 +288,22 @@ public class GameController extends BaseController{
         navigate(event, "/fxml/login.fxml",controller -> {});
     }
 
+    @FXML
+    private void handleSkip(ActionEvent event) {
+        // Skip current question and move to next
+        if (currentQuestionIndex < artImages.size() - 1) {
+            currentQuestionIndex++;
+            loadNextQuestion();
+        } else {
+            endGame();
+        }
+    }
+
+    @FXML
+    private void handleBackToMenu(ActionEvent event) {
+        navigate(event, "/fxml/Menu.fxml", controller -> {});
+    }
+
 
 
     private void showGamePane() {
