@@ -4,28 +4,58 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.learn.plan_b_302.MenuController"
-      spacing="16" alignment="CENTER" stylesheets="@../css/style.css">
-    <padding><Insets top="32" right="24" bottom="32" left="24"/></padding>
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.learn.plan_b_302.MenuController"
+           styleClass="auth-container" stylesheets="@../css/style.css">
 
-    <Label text="Choose a Game" styleClass="h1"/>
-
-    <!-- Box: Creates a box for Menu -->
-    <HBox spacing="16" alignment="CENTER">
-        <!-- Card: Guess the Image by Location -->
-        <VBox spacing="10" styleClass="card" maxWidth="360">
-            <Label text="Guess the Location" styleClass="h2"/>
-            <Button text="Play" onAction="#handleLocationGame" styleClass="btn-primary" maxWidth="Infinity"/>
+    <VBox alignment="CENTER" spacing="32" styleClass="padding-2xl">
+        <!-- Header Section -->
+        <VBox alignment="CENTER" spacing="16">
+            <Label text="🎨" styleClass="display-1" />
+            <Label text="Historical Art Guesser" styleClass="title-label" />
+            <Label text="Choose your adventure" styleClass="body" />
         </VBox>
 
-        <!-- Card: Guess the Year -->
-        <VBox spacing="10" styleClass="card" maxWidth="360">
-            <Label text="  Guess the Year  " styleClass="h2"/>
-            <Button text="Play" onAction="#handleYearGame" styleClass="btn-primary" maxWidth="Infinity"/>
-        </VBox>
-    </HBox>
+        <!-- Game Selection Cards -->
+        <HBox spacing="32" alignment="CENTER">
+            <!-- Location Game Card -->
+            <VBox spacing="20" styleClass="modern-card-elevated" alignment="CENTER" minWidth="320" minHeight="280">
+                <VBox spacing="12" alignment="CENTER">
+                    <Label text="🌍" styleClass="display-2" />
+                    <Label text="Guess the Location" styleClass="heading-2" />
+                    <Label text="Test your geography knowledge by identifying where historical events took place" 
+                           styleClass="body" textAlignment="CENTER" wrapText="true" maxWidth="280" />
+                </VBox>
+                
+                <VBox spacing="12" alignment="CENTER">
+                    <Button text="Start Game" onAction="#handleLocationGame" 
+                            styleClass="btn-primary btn-large" minWidth="200" />
+                    <Label text="📍 Interactive map gameplay" styleClass="caption" />
+                </VBox>
+            </VBox>
 
-    <Hyperlink text="Sign out" onAction="#ReturnLogin"/>
-</VBox>
+            <!-- Year Game Card -->
+            <VBox spacing="20" styleClass="modern-card-elevated" alignment="CENTER" minWidth="320" minHeight="280">
+                <VBox spacing="12" alignment="CENTER">
+                    <Label text="📅" styleClass="display-2" />
+                    <Label text="Guess the Year" styleClass="heading-2" />
+                    <Label text="Challenge your historical knowledge by guessing when famous artworks were created" 
+                           styleClass="body" textAlignment="CENTER" wrapText="true" maxWidth="280" />
+                </VBox>
+                
+                <VBox spacing="12" alignment="CENTER">
+                    <Button text="Start Game" onAction="#handleYearGame" 
+                            styleClass="btn-primary btn-large" minWidth="200" />
+                    <Label text="🎨 Art history focus" styleClass="caption" />
+                </VBox>
+            </VBox>
+        </HBox>
+
+        <!-- Footer -->
+        <VBox spacing="16" alignment="CENTER">
+            <Button text="Sign Out" onAction="#ReturnLogin" styleClass="btn-ghost" />
+            <Label text="Ready to explore history?" styleClass="body-small" />
+        </VBox>
+    </VBox>
+</StackPane>

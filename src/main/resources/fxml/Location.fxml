@@ -11,28 +11,29 @@
             stylesheets="@../css/style.css">
 
     <top>
-        <HBox spacing="16">
-            <padding><Insets topRightBottomLeft="12"/></padding>
-            <Label text="Guess the Location" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+        <HBox spacing="24" styleClass="game-header" alignment="CENTER">
+            <padding><Insets topRightBottomLeft="24"/></padding>
+            <Label text="🌍 Guess the Location" styleClass="heading-2"/>
             <Pane HBox.hgrow="ALWAYS"/>
-            <Label fx:id="roundLabel" text="Round 1 / 1"/>
-            <Label fx:id="scoreLabel" text="Score: 0" style="-fx-padding: 0 0 0 8;"/>
+            <Label fx:id="roundLabel" text="Round 1 / 1" styleClass="game-info"/>
+            <Label fx:id="scoreLabel" text="Score: 0" styleClass="score-label"/>
         </HBox>
     </top>
 
     <center>
         <SplitPane dividerPositions="0.45">
             <items>
-                <VBox spacing="8">
-                    <padding><Insets topRightBottomLeft="12"/></padding>
-                    <ImageView fx:id="photoView" preserveRatio="true" fitWidth="420" fitHeight="320"/>
-                    <Label text="Drop a pin on the map where you think this photo was taken." wrapText="true"/>
-                    <HBox spacing="8">
-                        <Button text="Submit Guess" onAction="#onSubmit" fx:id="submitBtn"/>
-                        <Button text="Next" onAction="#onNext" fx:id="nextBtn" disable="true"/>
+                <VBox spacing="20" styleClass="modern-card" alignment="CENTER">
+                    <padding><Insets topRightBottomLeft="24"/></padding>
+                    <ImageView fx:id="photoView" preserveRatio="true" fitWidth="420" fitHeight="320" styleClass="art-image"/>
+                    <Label text="Drop a pin on the map where you think this photo was taken." 
+                           styleClass="body" wrapText="true" textAlignment="CENTER"/>
+                    <HBox spacing="12" alignment="CENTER">
+                        <Button text="Submit Guess" onAction="#onSubmit" fx:id="submitBtn" styleClass="btn-primary"/>
+                        <Button text="Next" onAction="#onNext" fx:id="nextBtn" disable="true" styleClass="btn-secondary"/>
                         <Button text="Back to Menu" onAction="#onBackToMenu" styleClass="btn-ghost"/>
                     </HBox>
-                    <Label fx:id="feedbackLabel" wrapText="true"/>
+                    <Label fx:id="feedbackLabel" wrapText="true" styleClass="feedback-label"/>
                 </VBox>
 
                 <VBox fillWidth="true" VBox.vgrow="ALWAYS" minWidth="0" minHeight="0">
