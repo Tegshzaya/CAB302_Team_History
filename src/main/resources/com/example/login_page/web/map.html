@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Interactive Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        #map {
+            position: absolute;
+            top: 0; bottom: 0; left: 0; right: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0;
+        }
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: #666;
+            z-index: 1000;
+        }
+        
+        /* Custom map controls */
+        .map-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .control-btn {
+            background: white;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+        }
+        
+        .control-btn:hover {
+            background: #f0f0f0;
+            border-color: #999;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        }
+        
+        .control-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .zoom-to-world {
+            background: #4CAF50;
+            color: white;
+            border-color: #45a049;
+        }
+        
+        .zoom-to-world:hover {
+            background: #45a049;
+        }
+        
+        .clear-marker {
+            background: #f44336;
+            color: white;
+            border-color: #da190b;
+        }
+        
+        .clear-marker:hover {
+            background: #da190b;
+        }
+        
+        /* Instructions overlay */
+        .instructions {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 12px;
+            color: #333;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            max-height: 200px;
+            overflow: hidden;
+        }
+        
+        .instructions.collapsed {
+            max-height: 40px;
+            cursor: pointer;
+        }
+        
+        .instructions.collapsed .instructions-content {
+            display: none;
+        }
+        
+        .instructions h4 {
+            margin: 0 0 5px 0;
+            color: #2c3e50;
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .instructions.collapsed h4 {
+            margin: 0;
+        }
+        
+        .instructions.collapsed h4::after {
+            content: " (click to expand)";
+            font-size: 10px;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .instructions-content {
+            transition: all 0.3s ease;
+        }
+        
+        .instructions ul {
+            margin: 0;
+            padding-left: 15px;
+        }
+        
+        .instructions li {
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="map">
+        <div class="loading">Loading map...</div>
+    </div>
+    
+    <!-- Map Controls -->
+    <div class="map-controls">
+        <button class="control-btn zoom-to-world" onclick="zoomToWorld()">🌍 World View</button>
+        <button class="control-btn" onclick="zoomToEurope()">🇪🇺 Europe</button>
+        <button class="control-btn" onclick="zoomToAmericas()">🌎 Americas</button>
+        <button class="control-btn" onclick="zoomToAsia()">🌏 Asia</button>
+        <button class="control-btn clear-marker" onclick="clearMarker()">❌ Clear Pin</button>
+        <select class="control-btn" id="mapProvider" onchange="changeMapProvider()" style="font-size: 12px; padding: 6px;">
+            <option value="osm">🗺️ OpenStreetMap</option>
+            <option value="carto">🎨 CartoDB Light</option>
+            <option value="carto-dark">🌙 CartoDB Dark</option>
+            <option value="stamen">🎭 Stamen Terrain</option>
+        </select>
+    </div>
+    
+    <!-- Instructions -->
+    <div class="instructions collapsed" id="instructions">
+        <h4 onclick="toggleInstructions()">🗺️ Map Navigation Tips:</h4>
+        <div class="instructions-content">
+            <ul>
+                <li><strong>Click anywhere</strong> on the map to place your guess pin</li>
+                <li><strong>Drag</strong> to pan around the world</li>
+                <li><strong>Scroll</strong> or use +/- buttons to zoom in/out</li>
+                <li>Use the <strong>region buttons</strong> above to quickly jump to continents</li>
+                <li>Click <strong>World View</strong> to see the entire globe</li>
+                <li>Try different <strong>map styles</strong> using the dropdown selector</li>
+                <li><strong>Keyboard shortcuts:</strong> 1=World, 2=Europe, 3=Americas, 4=Asia, C=Clear pin, H=Toggle help</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        console.log('Map script starting...');
+        
+        // Wait for Leaflet to load
+        if (typeof L === 'undefined') {
+            console.error('Leaflet library not loaded!');
+            document.querySelector('.loading').textContent = 'Error: Map library not loaded';
+        } else {
+            console.log('Leaflet loaded successfully');
+            
+            try {
+                // Initialize map with better settings
+                const map = L.map('map', { 
+                    worldCopyJump: true,
+                    zoomControl: true,
+                    attributionControl: true,
+                    doubleClickZoom: true,
+                    scrollWheelZoom: true,
+                    dragging: true,
+                    touchZoom: true,
+                    boxZoom: true,
+                    keyboard: true,
+                    zoomSnap: 0.25,
+                    zoomDelta: 0.5
+                }).setView([20, 0], 2);
+                
+                console.log('Map initialized');
+                
+                // Map provider options - uncomment the one you want to use
+                
+                // Option 1: OpenStreetMap (current - free)
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18,
+                    minZoom: 1,
+                    attribution: '&copy; OpenStreetMap contributors',
+                    subdomains: ['a', 'b', 'c']
+                }).addTo(map);
+                
+                // Option 2: Mapbox (beautiful, customizable - requires API key)
+                // Replace 'YOUR_MAPBOX_TOKEN' with your actual Mapbox token
+                // L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=YOUR_MAPBOX_TOKEN', {
+                //     maxZoom: 18,
+                //     minZoom: 1,
+                //     attribution: '&copy; Mapbox',
+                //     tileSize: 512,
+                //     zoomOffset: -1
+                // }).addTo(map);
+                
+                // Option 3: Google Maps (most detailed - requires API key)
+                // L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                //     maxZoom: 18,
+                //     minZoom: 1,
+                //     attribution: '&copy; Google Maps'
+                // }).addTo(map);
+                
+                // Option 4: CartoDB (clean, modern look)
+                // L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                //     maxZoom: 18,
+                //     minZoom: 1,
+                //     attribution: '&copy; CartoDB',
+                //     subdomains: 'abcd'
+                // }).addTo(map);
+                
+                console.log('Tile layer added');
+                
+                // Remove loading message
+                document.querySelector('.loading').style.display = 'none';
+                
+                let guess = null, marker = null, line = null;
+                
+                // Navigation functions
+                window.zoomToWorld = function() {
+                    map.setView([20, 0], 2, { animate: true, duration: 1.0 });
+                };
+                
+                window.zoomToEurope = function() {
+                    map.setView([50, 10], 4, { animate: true, duration: 1.0 });
+                };
+                
+                window.zoomToAmericas = function() {
+                    map.setView([20, -80], 3, { animate: true, duration: 1.0 });
+                };
+                
+                window.zoomToAsia = function() {
+                    map.setView([30, 100], 3, { animate: true, duration: 1.0 });
+                };
+                
+                window.clearMarker = function() {
+                    if (marker) {
+                        map.removeLayer(marker);
+                        marker = null;
+                        guess = null;
+                        console.log('Marker cleared');
+                    }
+                };
+                
+                // Instructions toggle function
+                window.toggleInstructions = function() {
+                    const instructions = document.getElementById('instructions');
+                    instructions.classList.toggle('collapsed');
+                };
+                
+                // Auto-hide instructions after 10 seconds
+                setTimeout(function() {
+                    const instructions = document.getElementById('instructions');
+                    if (instructions && !instructions.classList.contains('collapsed')) {
+                        instructions.classList.add('collapsed');
+                    }
+                }, 10000);
+                
+                // Map provider switching function
+                window.changeMapProvider = function() {
+                    const provider = document.getElementById('mapProvider').value;
+                    const currentView = map.getView();
+                    
+                    // Remove existing tile layer
+                    map.eachLayer(function(layer) {
+                        if (layer instanceof L.TileLayer) {
+                            map.removeLayer(layer);
+                        }
+                    });
+                    
+                    // Add new tile layer based on selection
+                    let newLayer;
+                    switch(provider) {
+                        case 'osm':
+                            newLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                maxZoom: 18,
+                                minZoom: 1,
+                                attribution: '&copy; OpenStreetMap contributors',
+                                subdomains: ['a', 'b', 'c']
+                            });
+                            break;
+                        case 'carto':
+                            newLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                                maxZoom: 18,
+                                minZoom: 1,
+                                attribution: '&copy; CartoDB',
+                                subdomains: 'abcd'
+                            });
+                            break;
+                        case 'carto-dark':
+                            newLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                                maxZoom: 18,
+                                minZoom: 1,
+                                attribution: '&copy; CartoDB',
+                                subdomains: 'abcd'
+                            });
+                            break;
+                        case 'stamen':
+                            newLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png', {
+                                maxZoom: 18,
+                                minZoom: 1,
+                                attribution: '&copy; Stamen Design',
+                                subdomains: 'abcd'
+                            });
+                            break;
+                    }
+                    
+                    if (newLayer) {
+                        newLayer.addTo(map);
+                        console.log('Switched to map provider:', provider);
+                    }
+                };
+                
+                // Add click handler with better marker
+                map.on('click', function(e) {
+                    const { lat, lng } = e.latlng;
+                    console.log('Map clicked at:', lat, lng);
+                    
+                    guess = [lat, lng];
+                    if (marker) {
+                        marker.setLatLng(guess);
+                    } else {
+                        // Create a custom marker with better styling
+                        const customIcon = L.divIcon({
+                            className: 'custom-marker',
+                            html: '<div style="background-color: #ff4444; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+                            iconSize: [20, 20],
+                            iconAnchor: [10, 10]
+                        });
+                        marker = L.marker(guess, { icon: customIcon }).addTo(map);
+                    }
+                    
+                    // Call Java method if available
+                    if (window.app && typeof window.app.onMapClick === 'function') {
+                        console.log('Calling Java onMapClick method');
+                        window.app.onMapClick(lat, lng);
+                    } else {
+                        console.log('Java app method not available yet');
+                    }
+                });
+                
+                // Function to show result line with better styling
+                window.showResultLine = function(fromLat, fromLng, toLat, toLng) {
+                    console.log('Showing result line from', fromLat, fromLng, 'to', toLat, toLng);
+                    if (line) line.remove();
+                    
+                    // Create a more visible result line
+                    line = L.polyline([[fromLat, fromLng], [toLat, toLng]], { 
+                        color: '#ff4444',
+                        weight: 4,
+                        opacity: 0.9,
+                        dashArray: '10, 10',
+                        lineCap: 'round'
+                    }).addTo(map);
+                    
+                    // Add markers for both points
+                    const correctIcon = L.divIcon({
+                        className: 'correct-marker',
+                        html: '<div style="background-color: #44ff44; width: 16px; height: 16px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+                        iconSize: [16, 16],
+                        iconAnchor: [8, 8]
+                    });
+                    
+                    L.marker([toLat, toLng], { icon: correctIcon }).addTo(map);
+                    
+                    // Fit bounds with better padding
+                    map.fitBounds([[fromLat, fromLng], [toLat, toLng]], { 
+                        padding: [50, 50],
+                        maxZoom: 8
+                    });
+                };
+                
+                // Add keyboard shortcuts
+                document.addEventListener('keydown', function(e) {
+                    switch(e.key) {
+                        case '1':
+                            zoomToWorld();
+                            break;
+                        case '2':
+                            zoomToEurope();
+                            break;
+                        case '3':
+                            zoomToAmericas();
+                            break;
+                        case '4':
+                            zoomToAsia();
+                            break;
+                        case 'Escape':
+                        case 'c':
+                        case 'C':
+                            clearMarker();
+                            break;
+                        case 'h':
+                        case 'H':
+                        case '?':
+                            toggleInstructions();
+                            break;
+                    }
+                });
+                
+                console.log('Map setup complete');
+                
+            } catch (error) {
+                console.error('Error setting up map:', error);
+                document.querySelector('.loading').textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        // Test if Java bridge is working
+        setTimeout(function() {
+            if (window.app) {
+                console.log('Java app object is available');
+            } else {
+                console.log('Java app object not yet available');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

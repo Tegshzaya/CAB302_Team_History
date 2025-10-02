@@ -1,6 +1,5 @@
 package com.learn.plan_b_302;
 
-import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -38,6 +36,7 @@ public class GameController extends BaseController{
     @FXML private Button option2Button;
     @FXML private Button option3Button;
     @FXML private Button option4Button;
+    @FXML private Button submitAnswerButton;
     @FXML private Label feedbackLabel;
     @FXML private Button nextQuestionButton;
 
@@ -57,13 +56,15 @@ public class GameController extends BaseController{
     private Button[] optionButtons;
     private boolean questionReady = false;
     private boolean gameOver = false;
+    private String selectedAnswer = null;
 
 
     @FXML
     private void initialize() {
         optionButtons = new Button[]{option1Button, option2Button, option3Button, option4Button};
         for (Button b : optionButtons) b.setDisable(true);
-        nextQuestionButton.setVisible(false);
+        nextQuestionButton.setDisable(true); // Start disabled like Location game
+        submitAnswerButton.setDisable(true); // Start disabled, not hidden
 
         System.out.println("[INIT] GameController@" + System.identityHashCode(this));
 
@@ -149,21 +150,22 @@ public class GameController extends BaseController{
         for (int i = 0; i < optionButtons.length && i < options.size(); i++) {
             optionButtons[i].setText(options.get(i));
             optionButtons[i].setDisable(false);
-            optionButtons[i].getStyleClass().removeAll("correct-answer", "wrong-answer");
-            optionButtons[i].getStyleClass().add("option-button");
+            optionButtons[i].getStyleClass().removeAll("correct-answer", "wrong-answer", "selected-answer");
+            optionButtons[i].getStyleClass().add("answer-button");
         }
 
-        // Clear feedback and hide next button
+        // Clear feedback and reset buttons
         feedbackLabel.setText("");
-        nextQuestionButton.setVisible(false);
+        nextQuestionButton.setDisable(true); // Disable next button like Location game
+        submitAnswerButton.setDisable(true); // Disable submit button
+        selectedAnswer = null;
 
         // Change button text depending on whether this is the last question
         if (currentQuestionIndex == totalQuestions - 1) {
             nextQuestionButton.setText("Finish 🎯");
         } else {
-            nextQuestionButton.setText("Next Question");
+            nextQuestionButton.setText("Next");
         }
-
 
         questionReady = true;
     }
@@ -189,40 +191,67 @@ public class GameController extends BaseController{
     }
 
     private void handleAnswerSelection(Button selectedButton) {
-
         if (!questionReady || currentImage == null) return; // guard
 
-        String selectedAnswer = selectedButton.getText();
-        boolean isCorrect = currentImage.isCorrectAnswer(selectedAnswer);
+        // Clear previous selection
+        for (Button button : optionButtons) {
+            button.getStyleClass().removeAll("selected-answer");
+        }
 
+        // Mark the selected answer
+        selectedAnswer = selectedButton.getText();
+        selectedButton.getStyleClass().add("selected-answer");
+        
+        // Enable submit button
+        submitAnswerButton.setDisable(false);
+    }
+
+    @FXML
+    private void handleSubmitAnswer() {
+        if (selectedAnswer == null || currentImage == null) return;
+
+        boolean isCorrect = currentImage.isCorrectAnswer(selectedAnswer);
 
         // Disable all buttons
         for (Button button : optionButtons) {
             button.setDisable(true);
         }
+        submitAnswerButton.setDisable(true);
 
         // Style the buttons based on correctness
         if (isCorrect) {
-            selectedButton.getStyleClass().removeAll("option-button");
-            selectedButton.getStyleClass().add("correct-answer");
-            feedbackLabel.setText("Correct! ✓");
+            for (Button button : optionButtons) {
+                if (button.getText().equals(selectedAnswer)) {
+                    button.getStyleClass().removeAll("selected-answer");
+                    button.getStyleClass().add("correct-answer");
+                    break;
+                }
+            }
+            feedbackLabel.setText("Correct! ✓ The artwork was created in " + currentImage.getCorrectAnswer());
             feedbackLabel.getStyleClass().removeAll("wrong-feedback");
             feedbackLabel.getStyleClass().add("correct-feedback");
             score++;
         } else {
-            selectedButton.getStyleClass().removeAll("option-button");
-            selectedButton.getStyleClass().add("wrong-answer");
+            // Highlight the selected wrong answer
+            for (Button button : optionButtons) {
+                if (button.getText().equals(selectedAnswer)) {
+                    button.getStyleClass().removeAll("selected-answer");
+                    button.getStyleClass().add("wrong-answer");
+                    break;
+                }
+            }
 
             // Highlight the correct answer
             for (Button button : optionButtons) {
                 if (currentImage.isCorrectAnswer(button.getText())) {
-                    button.getStyleClass().removeAll("option-button");
+                    button.getStyleClass().removeAll("answer-button");
                     button.getStyleClass().add("correct-answer");
                     break;
                 }
             }
 
-            feedbackLabel.setText("Wrong! The correct answer is: " + currentImage.getCorrectAnswer());
+            feedbackLabel.setText("Wrong! The correct answer is " + currentImage.getCorrectAnswer() + 
+                                ". The artwork was created in " + currentImage.getCorrectAnswer());
             feedbackLabel.getStyleClass().removeAll("correct-feedback");
             feedbackLabel.getStyleClass().add("wrong-feedback");
         }
@@ -230,10 +259,8 @@ public class GameController extends BaseController{
         // Update score display
         scoreLabel.setText("Score: " + score);
 
-        // Show next button after a short delay
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
-        pause.setOnFinished(e -> nextQuestionButton.setVisible(true));
-        pause.play();
+        // Enable next button like Location game
+        nextQuestionButton.setDisable(false);
     }
 
     @FXML
@@ -286,6 +313,12 @@ public class GameController extends BaseController{
     @FXML
     private void handleLogoutFromEnd(ActionEvent event) {
         navigate(event, "/fxml/login.fxml",controller -> {});
+    }
+
+
+    @FXML
+    private void handleBackToMenu(ActionEvent event) {
+        navigate(event, "/fxml/Menu.fxml", controller -> {});
     }
 
 

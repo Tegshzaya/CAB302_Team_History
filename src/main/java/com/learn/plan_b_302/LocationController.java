@@ -1,6 +1,5 @@
 package com.learn.plan_b_302;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
@@ -65,7 +64,7 @@ public class LocationController extends BaseController {
                 window = (JSObject) engine.executeScript("window");
                 window.setMember("app", this);
 
-                // Forward console.log/error to Java output (optional)
+                // Forward console.log/error to Java output
                 engine.executeScript("""
                   (function(){
                     var L=console.log, E=console.error;
@@ -97,12 +96,7 @@ public class LocationController extends BaseController {
         nextRound();
     }
 
-    /** Optional: see JS logs in your IDE console */
-    public void javaLog(String level, String msg) {
-        System.out.println("[WebView " + level + "] " + msg);
-    }
-
-    /** One-shot delayed redraw helper */
+    /** One-shot delayed redraw helper for smoothing the work of the map */
     private void nudgeRedraw(long delayMs) {
         new Thread(() -> {
             try { Thread.sleep(delayMs); } catch (InterruptedException ignored) {}
@@ -120,6 +114,7 @@ public class LocationController extends BaseController {
     }
 
     private void loadDataset() throws IOException {
+        // To robust the game used try method
         try (InputStream in = Objects.requireNonNull(getClass().getResourceAsStream(CSV_PATH), "CSV not found: " + CSV_PATH);
              BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
             String line; int row = 0;
@@ -196,7 +191,7 @@ public class LocationController extends BaseController {
     private static double haversineKm(double lat1, double lon1, double lat2, double lon2) {
         final double R = 6371.0088; // km
         double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);   // <-- this line (lon2 - lon1)
+        double dLon = Math.toRadians(lon2 - lon1);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
                 + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
                 * Math.sin(dLon / 2) * Math.sin(dLon / 2);
@@ -207,6 +202,11 @@ public class LocationController extends BaseController {
 
     @FXML
     private void onSelectionScreen(ActionEvent event) throws IOException{
+        navigate(event, "/fxml/Menu.fxml",controller -> {});
+    }
+
+    @FXML
+    private void onBackToMenu(ActionEvent event) throws IOException{
         navigate(event, "/fxml/Menu.fxml",controller -> {});
     }
 

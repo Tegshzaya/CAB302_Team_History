@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.example.login_page.GuessYearController" 
+      styleClass="game-container" 
+      spacing="16" alignment="CENTER">
+    <padding>
+        <Insets top="16" right="24" bottom="16" left="24"/>
+    </padding>
+
+    <!-- Header Section -->
+    <VBox spacing="8" alignment="CENTER">
+        <Label text="🎨 Guess the Year" styleClass="title"/>
+        <Label text="Can you guess when this famous artwork was created?" styleClass="subtitle"/>
+    </VBox>
+
+    <!-- Score and Round Info -->
+    <HBox styleClass="card" spacing="32" alignment="CENTER">
+        <VBox spacing="4" alignment="CENTER">
+            <Label text="Round" styleClass="muted"/>
+            <Label fx:id="roundLabel" styleClass="h3"/>
+        </VBox>
+        <VBox spacing="4" alignment="CENTER">
+            <Label text="Score" styleClass="muted"/>
+            <Label fx:id="scoreLabel" styleClass="h3"/>
+        </VBox>
+    </HBox>
+
+    <!-- Main Game Area -->
+    <HBox styleClass="hbox" spacing="32" alignment="CENTER">
+        <!-- Artwork Image Section -->
+        <VBox styleClass="image-container" spacing="16" alignment="CENTER">
+            <Label text="🎨 Famous Artwork" styleClass="h2"/>
+            <ImageView fx:id="photoView" styleClass="image-view" fitWidth="320" fitHeight="240" preserveRatio="true"/>
+            <Label fx:id="artworkInfo" text="Loading artwork..." styleClass="muted"/>
+        </VBox>
+        
+        <!-- Input and Control Section -->
+        <VBox styleClass="card" spacing="20" alignment="CENTER" prefWidth="300">
+            <Label text="📅 Your Guess" styleClass="h2"/>
+            
+            <!-- Year Input -->
+            <VBox spacing="12" alignment="CENTER">
+                <Label text="Enter the year:" styleClass="h3"/>
+                <TextField fx:id="yearField" promptText="e.g., 1801" prefWidth="150" styleClass="text-field"/>
+                <Button text="Submit Guess" onAction="#onSubmit" styleClass="btn-primary" prefWidth="150"/>
+            </VBox>
+            
+            <!-- Control Buttons -->
+            <VBox spacing="12" alignment="CENTER">
+                <Button fx:id="nextBtn" text="Next Round" onAction="#onNext" disable="true" styleClass="btn-success" prefWidth="150"/>
+                <Button fx:id="skipBtn" text="Skip" onAction="#onSkip" styleClass="btn-warning" prefWidth="150"/>
+                <Button text="Back to Menu" onAction="#onBackToMenu" styleClass="btn-ghost" prefWidth="150"/>
+            </VBox>
+        </VBox>
+    </HBox>
+
+    <!-- Feedback Section -->
+    <VBox styleClass="card" spacing="8" alignment="CENTER">
+        <Label fx:id="feedbackLabel" styleClass="feedback-label" wrapText="true" maxWidth="600"/>
+    </VBox>
+</VBox>

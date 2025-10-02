@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.learn.plan_b_302.DescribeImageController"
+      spacing="16" alignment="CENTER" stylesheets="@../css/style.css">
+    <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+
+    <Label text="Describe Image" styleClass="h1"/>
+
+    <!-- Row: choose file OR paste URL -->
+    <VBox spacing="10" maxWidth="760">
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <Button text="Choose File…" onAction="#handleChooseImage" styleClass="btn-primary"/>
+            <CheckBox fx:id="useBase64" text="Send as Base64 (for local files)"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Analyze" onAction="#handleAnalyze" disable="true" fx:id="analyzeBtn" styleClass="btn-primary"/>
+        </HBox>
+
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <Label text="Or paste image URL:"/>
+            <TextField fx:id="urlField" promptText="https://example.com/image.jpg" prefWidth="520"/>
+            <Button text="Use URL" onAction="#handleUseUrl"/>
+        </HBox>
+
+        <Label text="Tip: For local files, keep “Send as Base64” checked. For online images, paste an HTTPS URL and click Use URL."
+               wrapText="true" styleClass="caption"/>
+    </VBox>
+
+    <ImageView fx:id="preview" fitWidth="420" preserveRatio="true" smooth="true"/>
+
+    <TitledPane text="Result" expanded="true" maxWidth="760">
+        <content>
+            <TextArea fx:id="resultArea" wrapText="true" prefRowCount="12"/>
+        </content>
+    </TitledPane>
+</VBox>

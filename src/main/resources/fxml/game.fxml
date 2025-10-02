@@ -7,77 +7,74 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.learn.plan_b_302.GameController">
-    <center>
-        <StackPane>
-            <children>
-                <!-- GAME PANE -->
-                <VBox fx:id="gamePane" spacing="20.0" styleClass="game-container" visible="true" stylesheets="@../css/style.css">
-                    <children>
-                        <!-- Game Header -->
-                        <HBox alignment="CENTER" spacing="50.0" styleClass="game-header">
-                            <children>
-                                <Label fx:id="questionCountLabel" styleClass="game-info" text="Question 1 of 10">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <Label fx:id="scoreLabel" styleClass="score-label" text="Score: 0">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                            </children>
-                        </HBox>
+    <BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.learn.plan_b_302.GameController">
+        <top>
+            <HBox spacing="24" styleClass="game-header" alignment="CENTER">
+                <padding><Insets topRightBottomLeft="24"/></padding>
+                <Label text="📅 Guess the Year" styleClass="heading-2"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label fx:id="questionCountLabel" text="Question 1 of 10" styleClass="game-info"/>
+                <Label fx:id="scoreLabel" text="Score: 0" styleClass="score-label"/>
+            </HBox>
+        </top>
+        
+        <center>
+            <StackPane>
+                <children>
+                    <!-- GAME PANE -->
+                    <VBox fx:id="gamePane" styleClass="game-container" visible="true" stylesheets="@../css/style.css">
+                        <children>
+                            <SplitPane dividerPositions="0.45">
+                                <items>
+                                    <!-- Left side: Image -->
+                                    <VBox spacing="20" styleClass="modern-card" alignment="CENTER">
+                                        <padding><Insets topRightBottomLeft="24"/></padding>
+                                        <Label text="What year was this artwork created?" styleClass="question-label" textAlignment="CENTER"/>
+                                        <ImageView fx:id="artImageView" preserveRatio="true" fitWidth="420" fitHeight="320" styleClass="art-image"/>
+                                        <Label text="Select your answer from the options on the right" 
+                                               styleClass="body" wrapText="true" textAlignment="CENTER"/>
+                                    </VBox>
 
-                        <!-- Art Image Display -->
-                        <VBox alignment="CENTER" spacing="10.0">
-                            <children>
-                                <Label styleClass="question-label" text="Who is the artist of this artwork?">
-                                    <font>
-                                        <Font size="20.0" />
-                                    </font>
-                                </Label>
-                                <ImageView fx:id="artImageView" fitHeight="300.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" styleClass="art-image">
-                                    <viewport>
-                                        <Rectangle2D />
-                                    </viewport>
-                                </ImageView>
-                            </children>
-                        </VBox>
+                                    <!-- Right side: Answer Options -->
+                                    <VBox spacing="20" styleClass="modern-card" alignment="CENTER">
+                                        <padding><Insets topRightBottomLeft="24"/></padding>
+                                        
+                                        <!-- Answer Options -->
+                                        <VBox spacing="16.0" alignment="CENTER">
+                                            <HBox alignment="CENTER" spacing="20.0">
+                                                <Button fx:id="option1Button" onAction="#handleOption1" text="Option 1" styleClass="answer-button"/>
+                                                <Button fx:id="option2Button" onAction="#handleOption2" text="Option 2" styleClass="answer-button"/>
+                                            </HBox>
+                                            <HBox alignment="CENTER" spacing="20.0">
+                                                <Button fx:id="option3Button" onAction="#handleOption3" text="Option 3" styleClass="answer-button"/>
+                                                <Button fx:id="option4Button" onAction="#handleOption4" text="Option 4" styleClass="answer-button"/>
+                                            </HBox>
+                                        </VBox>
+                                        
+                                        <!-- Submit and Navigation Buttons -->
+                                        <VBox spacing="16" alignment="CENTER">
+                                            <HBox alignment="CENTER" spacing="12">
+                                                <Button fx:id="submitAnswerButton" onAction="#handleSubmitAnswer" 
+                                                        text="Submit Guess" styleClass="btn-primary" disable="true"/>
+                                                <Button fx:id="nextQuestionButton" onAction="#handleNextQuestion" 
+                                                        text="Next" styleClass="btn-secondary" disable="true"/>
+                                            </HBox>
+                                            <Button onAction="#handleBackToMenu" 
+                                                    text="Back to Menu" styleClass="btn-ghost"/>
+                                        </VBox>
 
-                        <!-- Answer Options -->
-                        <HBox alignment="CENTER" spacing="20.0">
-                            <Button fx:id="option1Button" onAction="#handleOption1" text="Option 1" styleClass="option-button"/>
-                            <Button fx:id="option2Button" onAction="#handleOption2" text="Option 2" styleClass="option-button"/>
-                        </HBox>
-
-                        <HBox alignment="CENTER" spacing="20.0">
-                            <Button fx:id="option3Button" onAction="#handleOption3" text="Option 3" styleClass="option-button"/>
-                            <Button fx:id="option4Button" onAction="#handleOption4" text="Option 4" styleClass="option-button"/>
-                        </HBox>
-
-
-                        <!-- Feedback Section -->
-                        <VBox alignment="CENTER" spacing="15.0">
-                            <children>
-                                <Label fx:id="feedbackLabel" styleClass="feedback-label" wrapText="true">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Label>
-                                <Button fx:id="nextQuestionButton" onAction="#handleNextQuestion" styleClass="next-button" text="Next Question ➤" visible="false">
-                                    <font>
-                                        <Font size="16.0" />
-                                    </font>
-                                </Button>
-                            </children>
-                        </VBox>
-                    </children>
-                    <padding>
-                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-                    </padding>
-                </VBox>
+                                        <!-- Feedback Section -->
+                                        <VBox alignment="CENTER" spacing="16.0">
+                                            <Label fx:id="feedbackLabel" styleClass="feedback-label" wrapText="true" textAlignment="CENTER" />
+                                        </VBox>
+                                    </VBox>
+                                </items>
+                            </SplitPane>
+                        </children>
+                        <padding>
+                            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                        </padding>
+                    </VBox>
 
                 <!-- END GAME PANE -->
                 <VBox fx:id="endGamePane" alignment="CENTER" spacing="30.0" styleClass="end-game-container" visible="false">

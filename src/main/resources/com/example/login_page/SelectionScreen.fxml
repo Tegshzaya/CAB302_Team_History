@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.login_page.SelectionScreenController"
+      styleClass="vbox" spacing="24" alignment="CENTER" stylesheets="@styles.css">
+    <padding><Insets top="40" right="32" bottom="40" left="32"/></padding>
+
+    <Label text="Historical Art Guesser" styleClass="title"/>
+    <Label text="Choose a Game Mode" styleClass="subtitle"/>
+
+    <HBox styleClass="hbox" spacing="24" alignment="CENTER">
+        <!-- Card: Guess the Location -->
+        <VBox styleClass="card vbox" spacing="16" maxWidth="380">
+            <ImageView fx:id="imgLocation" styleClass="image-view" fitWidth="340" fitHeight="200" preserveRatio="true">
+                <image>
+                    <Image url="@guessLocation.jpg" />
+                </image>
+            </ImageView>
+            <Label text="Guess the Location" styleClass="h2"/>
+            <Label wrapText="true" styleClass="muted"
+                   text="Test your geography knowledge! Click on the world map to guess where famous artworks are located."/>
+            <Button text="Play Location Game" onAction="#onChooseLocationGame" styleClass="game-button" maxWidth="Infinity"/>
+        </VBox>
+
+        <!-- Card: Guess the Year -->
+        <VBox styleClass="card vbox" spacing="16" maxWidth="380">
+            <ImageView fx:id="imgYear" styleClass="image-view" fitWidth="340" fitHeight="200" preserveRatio="true">
+                <image>
+                    <Image url="@guessYear.jpg" />
+                </image>
+            </ImageView>
+            <Label text="Guess the Year" styleClass="h2"/>
+            <Label wrapText="true" styleClass="muted"
+                   text="Test your knowledge of art history! Guess the year when famous artworks were created."/>
+            <Button text="Play Year Game" onAction="#onChooseYearGame" styleClass="game-button" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
+
+    <Hyperlink text="Sign out" onAction="#onSignOut"/>
+</VBox>

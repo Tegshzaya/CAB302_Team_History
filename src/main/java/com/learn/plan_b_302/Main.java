@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 Objects.requireNonNull(getClass().getResource("/fxml/login.fxml"),
-                        "Missing FXML: /fxml/game.fxml"));
+                        "Missing FXML: /fxml/login.fxml"));
 
         Scene scene = new Scene(loader.load(), 800, 600);
 
