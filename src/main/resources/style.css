@@ -1,7 +1,6 @@
 /* Auth Container */
 .auth-container {
-    -fx-background-color: #667eea;
-    -fx-background-image: linear-gradient(to bottom right, #667eea, #764ba2);
+    -fx-background-color: linear-gradient(to bottom right, #667eea, #764ba2);
 }
 
 /* Auth Form */
@@ -98,9 +97,9 @@
 
 /* Game Container */
 .game-container {
-    -fx-background-color: #f5f7fa;
-    -fx-background-image: linear-gradient(to bottom right, #f5f7fa, #c3cfe2);
+    -fx-background-color: linear-gradient(to bottom right, #f5f7fa, #c3cfe2);
 }
+
 
 /* Game Panel */
 .game-panel {

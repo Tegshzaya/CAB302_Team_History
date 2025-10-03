@@ -30,9 +30,14 @@ public abstract class BaseController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
 
-            scene.getStylesheets().add(
-                    Objects.requireNonNull(getClass().getResource("/css/style.css")).toExternalForm()
-            );
+            // Add CSS stylesheet (with null-safety)
+            String css = Objects.requireNonNull(
+                    getClass().getResource("/style.css"),
+                    "Missing CSS: /css/style.css"
+            ).toExternalForm();
+
+            scene.getStylesheets().add(css);
+
 
             stage.setScene(scene);
             stage.show();

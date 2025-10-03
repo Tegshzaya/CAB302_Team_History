@@ -11,7 +11,6 @@ module com.learn.plan_b_302 {
     requires javafx.graphics;
     requires java.desktop;
     requires com.fasterxml.jackson.databind;
-    requires com.learn.plan_b_302;
     requires javafx.base;
 
     opens com.learn.plan_b_302 to javafx.fxml;
