@@ -9,8 +9,10 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -32,6 +34,14 @@ public class LocationController extends BaseController {
     @FXML private Label scoreLabel;
     @FXML private Button nextBtn;
     @FXML private Button submitBtn;
+    
+    // End game pane controls
+    @FXML private SplitPane gamePane;
+    @FXML private VBox endGamePane;
+    @FXML private Label finalScoreLabel;
+    @FXML private Label finalAccuracyLabel;
+    @FXML private Button checkAndLearnButton;
+    @FXML private Button playAgainButton;
 
     private WebEngine engine;
     private JSObject window;
@@ -42,13 +52,48 @@ public class LocationController extends BaseController {
 
     private static class Round {
         final String filename; final double lat, lon; final String label;
-        Round(String f, double la, double lo, String label) { this.filename=f; this.lat=la; this.lon=lo; this.label=label; }
+        final String insight;
+        
+        Round(String f, double la, double lo, String label) { 
+            this.filename=f; 
+            this.lat=la; 
+            this.lon=lo; 
+            this.label=label;
+            this.insight = generateLocationInsight(f, label);
+        }
+        
+        private static String generateLocationInsight(String filename, String locationName) {
+            // Generate location-specific insights
+            if (locationName.toLowerCase().contains("louvre") || locationName.toLowerCase().contains("paris")) {
+                return "The Louvre Museum in Paris is the world's largest art museum and a historic monument. Originally built as a fortress in the 12th century, it became a royal palace before transforming into a public museum during the French Revolution in 1793.";
+            } else if (locationName.toLowerCase().contains("chicago")) {
+                return "Chicago, known as the 'Windy City', is famous for its stunning architecture, deep-dish pizza, and rich cultural heritage. The Art Institute of Chicago houses one of the world's finest collections of Impressionist and Post-Impressionist art.";
+            } else if (locationName.toLowerCase().contains("london")) {
+                return "London, the capital of England and the United Kingdom, is a global hub for culture, history, and the arts. Its museums, galleries, and historic landmarks attract millions of visitors from around the world each year.";
+            } else if (locationName.toLowerCase().contains("hague")) {
+                return "The Hague is the seat of the Dutch government and home to the International Court of Justice. The Mauritshuis museum houses the world's finest collection of Dutch Golden Age paintings, including works by Vermeer and Rembrandt.";
+            } else if (locationName.toLowerCase().contains("oslo")) {
+                return "Oslo, the capital of Norway, is known for its green spaces, maritime heritage, and vibrant cultural scene. The city's museums showcase everything from Viking history to modern art and Norwegian cultural traditions.";
+            } else if (locationName.toLowerCase().contains("new york") || locationName.toLowerCase().contains("moma")) {
+                return "New York City is a global center for art, culture, and commerce. The Museum of Modern Art (MoMA) houses the world's most influential collection of modern and contemporary art, from painting to electronic media.";
+            } else if (locationName.toLowerCase().contains("borodino")) {
+                return "The Battle of Borodino (1812) was a major engagement during Napoleon's invasion of Russia. Located near Moscow, this site now houses a museum commemorating one of the largest and bloodiest single-day battles of the Napoleonic Wars.";
+            } else if (locationName.toLowerCase().contains("waterloo")) {
+                return "The Battle of Waterloo (1815) marked Napoleon's final defeat and the end of the Napoleonic Wars. This Belgian site is now a UNESCO World Heritage location with museums and monuments preserving this pivotal moment in European history.";
+            } else if (locationName.toLowerCase().contains("washington") || locationName.toLowerCase().contains("capitol")) {
+                return "Washington, D.C., the capital of the United States, is home to numerous monuments, museums, and government buildings. The U.S. Capitol building houses important historical documents and artworks that tell the story of American democracy.";
+            } else {
+                return "This location represents an important site in world history and culture. Each place on our planet has unique stories, traditions, and contributions that have shaped human civilization throughout the ages.";
+            }
+        }
     }
 
     private final List<Round> rounds = new ArrayList<>();
+    private List<Round> gameRounds = new ArrayList<>(); // Limited to 10 rounds for the game
     private int index = -1, score = 0;
     private Double guessLat = null, guessLon = null;
     private boolean answered = false;
+    private List<LocationReviewResult> gameResults = new ArrayList<>();
     
     private User currentUser;  // store the logged-in user
     
@@ -150,19 +195,23 @@ public class LocationController extends BaseController {
             }
         }
         if (rounds.isEmpty()) throw new IOException("CSV is empty.");
+        
+        // Select 10 random rounds for the game
         Collections.shuffle(rounds, new Random());
+        int maxRounds = Math.min(10, rounds.size());
+        gameRounds = new ArrayList<>(rounds.subList(0, maxRounds));
+        gameResults.clear();
     }
 
     private void nextRound() {
         index++;
-        if (index >= rounds.size()) {
-            feedbackLabel.setText("✅ Finished! Final score: " + score + " / " + rounds.size());
-            submitBtn.setDisable(true); nextBtn.setDisable(true);
+        if (index >= gameRounds.size()) {
+            endGame();
             return;
         }
-        Round r = rounds.get(index);
+        Round r = gameRounds.get(index);
         photoView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(IMG_DIR + r.filename))));
-        roundLabel.setText("Round " + (index+1) + " / " + rounds.size());
+        roundLabel.setText("Round " + (index+1) + " / " + gameRounds.size());
         scoreLabel.setText("Score: " + score);
 
         guessLat = guessLon = null; answered = false;
@@ -187,7 +236,7 @@ public class LocationController extends BaseController {
         if (answered) return;
         if (guessLat == null || guessLon == null) { feedbackLabel.setText("Please click on the map first."); return; }
 
-        Round r = rounds.get(index);
+        Round r = gameRounds.get(index);
         double distKm = haversineKm(guessLat, guessLon, r.lat, r.lon);
 
         int pts; String msg;
@@ -200,11 +249,19 @@ public class LocationController extends BaseController {
         feedbackLabel.setText(String.format("%s You were %.1f km away. Correct: %s (%.5f, %.5f). Click Next.",
                 msg, distKm, r.label, r.lat, r.lon));
 
+        // Store result for review
+        String imageTitle = extractImageTitle(r.filename);
+        LocationReviewResult result = new LocationReviewResult(
+            IMG_DIR + r.filename, imageTitle, r.label, 
+            r.lat, r.lon, guessLat, guessLon, 
+            distKm, pts, index + 1, r.insight
+        );
+        gameResults.add(result);
+
         try { if (window != null) window.call("showResultLine", guessLat, guessLon, r.lat, r.lon); } catch (Exception ignored) {}
 
         answered = true; submitBtn.setDisable(true); nextBtn.setDisable(false);
         System.out.printf("distKm=%.3f (expect ≈1.0 km for Louvre test)%n", distKm);
-
     }
 
     @FXML private void onNext() { if (answered) nextRound(); }
@@ -231,5 +288,95 @@ public class LocationController extends BaseController {
         navigate(event, "/fxml/Menu.fxml",controller -> {});
     }
 
+    private void endGame() {
+        // Calculate final statistics
+        int totalLocations = gameResults.size();
+        double totalDistance = 0;
+        int locationsWithGuesses = 0;
+        
+        for (LocationReviewResult result : gameResults) {
+            if (result.hasGuess()) {
+                locationsWithGuesses++;
+                totalDistance += result.getDistanceKm();
+            }
+        }
+        
+        double averageDistance = locationsWithGuesses > 0 ? totalDistance / locationsWithGuesses : 0;
+        
+        // Update final score displays
+        finalScoreLabel.setText("Final Score: " + score + " / 30");
+        finalAccuracyLabel.setText(String.format("Average Distance: %.1f km", averageDistance));
+        
+        // Show end game pane
+        showEndGamePane();
+    }
+    
+    private void showGamePane() {
+        gamePane.setVisible(true);
+        endGamePane.setVisible(false);
+    }
+    
+    private void showEndGamePane() {
+        gamePane.setVisible(false);
+        endGamePane.setVisible(true);
+    }
+    
+    @FXML
+    private void handleCheckAndLearn(ActionEvent event) {
+        navigate(event, "/fxml/location-review.fxml", controller -> {
+            if (controller instanceof LocationReviewController lrc) {
+                lrc.setReviewData(new ArrayList<>(gameResults), currentUser);
+            }
+        });
+    }
+    
+    @FXML
+    private void handlePlayAgain() {
+        // Reset game state
+        index = -1;
+        score = 0;
+        gameResults.clear();
+        
+        // Reload dataset and select new random rounds
+        try {
+            loadDataset();
+        } catch (IOException e) {
+            System.err.println("Failed to reload dataset: " + e.getMessage());
+            return;
+        }
+        
+        // Show game pane and start first round
+        showGamePane();
+        nextRound();
+    }
+    
+    private String extractImageTitle(String filename) {
+        if (filename == null) return "Unknown Location";
+        
+        // Remove file extension and convert underscores to spaces
+        String title = filename;
+        if (title.contains(".")) {
+            title = title.substring(0, title.lastIndexOf("."));
+        }
+        title = title.replace("_", " ").replace("-", " ");
+        
+        // Capitalize each word
+        String[] words = title.split(" ");
+        StringBuilder formatted = new StringBuilder();
+        
+        for (int i = 0; i < words.length; i++) {
+            if (i > 0) formatted.append(" ");
+            String word = words[i].toLowerCase();
+            if (word.length() > 0) {
+                formatted.append(Character.toUpperCase(word.charAt(0)));
+                if (word.length() > 1) {
+                    formatted.append(word.substring(1));
+                }
+            }
+        }
+        
+        return formatted.toString();
+    }
+    
     private void fail(String m){ feedbackLabel.setText(m); submitBtn.setDisable(true); nextBtn.setDisable(true); }
 }
