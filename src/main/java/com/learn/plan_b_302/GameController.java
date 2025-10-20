@@ -159,6 +159,7 @@ public class GameController extends BaseController{
 
         // Clear feedback and reset buttons
         feedbackLabel.setText("");
+        nextQuestionButton.setVisible(true); // Ensure next button is visible
         nextQuestionButton.setDisable(true); // Disable next button like Location game
         submitAnswerButton.setDisable(true); // Disable submit button
         selectedAnswer = null;
@@ -348,6 +349,10 @@ public class GameController extends BaseController{
     private void showGamePane() {
         gamePane.setVisible(true);
         endGamePane.setVisible(false);
+        
+        // Ensure next button is visible and properly configured for new game
+        nextQuestionButton.setVisible(true);
+        nextQuestionButton.setDisable(true); // Start disabled until answer is submitted
     }
 
     private void showEndGamePane() {
