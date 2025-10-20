@@ -43,6 +43,7 @@ public class GameController extends BaseController{
     @FXML private Label finalScoreLabel;
     @FXML private Label finalPercentageLabel;
     @FXML private Label newBestScoreLabel;
+    @FXML private Button checkAndLearnButton;
     @FXML private Button playAgainButton;
     @FXML private Button returnToMenuButton;
     @FXML private Button logoutButton;
@@ -57,6 +58,7 @@ public class GameController extends BaseController{
     private boolean questionReady = false;
     private boolean gameOver = false;
     private String selectedAnswer = null;
+    private List<ReviewResult> gameResults = new ArrayList<>();
 
 
     @FXML
@@ -98,6 +100,7 @@ public class GameController extends BaseController{
     private void startNewGame() {
         questionReady = false;
         gameOver = false;
+        gameResults.clear(); // Clear previous game results
 
         artImages = DatabaseManager.getAllImages();
         System.out.println("[DEBUG] artImages size = " + (artImages == null ? "null" : artImages.size()));
@@ -211,6 +214,16 @@ public class GameController extends BaseController{
         if (selectedAnswer == null || currentImage == null) return;
 
         boolean isCorrect = currentImage.isCorrectAnswer(selectedAnswer);
+        
+        // Store result for review
+        ReviewResult result = new ReviewResult(
+            currentImage, 
+            selectedAnswer, 
+            currentImage.getCorrectAnswer(), 
+            isCorrect, 
+            currentQuestionIndex + 1
+        );
+        gameResults.add(result);
 
         // Disable all buttons
         for (Button button : optionButtons) {
@@ -304,6 +317,15 @@ public class GameController extends BaseController{
     }
 
 
+    @FXML
+    private void handleCheckAndLearn(ActionEvent event) {
+        navigate(event, "/fxml/review.fxml", controller -> {
+            if (controller instanceof ReviewController rc) {
+                rc.setReviewData(new ArrayList<>(gameResults), currentUser);
+            }
+        });
+    }
+    
     @FXML
     private void handlePlayAgain() {
         startNewGame();

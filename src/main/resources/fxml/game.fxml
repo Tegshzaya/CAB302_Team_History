@@ -122,8 +122,10 @@
                         <!-- Action Buttons -->
                         <VBox alignment="CENTER" maxWidth="400" spacing="20">
                             <children>
+                                <Button fx:id="checkAndLearnButton" onAction="#handleCheckAndLearn" prefWidth="280" 
+                                        styleClass="btn-primary btn-large" text="📚 Check and Learn" />
                                 <Button fx:id="playAgainButton" onAction="#handlePlayAgain" prefWidth="280" 
-                                        styleClass="btn-primary btn-large" text="🎆 Play Again" />
+                                        styleClass="btn-secondary" text="🎆 Play Again" />
                                 <Button onAction="#handleLogoutFromEnd" prefWidth="280" 
                                         styleClass="btn-ghost" text="🏠 Return to Menu" />
                             </children>
