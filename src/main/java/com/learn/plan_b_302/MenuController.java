@@ -22,7 +22,11 @@ public class MenuController extends BaseController{
     // Location game FXML
     @FXML
     protected void handleLocationGame(ActionEvent event){
-        navigate(event, "/fxml/Location.fxml",controller -> {});
+        navigate(event, "/fxml/Location.fxml", controller -> {
+            if (controller instanceof LocationController lc) {
+                lc.setCurrentUser(currentUser);  // pass the user to LocationController
+            }
+        });
     }
 
     // Year game FXML

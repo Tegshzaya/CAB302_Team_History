@@ -1,34 +1,37 @@
 /* ========================================
-   MODERN DESIGN SYSTEM - HISTORICAL ART GUESSER
+ HISTORICAL ART GUESSER - MODERN DESIGN SYSTEM
    ======================================== */
 
-/* App-wide */
+/* App-wide with enhanced gradient background */
 .root {
-    -fx-background-color:lightgreen;
-    -fx-font-family: 'Inter', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
-    -fx-font-size: 14px;
+    -fx-background-color: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+    -fx-font-family: "Inter", "SF Pro Display", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+    -fx-font-size: 16px;
     -fx-text-fill: #1a202c;
+    -fx-background-size: 400% 400%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 /* ========================================
-   COLOR PALETTE
+   MODERN BLUE-PURPLE COLOR PALETTE
    ======================================== */
-/* Primary Colors */
+/* Primary Blue Colors */
 .primary-50 { -fx-background-color: #eff6ff; }
 .primary-100 { -fx-background-color: #dbeafe; }
-.primary-500 { -fx-background-color: #3b82f6; }
-.primary-600 { -fx-background-color: #2563eb; }
-.primary-700 { -fx-background-color: #1d4ed8; }
+.primary-500 { -fx-background-color: #667eea; }
+.primary-600 { -fx-background-color: #5a67d8; }
+.primary-700 { -fx-background-color: #4c51bf; }
 
-/* Secondary Colors */
-.secondary-50 { -fx-background-color: #f0f9ff; }
-.secondary-500 { -fx-background-color: #0ea5e9; }
-.secondary-600 { -fx-background-color: #0284c7; }
+/* Secondary Purple Colors */
+.secondary-50 { -fx-background-color: #faf5ff; }
+.secondary-500 { -fx-background-color: #764ba2; }
+.secondary-600 { -fx-background-color: #6b46c1; }
 
-/* Success Colors */
-.success-50 { -fx-background-color: #f0fdf4; }
-.success-500 { -fx-background-color: #22c55e; }
-.success-600 { -fx-background-color: #16a34a; }
+/* Success Colors (Modern Blue) */
+.success-50 { -fx-background-color: #f0f9ff; }
+.success-500 { -fx-background-color: #4facfe; }
+.success-600 { -fx-background-color: #3b82f6; }
 
 /* Warning Colors */
 .warning-50 { -fx-background-color: #fffbeb; }
@@ -126,122 +129,165 @@
 }
 
 /* ========================================
-   SPACING SYSTEM
+   ENHANCED SPACING SYSTEM
    ======================================== */
-.spacing-xs { -fx-spacing: 4px; }
-.spacing-sm { -fx-spacing: 8px; }
-.spacing-md { -fx-spacing: 16px; }
-.spacing-lg { -fx-spacing: 24px; }
-.spacing-xl { -fx-spacing: 32px; }
-.spacing-2xl { -fx-spacing: 48px; }
+.spacing-xs { -fx-spacing: 8px; }
+.spacing-sm { -fx-spacing: 16px; }
+.spacing-md { -fx-spacing: 24px; }
+.spacing-lg { -fx-spacing: 32px; }
+.spacing-xl { -fx-spacing: 40px; }
+.spacing-2xl { -fx-spacing: 56px; }
 
-.padding-xs { -fx-padding: 4px; }
-.padding-sm { -fx-padding: 8px; }
-.padding-md { -fx-padding: 16px; }
-.padding-lg { -fx-padding: 24px; }
-.padding-xl { -fx-padding: 32px; }
-.padding-2xl { -fx-padding: 48px; }
+.padding-xs { -fx-padding: 8px; }
+.padding-sm { -fx-padding: 16px; }
+.padding-md { -fx-padding: 24px; }
+.padding-lg { -fx-padding: 32px; }
+.padding-xl { -fx-padding: 40px; }
+.padding-2xl { -fx-padding: 56px; }
 
 /* ========================================
-   MODERN CONTAINERS
+   LAYOUT CONTAINERS
+   ======================================== */
+.main-container {
+    -fx-alignment: center;
+    -fx-spacing: 32px;
+    -fx-padding: 40px;
+    -fx-background-color: transparent;
+}
+
+.content-container {
+    -fx-alignment: center;
+    -fx-spacing: 24px;
+    -fx-padding: 32px;
+    -fx-background-color: transparent;
+}
+
+.form-container {
+    -fx-alignment: center;
+    -fx-spacing: 20px;
+    -fx-padding: 40px;
+    -fx-background-color: transparent;
+}
+
+.game-layout {
+    -fx-alignment: center;
+    -fx-spacing: 28px;
+    -fx-padding: 36px;
+    -fx-background-color: transparent;
+}
+
+/* ========================================
+   MODERN BLUE-PURPLE CONTAINERS
    ======================================== */
 .modern-card {
     -fx-background-color: rgba(255, 255, 255, 0.95);
-    -fx-background-radius: 16px;
-    -fx-padding: 24px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 20, 0, 0, 4);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-border-width: 1px;
-    -fx-border-radius: 16px;
+    -fx-background-radius: 24px;
+    -fx-padding: 40px;
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.2), 28, 0, 0, 8);
+    -fx-border-color: rgba(102, 126, 234, 0.3);
+    -fx-border-width: 2px;
+    -fx-border-radius: 24px;
+    -fx-alignment: center;
+    -fx-spacing: 24px;
+    -fx-min-width: 400px;
+    -fx-max-width: 600px;
 }
 
 .modern-card-elevated {
     -fx-background-color: rgba(255, 255, 255, 0.98);
-    -fx-background-radius: 20px;
-    -fx-padding: 32px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.12), 24, 0, 0, 8);
-    -fx-border-color: rgba(255, 255, 255, 0.3);
-    -fx-border-width: 1px;
-    -fx-border-radius: 20px;
+    -fx-background-radius: 28px;
+    -fx-padding: 48px;
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.25), 32, 0, 0, 12);
+    -fx-border-color: rgba(102, 126, 234, 0.4);
+    -fx-border-width: 2px;
+    -fx-border-radius: 28px;
+    -fx-alignment: center;
+    -fx-spacing: 28px;
+    -fx-min-width: 500px;
+    -fx-max-width: 700px;
 }
 
 .glass-card {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
-    -fx-background-radius: 16px;
-    -fx-padding: 24px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 16, 0, 0, 4);
-    -fx-border-color: rgba(255, 255, 255, 0.2);
-    -fx-border-width: 1px;
-    -fx-border-radius: 16px;
+    -fx-background-color: rgba(102, 126, 234, 0.1);
+    -fx-background-radius: 24px;
+    -fx-padding: 40px;
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.2), 24, 0, 0, 8);
+    -fx-border-color: rgba(102, 126, 234, 0.3);
+    -fx-border-width: 2px;
+    -fx-border-radius: 24px;
+    -fx-alignment: center;
+    -fx-spacing: 24px;
+    -fx-min-width: 400px;
+    -fx-max-width: 600px;
 }
 
 /* ========================================
-   MODERN BUTTONS
+   MODERN BLUE-PURPLE BUTTONS
    ======================================== */
 .btn-primary {
-    -fx-background-color: #3b82f6;
+    -fx-background-color: #667eea;
     -fx-text-fill: white;
     -fx-font-weight: 600;
-    -fx-font-size: 14px;
-    -fx-padding: 12px 24px;
-    -fx-background-radius: 12px;
+    -fx-font-size: 16px;
+    -fx-padding: 16px 32px;
+    -fx-background-radius: 16px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.3), 8, 0, 0, 2);
-    -fx-min-width: 120px;
-    -fx-min-height: 44px;
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.4), 12, 0, 0, 4);
+    -fx-min-width: 160px;
+    -fx-min-height: 56px;
 }
 
 .btn-primary:hover {
-    -fx-background-color: #2563eb;
-    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.4), 12, 0, 0, 4);
-    -fx-scale-x: 1.02;
-    -fx-scale-y: 1.02;
+    -fx-background-color: #5a67d8;
+    -fx-effect: dropshadow(gaussian, rgba(90, 103, 216, 0.5), 16, 0, 0, 6);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
 }
 
 .btn-primary:pressed {
-    -fx-background-color: #1d4ed8;
-    -fx-scale-x: 0.98;
-    -fx-scale-y: 0.98;
+    -fx-background-color: #4c51bf;
+    -fx-scale-x: 0.97;
+    -fx-scale-y: 0.97;
 }
 
 .btn-secondary {
-    -fx-background-color: #6b7280;
+    -fx-background-color: #764ba2;
     -fx-text-fill: white;
     -fx-font-weight: 600;
-    -fx-font-size: 14px;
-    -fx-padding: 12px 24px;
-    -fx-background-radius: 12px;
+    -fx-font-size: 16px;
+    -fx-padding: 16px 32px;
+    -fx-background-radius: 16px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(107, 114, 128, 0.3), 8, 0, 0, 2);
-    -fx-min-width: 120px;
-    -fx-min-height: 44px;
+    -fx-effect: dropshadow(gaussian, rgba(118, 75, 162, 0.4), 12, 0, 0, 4);
+    -fx-min-width: 160px;
+    -fx-min-height: 56px;
 }
 
 .btn-secondary:hover {
-    -fx-background-color: #4b5563;
-    -fx-effect: dropshadow(gaussian, rgba(75, 85, 99, 0.4), 12, 0, 0, 4);
-    -fx-scale-x: 1.02;
-    -fx-scale-y: 1.02;
+    -fx-background-color: #6b46c1;
+    -fx-effect: dropshadow(gaussian, rgba(107, 70, 193, 0.5), 16, 0, 0, 6);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
 }
 
 .btn-success {
-    -fx-background-color: #22c55e;
+    -fx-background-color: #4facfe;
     -fx-text-fill: white;
     -fx-font-weight: 600;
-    -fx-font-size: 14px;
-    -fx-padding: 12px 24px;
-    -fx-background-radius: 12px;
+    -fx-font-size: 16px;
+    -fx-padding: 16px 32px;
+    -fx-background-radius: 16px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(34, 197, 94, 0.3), 8, 0, 0, 2);
-    -fx-min-width: 120px;
-    -fx-min-height: 44px;
+    -fx-effect: dropshadow(gaussian, rgba(79, 172, 254, 0.4), 12, 0, 0, 4);
+    -fx-min-width: 160px;
+    -fx-min-height: 56px;
 }
 
 .btn-success:hover {
-    -fx-background-color: #16a34a;
-    -fx-effect: dropshadow(gaussian, rgba(22, 163, 74, 0.4), 12, 0, 0, 4);
-    -fx-scale-x: 1.02;
-    -fx-scale-y: 1.02;
+    -fx-background-color: #3b82f6;
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.5), 16, 0, 0, 6);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
 }
 
 .btn-warning {
@@ -333,10 +379,10 @@
 }
 
 /* ========================================
-   AUTH CONTAINER
+   MODERN BLUE-PURPLE AUTH CONTAINER
    ======================================== */
 .auth-container {
-    -fx-background-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -fx-background-color: linear-gradient(to bottom right, #667eea, #764ba2, #f093fb, #f5576c, #4facfe);
 }
 
 
@@ -476,20 +522,24 @@
    ======================================== */
 .game-container {
     -fx-background-color: rgba(255, 255, 255, 0.95);
-    -fx-background-radius: 20px;
-    -fx-padding: 32px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 24, 0, 0, 8);
-    -fx-border-color: rgba(255, 255, 255, 0.3);
-    -fx-border-width: 1px;
-    -fx-border-radius: 20px;
-    -fx-spacing: 24px;
+    -fx-background-radius: 24px;
+    -fx-padding: 48px;
+    -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.2), 28, 0, 0, 8);
+    -fx-border-color: rgba(102, 126, 234, 0.3);
+    -fx-border-width: 2px;
+    -fx-border-radius: 24px;
+    -fx-spacing: 28px;
+    -fx-alignment: center;
+    -fx-min-width: 500px;
+    -fx-max-width: 800px;
 }
 
 .game-header {
-    -fx-background-color: rgba(59, 130, 246, 0.1);
-    -fx-background-radius: 12px;
-    -fx-padding: 16px 24px;
-    -fx-spacing: 24px;
+    -fx-background-color: rgba(102, 126, 234, 0.1);
+    -fx-background-radius: 16px;
+    -fx-padding: 24px 32px;
+    -fx-spacing: 28px;
+    -fx-alignment: center;
 }
 
 .game-info {
@@ -636,49 +686,85 @@
 }
 
 /* ========================================
-   RESPONSIVE DESIGN
+   ENHANCED RESPONSIVE DESIGN
    ======================================== */
-/* Large screens */
-@media (min-width: 1200px) {
+/* Large screens (1200px+) */
+.large-screen {
+    .modern-card, .modern-card-elevated {
+        -fx-min-width: 500px;
+        -fx-max-width: 700px;
+        -fx-padding: 48px;
+    }
+
+    .answer-button {
+        -fx-min-width: 280px;
+        -fx-min-height: 60px;
+    }
+
+    .game-container {
+        -fx-min-width: 600px;
+        -fx-max-width: 900px;
+    }
+}
+
+/* Medium screens (800px-1199px) */
+.medium-screen {
     .modern-card, .modern-card-elevated {
         -fx-min-width: 400px;
+        -fx-max-width: 600px;
+        -fx-padding: 40px;
+    }
+
+    .answer-button {
+        -fx-min-width: 200px;
+        -fx-min-height: 56px;
+    }
+
+    .game-container {
+        -fx-min-width: 500px;
+        -fx-max-width: 700px;
+    }
+}
+
+/* Small screens (under 800px) */
+.small-screen {
+    .modern-card, .modern-card-elevated {
+        -fx-min-width: 350px;
         -fx-max-width: 500px;
+        -fx-padding: 32px;
     }
-    
-    .answer-button {
-        -fx-min-width: 250px;
-    }
-}
 
-/* Medium screens */
-@media (max-width: 1199px) {
-    .modern-card, .modern-card-elevated {
-        -fx-min-width: 300px;
-        -fx-max-width: 400px;
-    }
-    
     .answer-button {
-        -fx-min-width: 180px;
-    }
-}
-
-/* Small screens */
-@media (max-width: 768px) {
-    .modern-card, .modern-card-elevated {
-        -fx-min-width: 280px;
-        -fx-max-width: 320px;
-    }
-    
-    .answer-button {
-        -fx-min-width: 150px;
-        -fx-min-height: 40px;
-    }
-    
-    .btn-large {
-        -fx-padding: 12px 24px;
-        -fx-min-width: 120px;
+        -fx-min-width: 160px;
         -fx-min-height: 48px;
     }
+
+    .game-container {
+        -fx-min-width: 400px;
+        -fx-max-width: 600px;
+    }
+}
+
+/* ========================================
+   BACKGROUND COVERAGE ENHANCEMENTS
+   ======================================== */
+.full-screen-background {
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-attachment: fixed;
+}
+
+.centered-content {
+    -fx-alignment: center;
+    -fx-spacing: 32px;
+    -fx-padding: 40px;
+}
+
+.wide-layout {
+    -fx-min-width: 800px;
+    -fx-max-width: 1200px;
+    -fx-alignment: center;
 }
 
 /* ========================================
@@ -856,7 +942,7 @@
     -fx-padding: 12 20 12 20;
     -fx-cursor: hand;
 }
-.btn-warning:hover { 
+.btn-warning:hover {
     -fx-background-color: #d97706;
 }
 
@@ -877,35 +963,35 @@
 }
 
 /* Text Classes - Clean and Simple */
-.title { 
-    -fx-font-size: 24px; 
-    -fx-font-weight: 600; 
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: 600;
     -fx-text-fill: #1a202c;
 }
 
-.subtitle { 
-    -fx-font-size: 14px; 
-    -fx-font-weight: 400; 
+.subtitle {
+    -fx-font-size: 14px;
+    -fx-font-weight: 400;
     -fx-text-fill: #6b7280;
 }
 
-.h1 { 
-    -fx-font-size: 24px; 
-    -fx-font-weight: 600; 
+.h1 {
+    -fx-font-size: 24px;
+    -fx-font-weight: 600;
     -fx-text-fill: #1a202c;
 }
-.h2 { 
-    -fx-font-size: 18px; 
-    -fx-font-weight: 500; 
+.h2 {
+    -fx-font-size: 18px;
+    -fx-font-weight: 500;
     -fx-text-fill: #374151;
 }
-.h3 { 
-    -fx-font-size: 16px; 
-    -fx-font-weight: 500; 
+.h3 {
+    -fx-font-size: 16px;
+    -fx-font-weight: 500;
     -fx-text-fill: #374151;
 }
-.muted { 
-    -fx-text-fill: #6b7280; 
+.muted {
+    -fx-text-fill: #6b7280;
     -fx-font-weight: 400;
 }
 

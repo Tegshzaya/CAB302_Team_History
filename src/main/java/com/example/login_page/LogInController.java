@@ -10,7 +10,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 
 public class LogInController {
 
@@ -31,8 +30,8 @@ public class LogInController {
         if (UserStore.validate(username, password)) {
             System.out.println("LogInController: Login successful, navigating to selection screen");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("SelectionScreen.fxml"));
-            Scene selectionScreen = new Scene(loader.load(), 800, 700);
-            selectionScreen.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+            Scene selectionScreen = new Scene(loader.load(), 1200, 900);
+            selectionScreen.getStylesheets().add(getClass().getResource("/com/example/login_page/styles.css").toExternalForm());
 
             // Use the primary stage instead of creating new ones
             Stage stage = HelloApplication.getPrimaryStage();
@@ -41,6 +40,8 @@ public class LogInController {
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             }
 
+
+            
             stage.setTitle("Historical Art Guesser - Main Menu");
             stage.setScene(selectionScreen);
         } else {
@@ -58,8 +59,8 @@ public class LogInController {
     protected void onSignup(ActionEvent event) throws java.io.IOException {
         System.out.println("LogInController: Signup button clicked");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Signup.fxml"));
-        Scene signupScene = new Scene(loader.load(), 800, 700);
-        signupScene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        Scene signupScene = new Scene(loader.load(), 1200, 900);
+        signupScene.getStylesheets().add(getClass().getResource("/com/example/login_page/styles.css").toExternalForm());
         
         // Use the primary stage instead of creating new ones
         Stage stage = HelloApplication.getPrimaryStage();

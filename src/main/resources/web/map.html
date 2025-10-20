@@ -49,15 +49,38 @@
 
     // Java calls this AFTER the WebView has a real size
     window.initMap = function initMap() {
-        if (window.map) return;
+        console.log('initMap called');
+        if (window.map) {
+            console.log('Map already initialized');
+            return;
+        }
+        
+        console.log('Creating Leaflet map...');
+        try {
+            window.map = L.map('map', { worldCopyJump: true }).setView([20, 0], 2);
+            console.log('Leaflet map created successfully');
+        } catch (e) {
+            console.error('Error creating map:', e);
+            return;
+        }
 
-        window.map = L.map('map', { worldCopyJump: true }).setView([20, 0], 2);
-
-        // Default OSM tiles (you can switch to the FR mirror if needed)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Try primary tile server, with fallback options
+        let tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 18,
             attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(window.map);
+        });
+        
+        // Fallback to alternative servers if primary fails
+        tileLayer.on('tileerror', function() {
+            console.log('Primary tile server failed, trying fallback...');
+            tileLayer.remove();
+            L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+                maxZoom: 20,
+                attribution: '&copy; OpenStreetMap France contributors'
+            }).addTo(window.map);
+        });
+        
+        tileLayer.addTo(window.map);
 
         window.map.on('click', e => {
             const { lat, lng } = e.latlng;

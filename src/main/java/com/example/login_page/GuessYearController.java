@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -214,7 +213,14 @@ public class GuessYearController {
             Scene newScene = new Scene(root);
             
             // Apply the stylesheet to the new scene
-            newScene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+            newScene.getStylesheets().add(getClass().getResource("/com/example/login_page/styles.css").toExternalForm());
+            
+            // Set fixed window size and disable resizing
+            stage.setResizable(false);
+            stage.setMinWidth(1200);
+            stage.setMaxWidth(1200);
+            stage.setMinHeight(900);
+            stage.setMaxHeight(900);
             
             System.out.println("GuessYearController: Setting selection screen on stage");
             stage.setScene(newScene);

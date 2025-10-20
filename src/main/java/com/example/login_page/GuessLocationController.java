@@ -208,7 +208,14 @@ public class GuessLocationController {
             Scene newScene = new Scene(root);
             
             // Apply the stylesheet to the new scene
-            newScene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+            newScene.getStylesheets().add(getClass().getResource("/com/example/login_page/styles.css").toExternalForm());
+            
+            // Set fixed window size and disable resizing
+            stage.setResizable(false);
+            stage.setMinWidth(1200);
+            stage.setMaxWidth(1200);
+            stage.setMinHeight(900);
+            stage.setMaxHeight(900);
             
             System.out.println("GuessLocationController: Setting selection screen on stage");
             stage.setScene(newScene);

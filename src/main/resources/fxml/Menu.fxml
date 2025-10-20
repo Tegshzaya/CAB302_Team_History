@@ -7,55 +7,69 @@
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            fx:controller="com.learn.plan_b_302.MenuController"
-           styleClass="auth-container" stylesheets="@../css/style.css">
+           styleClass="auth-container main-layout" stylesheets="@../css/modern-style.css">
 
-    <VBox alignment="CENTER" spacing="32" styleClass="padding-2xl">
-        <!-- Header Section -->
-        <VBox alignment="CENTER" spacing="16">
-            <Label text="🎨" styleClass="display-1" />
-            <Label text="Historical Art Guesser" styleClass="title-label" />
-            <Label text="Choose your adventure" styleClass="body" />
+    <!-- Main Content Container -->
+    <VBox alignment="CENTER" spacing="56" styleClass="centered-content">
+        <!-- Enhanced Header Section -->
+        <VBox alignment="CENTER" spacing="32" styleClass="padding-xl">
+            <Label text="🎨" styleClass="display-2" />
+            <VBox alignment="CENTER" spacing="16">
+                <Label text="Historical Art Guesser" styleClass="title-label" />
+                <Label text="Choose your adventure in art history" styleClass="body-large" textAlignment="CENTER" />
+            </VBox>
         </VBox>
 
-        <!-- Game Selection Cards -->
-        <HBox spacing="32" alignment="CENTER">
-            <!-- Location Game Card -->
-            <VBox spacing="20" styleClass="modern-card-elevated" alignment="CENTER" minWidth="320" minHeight="280">
-                <VBox spacing="12" alignment="CENTER">
+        <!-- Modern Game Selection Cards -->
+        <HBox spacing="56" alignment="CENTER" styleClass="button-row">
+            <!-- Enhanced Location Game Card -->
+            <VBox spacing="28" styleClass="glass-card-elevated interactive" alignment="CENTER" 
+                  minWidth="420" minHeight="380" maxWidth="500">
+                <VBox spacing="20" alignment="CENTER">
                     <Label text="🌍" styleClass="display-2" />
                     <Label text="Guess the Location" styleClass="heading-2" />
-                    <Label text="Test your geography knowledge by identifying where historical events took place" 
-                           styleClass="body" textAlignment="CENTER" wrapText="true" maxWidth="280" />
+                    <Label text="Embark on a geographical journey through art history. Test your knowledge by identifying where famous artworks originated." 
+                           styleClass="body" textAlignment="CENTER" wrapText="true" maxWidth="380" />
                 </VBox>
                 
-                <VBox spacing="12" alignment="CENTER">
-                    <Button text="Start Game" onAction="#handleLocationGame" 
-                            styleClass="btn-primary btn-large" minWidth="200" />
-                    <Label text="📍 Interactive map gameplay" styleClass="caption" />
+                <VBox spacing="16" alignment="CENTER" styleClass="button-container">
+                    <Button text="✨ Start Adventure" onAction="#handleLocationGame" 
+                            styleClass="btn-primary btn-large" minWidth="260" minHeight="52" />
+                    <VBox alignment="CENTER" spacing="6">
+                        <Label text="📍 Interactive Map Experience" styleClass="caption" />
+                        <Label text="Explore • Discover • Learn" styleClass="body-small" />
+                    </VBox>
                 </VBox>
             </VBox>
 
-            <!-- Year Game Card -->
-            <VBox spacing="20" styleClass="modern-card-elevated" alignment="CENTER" minWidth="320" minHeight="280">
-                <VBox spacing="12" alignment="CENTER">
+            <!-- Enhanced Year Game Card -->
+            <VBox spacing="28" styleClass="glass-card-elevated interactive" alignment="CENTER" 
+                  minWidth="420" minHeight="380" maxWidth="500">
+                <VBox spacing="20" alignment="CENTER">
                     <Label text="📅" styleClass="display-2" />
                     <Label text="Guess the Year" styleClass="heading-2" />
-                    <Label text="Challenge your historical knowledge by guessing when famous artworks were created" 
-                           styleClass="body" textAlignment="CENTER" wrapText="true" maxWidth="280" />
+                    <Label text="Travel through time with masterpieces from across the centuries. Challenge yourself to guess when these works were created." 
+                           styleClass="body" textAlignment="CENTER" wrapText="true" maxWidth="380" />
                 </VBox>
                 
-                <VBox spacing="12" alignment="CENTER">
-                    <Button text="Start Game" onAction="#handleYearGame" 
-                            styleClass="btn-primary btn-large" minWidth="200" />
-                    <Label text="🎨 Art history focus" styleClass="caption" />
+                <VBox spacing="16" alignment="CENTER" styleClass="button-container">
+                    <Button text="🕰️ Begin Journey" onAction="#handleYearGame" 
+                            styleClass="btn-secondary btn-large" minWidth="260" minHeight="52" />
+                    <VBox alignment="CENTER" spacing="6">
+                        <Label text="🎨 Artistic Timeline Quest" styleClass="caption" />
+                        <Label text="Renaissance • Baroque • Modern" styleClass="body-small" />
+                    </VBox>
                 </VBox>
             </VBox>
         </HBox>
 
-        <!-- Footer -->
-        <VBox spacing="16" alignment="CENTER">
-            <Button text="Sign Out" onAction="#ReturnLogin" styleClass="btn-ghost" />
-            <Label text="Ready to explore history?" styleClass="body-small" />
+        <!-- Enhanced Footer -->
+        <VBox spacing="24" alignment="CENTER" styleClass="button-container">
+            <VBox alignment="CENTER" spacing="12">
+                <Label text="Ready to explore the fascinating world of art history?" styleClass="body" textAlignment="CENTER" />
+                <Label text="Each game offers unique challenges and discoveries" styleClass="body-small" textAlignment="CENTER" />
+            </VBox>
+            <Button text="🚀 Sign Out" onAction="#ReturnLogin" styleClass="btn-ghost" minWidth="180" />
         </VBox>
     </VBox>
 </StackPane>

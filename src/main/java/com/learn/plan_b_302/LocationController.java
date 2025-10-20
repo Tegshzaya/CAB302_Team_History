@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class LocationController extends BaseController {
@@ -48,12 +49,26 @@ public class LocationController extends BaseController {
     private int index = -1, score = 0;
     private Double guessLat = null, guessLon = null;
     private boolean answered = false;
+    
+    private User currentUser;  // store the logged-in user
+    
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+        System.out.println("LocationController: User set to " + (user != null ? user.getUsername() : "null"));
+    }
 
     @FXML
     public void initialize() {
+        System.out.println("LocationController: Initializing...");
+        
         try { loadDataset(); }
-        catch (IOException e) { fail("❌ Could not load dataset: " + e.getMessage()); return; }
-
+        catch (IOException e) { 
+            System.err.println("LocationController: Failed to load dataset - " + e.getMessage());
+            fail("❌ Could not load dataset: " + e.getMessage()); 
+            return; 
+        }
+        
+        System.out.println("LocationController: Dataset loaded with " + rounds.size() + " rounds");
         engine = mapView.getEngine();
 
         // Optional: see JS console logs in your IDE (handy to debug)
@@ -116,7 +131,7 @@ public class LocationController extends BaseController {
     private void loadDataset() throws IOException {
         // To robust the game used try method
         try (InputStream in = Objects.requireNonNull(getClass().getResourceAsStream(CSV_PATH), "CSV not found: " + CSV_PATH);
-             BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
             String line; int row = 0;
             while ((line = br.readLine()) != null) {
                 row++; line = line.trim();
@@ -155,9 +170,15 @@ public class LocationController extends BaseController {
         feedbackLabel.setText("Drop a pin on the map, then click Submit Guess.");
     }
 
+    /** Called from JS for console forwarding */
+    public void javaLog(String level, String message) {
+        System.out.println("[WebView " + level + "] " + message);
+    }
+    
     /** Called from JS when user clicks on the map */
     public void onMapClick(double lat, double lon) {
         guessLat = lat; guessLon = lon;
+        System.out.println("LocationController: Map clicked at " + lat + ", " + lon);
         feedbackLabel.setText(String.format("Selected: %.4f, %.4f — click Submit Guess.", lat, lon));
     }
 

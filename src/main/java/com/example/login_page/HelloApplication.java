@@ -25,12 +25,19 @@ public class HelloApplication extends Application {
         // Start with the login screen instead of selection screen
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Login.fxml"));
         System.out.println("HelloApplication: Loading Login.fxml...");
-        Scene scene = new Scene(fxmlLoader.load(), 800, 700);
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 900);
         System.out.println("HelloApplication: Scene created successfully");
 
         primaryStage.setTitle("Historical Art Guesser - Login");
         scene.getStylesheets().add(HelloApplication.
-                class.getResource("styles.css").toExternalForm()); // adding the CSS
+                class.getResource("/com/example/login_page/styles.css").toExternalForm()); // adding the CSS
+
+        // Set fixed window size and disable resizing
+        primaryStage.setResizable(false);
+        primaryStage.setMinWidth(1200);
+        primaryStage.setMaxWidth(1200);
+        primaryStage.setMinHeight(900);
+        primaryStage.setMaxHeight(900);
 
         System.out.println("HelloApplication: Showing stage...");
         primaryStage.setScene(scene);

@@ -5,58 +5,61 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.web.WebView?>
 
-<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.login_page.GuessLocationController" 
-      styleClass="game-container" 
-      spacing="24" alignment="CENTER">
-    <padding>
-        <Insets top="24" right="32" bottom="24" left="32"/>
-    </padding>
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.login_page.GuessLocationController" 
+           prefHeight="900.0" prefWidth="1200.0" styleClass="game-container main-layout" 
+           stylesheets="@styles.css">
 
-    <!-- Header Section -->
-    <VBox spacing="8" alignment="CENTER">
-        <Label text="🎯 Guess the Location" styleClass="title"/>
-        <Label text="Click on the world map to guess where this famous artwork is located" styleClass="subtitle"/>
-    </VBox>
-    
-    <!-- Score and Round Info -->
-    <HBox styleClass="card" spacing="32" alignment="CENTER">
-        <VBox spacing="4" alignment="CENTER">
-            <Label text="Round" styleClass="muted"/>
-            <Label fx:id="roundLabel" styleClass="h3"/>
-        </VBox>
-        <VBox spacing="4" alignment="CENTER">
-            <Label text="Score" styleClass="muted"/>
-            <Label fx:id="scoreLabel" styleClass="h3"/>
-        </VBox>
-    </HBox>
-    
-    <!-- Main Game Area -->
-    <HBox styleClass="hbox" spacing="32" alignment="CENTER">
-        <!-- Artwork Image Section -->
-        <VBox styleClass="image-container" spacing="16" alignment="CENTER">
-            <Label text="🎨 Famous Artwork" styleClass="h2"/>
-            <ImageView fx:id="photoView" styleClass="image-view" fitWidth="320" fitHeight="240" preserveRatio="true"/>
-            <Label fx:id="artworkInfo" text="Loading artwork..." styleClass="muted"/>
+    <!-- Main Content Container -->
+    <VBox alignment="CENTER" spacing="40" styleClass="centered-content">
+        <!-- Header Section -->
+        <VBox spacing="16" alignment="CENTER" styleClass="padding-2xl">
+            <Label text="🎯 Guess the Location" styleClass="title"/>
+            <Label text="Click on the world map to guess where this famous artwork is located" styleClass="subtitle"/>
         </VBox>
         
-        <!-- Interactive Map Section -->
-        <VBox styleClass="image-container" spacing="16" alignment="CENTER">
-            <Label text="🌍 World Map" styleClass="h2"/>
-            <WebView fx:id="mapView" prefWidth="480" prefHeight="360"/>
-            <Label text="Click anywhere on the map to place your guess" styleClass="muted"/>
+        <!-- Score and Round Info -->
+        <HBox styleClass="card" spacing="48" alignment="CENTER" styleClass="button-row">
+            <VBox spacing="8" alignment="CENTER">
+                <Label text="Round" styleClass="muted"/>
+                <Label fx:id="roundLabel" styleClass="h3"/>
+            </VBox>
+            <VBox spacing="8" alignment="CENTER">
+                <Label text="Score" styleClass="muted"/>
+                <Label fx:id="scoreLabel" styleClass="h3"/>
+            </VBox>
+        </HBox>
+        
+        <!-- Main Game Area -->
+        <HBox styleClass="button-row" spacing="48" alignment="CENTER">
+            <!-- Artwork Image Section -->
+            <VBox styleClass="image-container" spacing="20" alignment="CENTER" minWidth="400">
+                <Label text="🎨 Famous Artwork" styleClass="h2"/>
+                <ImageView fx:id="photoView" styleClass="image-view" fitWidth="400" fitHeight="300" preserveRatio="true"/>
+                <Label fx:id="artworkInfo" text="Loading artwork..." styleClass="muted"/>
+            </VBox>
+            
+            <!-- Interactive Map Section -->
+            <VBox styleClass="image-container" spacing="20" alignment="CENTER" minWidth="500">
+                <Label text="🌍 World Map" styleClass="h2"/>
+                <WebView fx:id="mapView" prefWidth="520" prefHeight="400"/>
+                <Label text="Click anywhere on the map to place your guess" styleClass="muted"/>
+            </VBox>
+        </HBox>
+
+        <!-- Control Buttons -->
+        <HBox styleClass="button-row" spacing="24" alignment="CENTER" styleClass="button-container">
+            <Button fx:id="submitBtn" text="Submit Guess" onAction="#onSubmit" 
+                    styleClass="btn-primary" minWidth="160" minHeight="48"/>
+            <Button fx:id="nextBtn" text="Next Round" onAction="#onNext" disable="true" 
+                    styleClass="btn-success" minWidth="160" minHeight="48"/>
+            <Button text="Back to Menu" onAction="#onBackToMenu" 
+                    styleClass="btn-ghost" minWidth="160" minHeight="48"/>
+        </HBox>
+
+        <!-- Feedback Section -->
+        <VBox styleClass="card" spacing="12" alignment="CENTER" maxWidth="800">
+            <Label fx:id="feedbackLabel" styleClass="feedback-label" wrapText="true" textAlignment="CENTER"/>
         </VBox>
-    </HBox>
-
-    <!-- Control Buttons -->
-    <HBox styleClass="hbox" spacing="20" alignment="CENTER">
-        <Button fx:id="submitBtn" text="Submit Guess" onAction="#onSubmit" styleClass="btn-primary"/>
-        <Button fx:id="nextBtn" text="Next Round" onAction="#onNext" disable="true" styleClass="btn-success"/>
-        <Button text="Back to Menu" onAction="#onBackToMenu" styleClass="btn-ghost"/>
-    </HBox>
-
-    <!-- Feedback Section -->
-    <VBox styleClass="card" spacing="8" alignment="CENTER">
-        <Label fx:id="feedbackLabel" styleClass="feedback-label" wrapText="true" maxWidth="600"/>
     </VBox>
-</VBox>
+</StackPane>

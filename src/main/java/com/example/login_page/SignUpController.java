@@ -11,7 +11,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 
 public class SignUpController {
 
@@ -69,8 +68,8 @@ public class SignUpController {
             System.out.println("SignUpController: Navigating to login screen");
             // Load the Login.fxml file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
-            Scene scene = new Scene(loader.load(), 800, 700);
-            scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+            Scene scene = new Scene(loader.load(), 1200, 900);
+            scene.getStylesheets().add(getClass().getResource("/com/example/login_page/styles.css").toExternalForm());
 
             // Use the primary stage instead of creating new ones
             Stage stage = HelloApplication.getPrimaryStage();
@@ -79,6 +78,13 @@ public class SignUpController {
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             }
 
+            // Set fixed window size and disable resizing
+            stage.setResizable(false);
+            stage.setMinWidth(1200);
+            stage.setMaxWidth(1200);
+            stage.setMinHeight(900);
+            stage.setMaxHeight(900);
+            
             // Update the stage with the login scene
             stage.setTitle("Login - Historical Art Guesser");
             stage.setScene(scene);
