@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.learn.plan_b_302.ReviewController"
+            styleClass="auth-container main-layout" stylesheets="@../css/modern-style.css">
+    
+    <top>
+        <HBox spacing="40" styleClass="game-header" alignment="CENTER">
+            <padding><Insets topRightBottomLeft="40"/></padding>
+            <VBox alignment="CENTER" spacing="4">
+                <Label text="📚 Check and Learn" styleClass="heading-2"/>
+                <Label text="Review Your Performance &amp; Discover Art History" styleClass="body-small"/>
+            </VBox>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <VBox alignment="CENTER" spacing="8">
+                <Label fx:id="summaryLabel" text="Total: 0 questions" styleClass="game-info"/>
+                <Label fx:id="mistakesLabel" text="Mistakes: 0" styleClass="score-label"/>
+            </VBox>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="20" styleClass="review-container">
+            <padding><Insets topRightBottomLeft="40"/></padding>
+            
+            <!-- Results Summary Card -->
+            <VBox spacing="16" styleClass="glass-card">
+                <padding><Insets topRightBottomLeft="32"/></padding>
+                <VBox alignment="CENTER" spacing="12">
+                    <Label text="🎯 Performance Summary" styleClass="caption"/>
+                    <HBox spacing="40" alignment="CENTER">
+                        <VBox alignment="CENTER" spacing="8">
+                            <Label fx:id="correctLabel" text="✅ Correct: 0" styleClass="body"/>
+                            <Label fx:id="percentageLabel" text="0%" styleClass="final-percentage"/>
+                        </VBox>
+                        <VBox alignment="CENTER" spacing="8">
+                            <Label fx:id="incorrectLabel" text="❌ Incorrect: 0" styleClass="body"/>
+                            <Label fx:id="accuracyLabel" text="Accuracy" styleClass="body-small"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- Review List -->
+            <VBox spacing="16" VBox.vgrow="ALWAYS">
+                <Label text="📖 Detailed Review" styleClass="caption"/>
+                <ScrollPane fx:id="reviewScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS" 
+                           styleClass="review-scroll-pane">
+                    <VBox fx:id="reviewContainer" spacing="16" styleClass="review-list">
+                        <padding><Insets topRightBottomLeft="20"/></padding>
+                        <!-- Review items will be added dynamically -->
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+
+            <!-- Action Buttons -->
+            <HBox spacing="20" alignment="CENTER">
+                <Button onAction="#handlePlayAgain" text="🎮 Play Again" 
+                        styleClass="btn-primary" minWidth="180" minHeight="56"/>
+                <Button onAction="#handleBackToMenu" text="🏠 Back to Menu" 
+                        styleClass="btn-secondary" minWidth="180" minHeight="56"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>
