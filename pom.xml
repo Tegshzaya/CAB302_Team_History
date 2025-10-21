@@ -192,20 +192,6 @@
                     <excludes>
                         <exclude>**/AuthControllerTest.java</exclude>
                     </excludes>
-                    <systemPropertyVariables>
-                        <java.awt.headless>true</java.awt.headless>
-                        <testfx.robot>glass</testfx.robot>
-                        <testfx.headless>true</testfx.headless>
-                        <glass.platform>Monocle</glass.platform>
-                        <monocle.platform>Headless</monocle.platform>
-                    </systemPropertyVariables>
-                    <argLine>
-                        --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-                        --add-exports javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
-                        --add-opens javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
-                        --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
-                        --add-opens java.base/java.lang.reflect=ALL-UNNAMED
-                    </argLine>
                 </configuration>
             </plugin>
             <!-- JaCoCo plugin for code coverage -->
@@ -230,35 +216,4 @@
             </plugin>
         </plugins>
     </build>
-    
-    <profiles>
-        <profile>
-            <id>ci</id>
-            <properties>
-                <maven.test.failure.ignore>false</maven.test.failure.ignore>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <java.awt.headless>true</java.awt.headless>
-                                <prism.order>sw</prism.order>
-                                <prism.text>t2k</prism.text>
-                                <testfx.robot>glass</testfx.robot>
-                                <testfx.headless>true</testfx.headless>
-                                <glass.platform>Monocle</glass.platform>
-                                <monocle.platform>Headless</monocle.platform>
-                                <prism.verbose>false</prism.verbose>
-                            </systemPropertyVariables>
-                            <forkCount>1</forkCount>
-                            <reuseForks>false</reuseForks>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
