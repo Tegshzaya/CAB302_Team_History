@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.learn.plan_b_302.GameHistoryController"
+            styleClass="auth-container main-layout" stylesheets="@../css/modern-style.css">
+
+    <top>
+        <HBox spacing="40" styleClass="game-header" alignment="CENTER">
+            <padding><Insets topRightBottomLeft="40"/></padding>
+            <VBox alignment="CENTER" spacing="4">
+                <Label text="📊 Game History" styleClass="heading-2"/>
+                <Label text="Track Your Progress &amp; Achievements" styleClass="body-small"/>
+            </VBox>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <VBox alignment="CENTER" spacing="8">
+                <Label fx:id="totalGamesLabel" text="Total Games: 0" styleClass="game-info"/>
+                <Label fx:id="overallAccuracyLabel" text="Overall Accuracy: 0%" styleClass="score-label"/>
+            </VBox>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="24" styleClass="history-container">
+            <padding><Insets topRightBottomLeft="40"/></padding>
+
+            <!-- Statistics Overview Cards -->
+            <HBox spacing="24" alignment="CENTER">
+                <!-- Year Game Stats -->
+                <VBox spacing="16" styleClass="glass-card stat-overview-card" alignment="CENTER" minWidth="280">
+                    <padding><Insets topRightBottomLeft="24"/></padding>
+                    <Label text="📅" styleClass="display-4"/>
+                    <VBox alignment="CENTER" spacing="8">
+                        <Label text="Year Game Statistics" styleClass="caption"/>
+                        <Label fx:id="yearStatsLabel" text="Games: 0 | Best: 0/10" styleClass="body"/>
+                        <Label fx:id="yearAccuracyLabel" text="Accuracy: 0%" styleClass="body-small"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Location Game Stats -->
+                <VBox spacing="16" styleClass="glass-card stat-overview-card" alignment="CENTER" minWidth="280">
+                    <padding><Insets topRightBottomLeft="24"/></padding>
+                    <Label text="🌍" styleClass="display-4"/>
+                    <VBox alignment="CENTER" spacing="8">
+                        <Label text="Location Game Statistics" styleClass="caption"/>
+                        <Label fx:id="locationStatsLabel" text="Games: 0 | Best: 0/30" styleClass="body"/>
+                        <Label fx:id="locationAccuracyLabel" text="Accuracy: 0%" styleClass="body-small"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+
+            <!-- Filter Controls -->
+            <HBox spacing="16" alignment="CENTER" styleClass="filter-controls">
+                <Label text="Filter:" styleClass="body"/>
+                <ComboBox fx:id="gameTypeFilter" styleClass="filter-combo" minWidth="150">
+                </ComboBox>
+                <Label text="Show:" styleClass="body"/>
+                <ComboBox fx:id="limitFilter" styleClass="filter-combo" minWidth="100">
+                </ComboBox>
+                <Button text="🔄 Refresh" onAction="#handleRefresh" styleClass="btn-ghost btn-small"/>
+            </HBox>
+
+            <!-- Game History List -->
+            <VBox spacing="16" VBox.vgrow="ALWAYS">
+                <Label text="📈 Recent Games" styleClass="caption"/>
+                <ScrollPane fx:id="historyScrollPane" fitToWidth="true" VBox.vgrow="ALWAYS"
+                           styleClass="history-scroll-pane">
+                    <VBox fx:id="historyContainer" spacing="12" styleClass="history-list">
+                        <padding><Insets topRightBottomLeft="16"/></padding>
+                        <!-- History items will be added dynamically -->
+                    </VBox>
+                </ScrollPane>
+            </VBox>
+
+            <!-- Action Buttons -->
+            <HBox spacing="20" alignment="CENTER">
+                <Button onAction="#handleBackToMenu" text="🏠 Back to Menu"
+                        styleClass="btn-secondary" minWidth="180" minHeight="56"/>
+                <Button onAction="#handleClearHistory" text="🗑️ Clear History"
+                        styleClass="btn-ghost" minWidth="180" minHeight="56"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

@@ -106,6 +106,12 @@ public class LocationController extends BaseController {
     public void initialize() {
         System.out.println("LocationController: Initializing...");
         
+        // Try to get user from UserManager if not set
+        if (currentUser == null) {
+            currentUser = UserManager.getCurrentUser();
+            System.out.println("LocationController: Got user from UserManager: " + (currentUser != null ? currentUser.getUsername() : "null"));
+        }
+        
         try { loadDataset(); }
         catch (IOException e) { 
             System.err.println("LocationController: Failed to load dataset - " + e.getMessage());
@@ -285,7 +291,12 @@ public class LocationController extends BaseController {
 
     @FXML
     private void onBackToMenu(ActionEvent event) throws IOException{
-        navigate(event, "/fxml/Menu.fxml",controller -> {});
+        navigate(event, "/fxml/Menu.fxml", controller -> {
+            if (controller instanceof MenuController mc) {
+                mc.setCurrentUser(currentUser);
+                mc.refreshStatistics();
+            }
+        });
     }
 
     private void endGame() {
@@ -306,6 +317,12 @@ public class LocationController extends BaseController {
         // Update final score displays
         finalScoreLabel.setText("Final Score: " + score + " / 30");
         finalAccuracyLabel.setText(String.format("Average Distance: %.1f km", averageDistance));
+        
+        // Save game to history
+        if (currentUser != null) {
+            saveGameToHistory();
+            saveSimpleGameRecord();
+        }
         
         // Show end game pane
         showEndGamePane();
@@ -376,6 +393,72 @@ public class LocationController extends BaseController {
         }
         
         return formatted.toString();
+    }
+    
+    private void saveGameToHistory() {
+        if (currentUser == null || gameResults == null || gameResults.isEmpty()) {
+            return;
+        }
+        
+        try {
+            // Create JSON details of the game (simplified version)
+            StringBuilder gameDetails = new StringBuilder("{");
+            gameDetails.append("\"results\":[");
+            
+            for (int i = 0; i < gameResults.size(); i++) {
+                LocationReviewResult result = gameResults.get(i);
+                if (i > 0) gameDetails.append(",");
+                gameDetails.append("{");
+                gameDetails.append("\"round\":").append(result.getRoundNumber()).append(",");
+                gameDetails.append("\"location\":\"").append(result.getLocationName().replace("\"", "\\\"")).append("\",");
+                gameDetails.append("\"distance\":").append(result.getDistanceKm()).append(",");
+                gameDetails.append("\"points\":").append(result.getPointsEarned()).append(",");
+                gameDetails.append("\"hasGuess\":").append(result.hasGuess());
+                gameDetails.append("}");
+            }
+            
+            gameDetails.append("]}");
+            
+            // Count correct answers (those with points > 0)
+            int correctAnswers = 0;
+            for (LocationReviewResult result : gameResults) {
+                if (result.isCorrect()) {
+                    correctAnswers++;
+                }
+            }
+            
+            // Create GameHistory object
+            GameHistory gameHistory = new GameHistory(
+                currentUser.getId(),
+                "LOCATION_GAME",
+                score,
+                30, // Max possible score for location game (10 locations * 3 points each)
+                gameResults.size(),
+                correctAnswers,
+                java.time.LocalDateTime.now(),
+                gameDetails.toString()
+            );
+            
+            // Save to database
+            GameHistoryManager.saveGameHistory(gameHistory);
+            
+        } catch (Exception e) {
+            System.err.println("Error saving location game history: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private void saveSimpleGameRecord() {
+        if (currentUser == null) return;
+        
+        UserGameRecord record = new UserGameRecord(
+            currentUser.getId(),
+            "LOCATION_GAME",
+            score,
+            java.time.LocalDateTime.now()
+        );
+        
+        UserGameManager.saveGameRecord(record);
     }
     
     private void fail(String m){ feedbackLabel.setText(m); submitBtn.setDisable(true); nextBtn.setDisable(true); }

@@ -194,6 +194,7 @@ public class LocationReviewController extends BaseController {
         navigate(event, "/fxml/Menu.fxml", controller -> {
             if (controller instanceof MenuController mc) {
                 mc.setCurrentUser(currentUser);
+                mc.refreshStatistics();
             }
         });
     }

@@ -10,11 +10,53 @@
            styleClass="auth-container main-layout" stylesheets="@../css/modern-style.css">
 
     <!-- Main Content Container -->
-    <VBox alignment="CENTER" spacing="56" styleClass="centered-content">
-        <!-- Enhanced Header Section -->
-        <VBox alignment="CENTER" spacing="32" styleClass="padding-xl">
+    <VBox alignment="CENTER" spacing="40" styleClass="centered-content">
+        <!-- Player Profile Header -->
+        <HBox spacing="40" alignment="CENTER" styleClass="profile-header">
+            <!-- Profile Card -->
+            <VBox spacing="16" styleClass="glass-card profile-card" alignment="CENTER" minWidth="300">
+                <padding><Insets topRightBottomLeft="24"/></padding>
+                <Label text="👤" styleClass="display-3" />
+                <VBox alignment="CENTER" spacing="8">
+                    <Label fx:id="welcomeLabel" text="Welcome, Player!" styleClass="heading-3" />
+                    <Label text="Art History Explorer" styleClass="caption" />
+                </VBox>
+                <HBox spacing="12" alignment="CENTER">
+                    <Button text="📈 View History" onAction="#handleViewHistory" styleClass="btn-secondary btn-small" minWidth="110" />
+                    <Button text="🚪 Sign Out" onAction="#handleSignOut" styleClass="btn-ghost btn-small" minWidth="100" />
+                </HBox>
+            </VBox>
+            
+            <!-- Stats Cards -->
+            <HBox spacing="24" alignment="CENTER">
+                <!-- Year Game Stats -->
+                <VBox spacing="12" styleClass="glass-card stat-card" alignment="CENTER" minWidth="200">
+                    <padding><Insets topRightBottomLeft="20"/></padding>
+                    <Label text="📅" styleClass="display-4" />
+                    <VBox alignment="CENTER" spacing="6">
+                        <Label text="Year Game" styleClass="caption" />
+                        <Label fx:id="yearBestScoreLabel" text="Best: 0/10" styleClass="body" />
+                        <Label fx:id="yearGamesPlayedLabel" text="Played: 0" styleClass="body-small" />
+                    </VBox>
+                </VBox>
+                
+                <!-- Location Game Stats -->
+                <VBox spacing="12" styleClass="glass-card stat-card" alignment="CENTER" minWidth="200">
+                    <padding><Insets topRightBottomLeft="20"/></padding>
+                    <Label text="🌍" styleClass="display-4" />
+                    <VBox alignment="CENTER" spacing="6">
+                        <Label text="Location Game" styleClass="caption" />
+                        <Label fx:id="locationBestScoreLabel" text="Best: 0/30" styleClass="body" />
+                        <Label fx:id="locationGamesPlayedLabel" text="Played: 0" styleClass="body-small" />
+                    </VBox>
+                </VBox>
+            </HBox>
+        </HBox>
+        
+        <!-- App Title Section -->
+        <VBox alignment="CENTER" spacing="16" styleClass="app-header">
             <Label text="🎨" styleClass="display-2" />
-            <VBox alignment="CENTER" spacing="16">
+            <VBox alignment="CENTER" spacing="8">
                 <Label text="Historical Art Guesser" styleClass="title-label" />
                 <Label text="Choose your adventure in art history" styleClass="body-large" textAlignment="CENTER" />
             </VBox>
@@ -63,13 +105,20 @@
             </VBox>
         </HBox>
 
+        <!-- Recent Games Section -->
+        <VBox spacing="16" alignment="CENTER" styleClass="recent-games-section">
+            <Label text="📈 Recent Games" styleClass="caption" />
+            <VBox fx:id="recentGamesContainer" spacing="8" styleClass="recent-games-list">
+                <Label text="No games played yet. Start playing to see your recent games here!" styleClass="body-small" />
+            </VBox>
+        </VBox>
+        
         <!-- Enhanced Footer -->
-        <VBox spacing="24" alignment="CENTER" styleClass="button-container">
-            <VBox alignment="CENTER" spacing="12">
+        <VBox spacing="16" alignment="CENTER" styleClass="button-container">
+            <VBox alignment="CENTER" spacing="8">
                 <Label text="Ready to explore the fascinating world of art history?" styleClass="body" textAlignment="CENTER" />
                 <Label text="Each game offers unique challenges and discoveries" styleClass="body-small" textAlignment="CENTER" />
             </VBox>
-            <Button text="🚀 Sign Out" onAction="#ReturnLogin" styleClass="btn-ghost" minWidth="180" />
         </VBox>
     </VBox>
 </StackPane>

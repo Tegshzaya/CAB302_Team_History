@@ -32,9 +32,39 @@ public class DatabaseManager {
                             option4 TEXT NOT NULL
                         )
                     """;
+            
+            // Create game_history table (detailed tracking)
+            String createGameHistoryTable = """
+                        CREATE TABLE IF NOT EXISTS game_history (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            user_id INTEGER NOT NULL,
+                            game_type TEXT NOT NULL,
+                            score INTEGER NOT NULL,
+                            max_possible_score INTEGER NOT NULL,
+                            questions_answered INTEGER NOT NULL,
+                            correct_answers INTEGER NOT NULL,
+                            played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            game_details TEXT,
+                            FOREIGN KEY (user_id) REFERENCES users (id)
+                        )
+                    """;
+            
+            // Create simple user_games table (basic tracking)
+            String createUserGamesTable = """
+                        CREATE TABLE IF NOT EXISTS user_games (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            user_id INTEGER NOT NULL,
+                            game_type TEXT NOT NULL,
+                            score INTEGER NOT NULL,
+                            date_played TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            FOREIGN KEY (user_id) REFERENCES users (id)
+                        )
+                    """;
 
             conn.createStatement().execute(createUsersTable);
             conn.createStatement().execute(createImagesTable);
+            conn.createStatement().execute(createGameHistoryTable);
+            conn.createStatement().execute(createUserGamesTable);
 
             // ✅ Add unique index for path to handle old DBs without UNIQUE constraint
             conn.createStatement().execute(

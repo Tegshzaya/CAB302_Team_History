@@ -69,22 +69,51 @@ public class GameController extends BaseController{
         submitAnswerButton.setDisable(true); // Start disabled, not hidden
 
         System.out.println("[INIT] GameController@" + System.identityHashCode(this));
-
+        
+        // Try to get user from UserManager if not set
+        if (currentUser == null) {
+            currentUser = UserManager.getCurrentUser();
+            if (currentUser != null) {
+                // Don't call updateUserInfo here since FXML elements may not be ready
+                // Will be called later in setCurrentUser or when game starts
+                System.out.println("GameController: Got user from UserManager: " + currentUser.getUsername());
+            }
+        }
     }
 
     public void setCurrentUser(User user) {
         this.currentUser = user;
-        updateUserInfo();
-
-        // Start once we have the user
-        startNewGame();
+        if (currentUser != null) {
+            updateUserInfo();
+            // Start once we have the user
+            startNewGame();
+        }
+    }
+    
+    // Method to start game for user already set in initialize
+    public void startGameIfUserReady() {
+        if (currentUser != null) {
+            updateUserInfo();
+            startNewGame();
+        }
     }
 
     private void updateUserInfo() {
+        System.out.println("GameController.updateUserInfo() called. User: " + (currentUser != null ? currentUser.getUsername() : "null"));
+        System.out.println("  welcomeLabel: " + (welcomeLabel != null ? "OK" : "null"));
+        System.out.println("  bestScoreLabel: " + (bestScoreLabel != null ? "OK" : "null"));
+        
         if (currentUser != null) {
-            welcomeLabel.setText("Welcome, " + currentUser.getUsername() + "!");
-            bestScoreLabel.setText("Best Score: " + currentUser.getBestScore());
-            gamesPlayedLabel.setText("Games Played: " + currentUser.getGamesPlayed());
+            // Add null checks for FXML elements in case they're not loaded yet
+            if (welcomeLabel != null) {
+                welcomeLabel.setText("Welcome, " + currentUser.getUsername() + "!");
+            }
+            if (bestScoreLabel != null) {
+                bestScoreLabel.setText("Best Score: " + currentUser.getBestScore());
+            }
+            if (gamesPlayedLabel != null) {
+                gamesPlayedLabel.setText("Games Played: " + currentUser.getGamesPlayed());
+            }
         }
     }
 
@@ -296,6 +325,12 @@ public class GameController extends BaseController{
         if (currentUser != null) {
             DatabaseManager.updateUserScore(currentUser.getId(), score, totalQuestions);
             currentUser = DatabaseManager.refreshUser(currentUser.getId());
+            
+            // Save game to history
+            saveGameToHistory();
+            
+            // Save simple game record
+            saveSimpleGameRecord();
         } else {
             System.out.println("[WARN] endGame(): currentUser is null — skipping score update.");
         }
@@ -341,7 +376,12 @@ public class GameController extends BaseController{
 
     @FXML
     private void handleBackToMenu(ActionEvent event) {
-        navigate(event, "/fxml/Menu.fxml", controller -> {});
+        navigate(event, "/fxml/Menu.fxml", controller -> {
+            if (controller instanceof MenuController mc) {
+                mc.setCurrentUser(currentUser);
+                mc.refreshStatistics();
+            }
+        });
     }
 
 
@@ -358,5 +398,63 @@ public class GameController extends BaseController{
     private void showEndGamePane() {
         gamePane.setVisible(false);
         endGamePane.setVisible(true);
+    }
+    
+    private void saveGameToHistory() {
+        if (currentUser == null || gameResults == null || gameResults.isEmpty()) {
+            return;
+        }
+        
+        try {
+            // Create JSON details of the game (simplified version)
+            StringBuilder gameDetails = new StringBuilder("{");
+            gameDetails.append("\"results\":[");
+            
+            for (int i = 0; i < gameResults.size(); i++) {
+                ReviewResult result = gameResults.get(i);
+                if (i > 0) gameDetails.append(",");
+                gameDetails.append("{");
+                gameDetails.append("\"question\":").append(result.getQuestionNumber()).append(",");
+                gameDetails.append("\"artwork\":\"").append(result.getArtworkTitle().replace("\"", "\\\"")).append("\",");
+                gameDetails.append("\"userAnswer\":\"").append(result.getUserAnswer().replace("\"", "\\\"")).append("\",");
+                gameDetails.append("\"correctAnswer\":\"").append(result.getCorrectAnswer().replace("\"", "\\\"")).append("\",");
+                gameDetails.append("\"correct\":").append(result.isCorrect());
+                gameDetails.append("}");
+            }
+            
+            gameDetails.append("]}");
+            
+            // Create GameHistory object
+            GameHistory gameHistory = new GameHistory(
+                currentUser.getId(),
+                "YEAR_GAME",
+                score,
+                totalQuestions, // Max possible score for year game
+                totalQuestions,
+                score, // For year game, score equals correct answers
+                java.time.LocalDateTime.now(),
+                gameDetails.toString()
+            );
+            
+            // Save to database
+            GameHistoryManager.saveGameHistory(gameHistory);
+            
+        } catch (Exception e) {
+            System.err.println("Error saving game history: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private void saveSimpleGameRecord() {
+        if (currentUser == null) return;
+        
+        UserGameRecord record = new UserGameRecord(
+            currentUser.getId(),
+            "YEAR_GAME",
+            score,
+            java.time.LocalDateTime.now()
+        );
+        
+        UserGameManager.saveGameRecord(record);
     }
 }
