@@ -9,7 +9,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 public class DatabaseManager {
-    private static final String DB_URL = "jdbc:sqlite:artgame.db";
+    private static final String DB_URL = "jdbc:sqlite:data/artgame.db";
     private static final SecureRandom random = new SecureRandom();
     
     /**
@@ -211,15 +211,21 @@ public class DatabaseManager {
             // Hash the password with salt
             String hashedPassword = hashPassword(password);
             
+            // Debug: Show the encryption in action
+            System.out.println("🔐 ENCRYPTION DEBUG:");
+            System.out.println("Original password: " + password);
+            System.out.println("Encrypted password: " + hashedPassword);
+            System.out.println("Encrypted length: " + hashedPassword.length());
+            
             stmt.setString(1, username);
             stmt.setString(2, hashedPassword);
             stmt.executeUpdate();
 
-            System.out.println("User created: " + username);
+            System.out.println("✅ User created: " + username);
             return true;
 
         } catch (SQLException e) {
-            System.out.println("Error creating user: " + e.getMessage());
+            System.out.println("❌ Error creating user: " + e.getMessage());
             return false;
         }
     }
