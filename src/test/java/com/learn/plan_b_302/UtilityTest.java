@@ -103,4 +103,80 @@ class UtilityTest {
         int[] array = {1, 2, 3, 4, 5};
         assertEquals(5, array.length, "Array should have 5 elements");
     }
+
+    @Test
+    @DisplayName("String operations should not mutate the original string")
+    void testStringImmutabilityAndCaseOps() {
+        String base = "hello world";
+
+        String upper = base.toUpperCase();
+        String replaced = base.replace("world", "java");
+
+        // Original should remain unchanged
+        assertEquals("hello world", base, "Original string should remain unchanged after operations");
+
+        // New values should reflect the transformation
+        assertEquals("HELLO WORLD", upper, "toUpperCase() should return uppercase version");
+        assertEquals("hello java", replaced, "replace() should return modified copy");
+
+        // Also confirm different objects when transformation changes content
+        assertNotSame(base, replaced,
+                "replace() with an actual change should create a different String object");
+    }
+
+    @Test
+    @DisplayName("Arrays.asList should allow set() but not add() or remove()")
+    void testListImmutabilityAndMutationBehavior() {
+        java.util.List<String> list = java.util.Arrays.asList("x", "y", "z");
+
+        // set() is allowed because backing array size is fixed
+        list.set(1, "Y");
+        assertEquals("Y", list.get(1), "set() should update element in fixed-size list");
+
+        // add() should throw UnsupportedOperationException
+        assertThrows(UnsupportedOperationException.class, () -> {
+            list.add("new");
+        }, "add() on Arrays.asList-backed list should throw UnsupportedOperationException");
+
+        // remove() should also throw
+        assertThrows(UnsupportedOperationException.class, () -> {
+            list.remove(0);
+        }, "remove() on Arrays.asList-backed list should throw UnsupportedOperationException");
+    }
+
+    @Test
+    @DisplayName("Rounding, casting, and ceiling should behave as expected")
+    void testRoundingAndCastingBehaviors() {
+        double value = 3.6;
+
+        long rounded = Math.round(value);   // nearest long
+        int casted = (int) value;           // truncates toward zero
+        double ceiled = Math.ceil(value);   // rounds up
+
+        assertEquals(4L, rounded,
+                "Math.round(3.6) should round to 4");
+        assertEquals(3, casted,
+                "Casting 3.6 to int should truncate to 3");
+        assertEquals(4.0, ceiled,
+                "Math.ceil(3.6) should return 4.0");
+    }
+
+    @Test
+    @DisplayName("DateTime should format and parse consistently")
+    void testDateFormattingAndParsingRoundTrip() {
+        java.time.LocalDateTime dt = java.time.LocalDateTime.of(2025, 10, 21, 15, 30);
+
+        java.time.format.DateTimeFormatter fmt =
+                java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        String asText = dt.format(fmt);
+        assertEquals("2025-10-21 15:30", asText,
+                "Formatted datetime should match expected pattern");
+
+        java.time.LocalDateTime parsed =
+                java.time.LocalDateTime.parse(asText, fmt);
+
+        assertEquals(dt, parsed,
+                "Parsed datetime should equal the original datetime");
+    }
 }

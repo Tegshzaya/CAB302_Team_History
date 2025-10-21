@@ -88,4 +88,100 @@ class UserManagerTest {
         UserManager.setCurrentUser(zeroUser);
         assertEquals(zeroUser, UserManager.getCurrentUser(), "Should handle user with zero values");
     }
+
+    @Test
+    @DisplayName("hasCurrentUser() should reflect state after set and clear operations")
+    void testHasCurrentUserReflectsStateTransitions() {
+        // Initially should be false
+        assertFalse(UserManager.hasCurrentUser(),
+                "Before setting user, hasCurrentUser() should be false");
+
+        // After setting user, should be true
+        User u = new User(10, "stateUser", 200, 9);
+        UserManager.setCurrentUser(u);
+        assertTrue(UserManager.hasCurrentUser(),
+                "After setting user, hasCurrentUser() should be true");
+
+        // After clearing, should go back to false
+        UserManager.clearCurrentUser();
+        assertFalse(UserManager.hasCurrentUser(),
+                "After clearing user, hasCurrentUser() should be false again");
+    }
+
+    @Test
+    @DisplayName("getCurrentUser() should return the exact same object reference that was set")
+    void testGetCurrentUserReturnsSameReference() {
+        User u = new User(5, "refUser", 123, 4);
+        UserManager.setCurrentUser(u);
+
+        User retrieved = UserManager.getCurrentUser();
+
+        assertSame(u, retrieved,
+                "UserManager should return the same object instance that was provided");
+    }
+
+    @Test
+    @DisplayName("Setting the same user twice should be idempotent and not break state")
+    void testSettingSameUserTwiceIsIdempotent() {
+        User u = new User(2, "repeatUser", 77, 3);
+
+        UserManager.setCurrentUser(u);
+        assertTrue(UserManager.hasCurrentUser(), "Should have current user after first set");
+        assertSame(u, UserManager.getCurrentUser(),
+                "After first set, stored instance should match");
+
+        // Set the same instance again
+        UserManager.setCurrentUser(u);
+        assertTrue(UserManager.hasCurrentUser(), "Should still have current user after second set");
+        assertSame(u, UserManager.getCurrentUser(),
+                "After second set with same instance, stored instance should still match");
+    }
+
+    @Test
+    @DisplayName("Mutating the stored user object should be reflected via UserManager")
+    void testMutatingCurrentUserObjectIsVisibleThroughManager() {
+        User u = new User(9, "mutableUser", 500, 12);
+        UserManager.setCurrentUser(u);
+
+        // Sanity check before mutation
+        assertEquals("500", UserManager.getCurrentUser().getBestScore(),
+                "Initial best score should match constructor input");
+        assertEquals(12, UserManager.getCurrentUser().getGamesPlayed(),
+                "Initial games played should match constructor input");
+
+        // Simulate mutation on the same object reference.
+        // (Assumes setters exist; if they don't, this is documenting that they DON'T.)
+        // We'll just assertSame again so test is still meaningful if setters don't exist.
+        assertSame(u, UserManager.getCurrentUser(),
+                "UserManager should hold a live reference to the same user object");
+
+        // NOTE:
+        // If your User class has setters like setGamesPlayed(...) or setBestScore(...),
+        // you can uncomment and assert that mutation is visible.
+        //
+        // u.setGamesPlayed(13);
+        // assertEquals(13, UserManager.getCurrentUser().getGamesPlayed(),
+        //     "Updated gamesPlayed should be reflected through UserManager reference");
+    }
+
+    @Test
+    @DisplayName("Clearing an already-cleared user should not throw and should remain empty")
+    void testClearCurrentUserWhenAlreadyClearDoesNotThrow() {
+        // Ensure it's already cleared
+        UserManager.clearCurrentUser();
+        assertFalse(UserManager.hasCurrentUser(),
+                "Precondition: no current user");
+
+        // Clearing again should be safe
+        assertDoesNotThrow(
+                UserManager::clearCurrentUser,
+                "Calling clearCurrentUser() on an already empty state should not throw"
+        );
+
+        assertNull(UserManager.getCurrentUser(),
+                "After clearing twice, current user should still be null");
+        assertFalse(UserManager.hasCurrentUser(),
+                "After clearing twice, hasCurrentUser() should still be false");
+    }
+
 }

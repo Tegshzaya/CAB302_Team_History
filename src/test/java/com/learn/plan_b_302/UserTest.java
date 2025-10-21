@@ -67,4 +67,75 @@ public class UserTest {
         user.setGamesPlayed(10);
         assertEquals(10, user.getGamesPlayed(), "Games played setter should work");
     }
+
+    @Test
+    void testHighScoreStringFormattingAfterUpdate() {
+        User user = new User(5, "player", 42, 3);
+
+        // Update the numeric high score
+        user.setHighScore(250);
+
+        // Check both numeric and string views match the new value
+        assertEquals(250, user.getHighScoreInt(),
+                "getHighScoreInt() should return the updated numeric score");
+        assertEquals("250", user.getBestScore(),
+                "getBestScore() should return the updated score as a string");
+    }
+
+    @Test
+    void testGamesPlayedCanIncrease() {
+        User user = new User(7, "grinder", 10, 4);
+
+        // Simulate another played game
+        user.setGamesPlayed(user.getGamesPlayed() + 1);
+
+        assertEquals(5, user.getGamesPlayed(),
+                "Games played should reflect incremented value");
+    }
+
+    @Test
+    void testToStringShouldNotBeEmpty() {
+        User user = new User(9, "logUser", 300, 12);
+
+        String s = user.toString();
+
+        assertNotNull(s, "toString() should not return null");
+        assertFalse(s.trim().isEmpty(),
+                "toString() should not return an empty string");
+        assertTrue(
+                s.contains("logUser") || s.contains("9") || s.contains("300"),
+                "toString() should include useful identifying info like username, id, or score"
+        );
+    }
+
+
+    @Test
+    void testDifferentInstancesWithSameValuesAreIndependent() {
+        User u1 = new User(11, "same", 123, 2);
+        User u2 = new User(11, "same", 123, 2);
+
+        // They are not the same object
+        assertNotSame(u1, u2,
+                "Two different User instances with the same data should not be the same reference");
+
+        // But their field values should match
+        assertEquals(u1.getId(), u2.getId(), "IDs should match");
+        assertEquals(u1.getUsername(), u2.getUsername(), "Usernames should match");
+        assertEquals(u1.getBestScore(), u2.getBestScore(), "Best scores should match");
+        assertEquals(u1.getGamesPlayed(), u2.getGamesPlayed(), "Games played should match");
+    }
+
+    @Test
+    void testReferenceIdentityIsPreserved() {
+        User u = new User(100, "identityUser", 999, 77);
+
+        User sameRef = u; // same object, different variable
+
+        assertSame(u, sameRef,
+                "Two references pointing to the same User instance should be the same object");
+        assertEquals(u.getUsername(), sameRef.getUsername(),
+                "Both references should see the same username");
+        assertEquals(u.getHighScoreInt(), sameRef.getHighScoreInt(),
+                "Both references should see the same high score");
+    }
 }

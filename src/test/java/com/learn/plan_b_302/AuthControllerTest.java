@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.*;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.TimeUnit;
@@ -41,11 +42,11 @@ class AuthControllerTest extends ApplicationTest {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/login.fxml"));
         Parent root = loader.load();
         controller = loader.getController();
-        
+
         Scene scene = new Scene(root, 800, 600);
         stage.setScene(scene);
         stage.show();
-        
+
         // Get UI components
         usernameField = lookup("#usernameField").query();
         passwordField = lookup("#passwordField").query();
@@ -60,7 +61,7 @@ class AuthControllerTest extends ApplicationTest {
             if (passwordField != null) passwordField.clear();
             if (messageLabel != null) messageLabel.setText("");
         });
-        
+
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
@@ -84,11 +85,11 @@ class AuthControllerTest extends ApplicationTest {
             usernameField.setText("");
             passwordField.setText("");
         });
-        
+
         clickOn(loginButton);
-        
+
         sleep(500, TimeUnit.MILLISECONDS);
-        
+
         Platform.runLater(() -> {
             assertNotNull(messageLabel.getText(), "Message should not be null");
             assertFalse(messageLabel.getText().isEmpty(), "Message should not be empty");
@@ -102,15 +103,15 @@ class AuthControllerTest extends ApplicationTest {
             usernameField.setText("invaliduser");
             passwordField.setText("wrongpassword");
         });
-        
+
         clickOn(loginButton);
-        
+
         sleep(1000, TimeUnit.MILLISECONDS);
-        
+
         Platform.runLater(() -> {
             String message = messageLabel.getText();
-            assertTrue(message.contains("Invalid") || message.contains("incorrect") || message.contains("wrong"), 
-                "Should show error for invalid credentials");
+            assertTrue(message.contains("Invalid") || message.contains("incorrect") || message.contains("wrong"),
+                    "Should show error for invalid credentials");
         });
     }
 
@@ -126,4 +127,8 @@ class AuthControllerTest extends ApplicationTest {
     static void tearDownAll() throws Exception {
         FxToolkit.cleanupStages();
     }
+
+
+
+
 }

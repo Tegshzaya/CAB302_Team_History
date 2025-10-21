@@ -164,4 +164,75 @@ class IntegrationTest {
             UserManager.clearCurrentUser();
         }, "Null user handling should not throw");
     }
+
+    @Test
+    @DisplayName("UserManager should replace the current user when a new one is set")
+    void testUserManagerReplaceUser() {
+        User first = new User(1, "alphaUser", 50, 2);
+        User second = new User(2, "betaUser", 250, 9);
+
+        // Set first user
+        UserManager.setCurrentUser(first);
+        assertEquals(first, UserManager.getCurrentUser(),
+                "First user should be current");
+
+        // Replace with second user
+        UserManager.setCurrentUser(second);
+        assertEquals(second, UserManager.getCurrentUser(),
+                "Second user should now be current");
+        assertNotEquals(first.getId(), UserManager.getCurrentUser().getId(),
+                "First user should no longer be active");
+
+        // Cleanup
+        UserManager.clearCurrentUser();
+    }
+
+    @Test
+    @DisplayName("GameHistory should handle 0/0 accuracy safely and produce sensible formatted accuracy")
+    void testGameHistoryAccuracyEdgeCaseIntegration() {
+        java.time.LocalDateTime testDate = java.time.LocalDateTime.of(2025, 10, 21, 15, 30);
+
+        GameHistory history = new GameHistory(
+                99,            // id
+                321,           // userId
+                "YEAR_GAME",   // type
+                0,             // score
+                10,            // maxPossibleScore
+                0,             // questionsAnswered
+                0,             // correctAnswers
+                testDate,
+                "{}"           // details
+        );
+
+        // getAccuracyPercentage() should not divide by zero or produce NaN/Infinity
+        double accuracy = history.getAccuracyPercentage();
+        assertEquals(0.0, accuracy, 0.0001,
+                "Accuracy should be 0.0 when no questions were answered");
+
+        // getFormattedAccuracy() should still give a readable string
+        String formatted = history.getFormattedAccuracy();
+        assertNotNull(formatted, "Formatted accuracy should not be null");
+        assertFalse(formatted.isEmpty(), "Formatted accuracy should not be empty");
+        assertTrue(formatted.contains("0/0"),
+                "Formatted accuracy should include raw score like 0/0");
+        assertTrue(formatted.contains("%"),
+                "Formatted accuracy should include percentage text");
+    }
+
+    @Test
+    @DisplayName("User best score should be exposed as a string suitable for UI display")
+    void testUserBestScoreFormattingIntegration() {
+        User highScoreUser = new User(7, "legend", 250, 42);
+
+        assertEquals(7, highScoreUser.getId(), "User ID should match");
+        assertEquals("legend", highScoreUser.getUsername(), "Username should match");
+
+        // The constructor got 250 as a score. getBestScore() should present "250".
+        assertEquals("250", highScoreUser.getBestScore(),
+                "Best score should be stringified for UI display");
+
+        assertEquals(42, highScoreUser.getGamesPlayed(),
+                "Games played should match");
+    }
+
 }

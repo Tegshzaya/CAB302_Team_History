@@ -3,6 +3,7 @@ package com.learn.plan_b_302;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -64,4 +65,62 @@ public class ArtImageTest {
         assertNotNull(image, "ArtImage should be created even with null path");
         assertNull(image.getPath(), "Path should be null when passed null");
     }
+
+    @Test
+    void testMultipleInstancesAreIndependent() {
+        // Make sure two different ArtImage instances keep their own data
+        ArtImage monaLisa = new ArtImage(
+                "/img/mona_lisa.jpg",
+                "1503",
+                "1503", "1495", "1510", "1520"
+        );
+
+        ArtImage starryNight = new ArtImage(
+                "/img/starry_night.jpg",
+                "1889",
+                "1889", "1875", "1890", "1901"
+        );
+
+        // Paths should be different
+        assertNotEquals(monaLisa.getPath(), starryNight.getPath(),
+                "Each ArtImage should store its own path");
+
+        // Correct answers should be different
+        assertNotEquals(monaLisa.getCorrectAnswer(), starryNight.getCorrectAnswer(),
+                "Each ArtImage should store its own correct answer");
+
+        // Options should be different for each image
+        assertNotEquals(monaLisa.getAllOptions(), starryNight.getAllOptions(),
+                "Each ArtImage should keep its own set of options");
+
+        // Cross-check correctness logic is instance-specific
+        assertTrue(monaLisa.isCorrectAnswer("1503"),
+                "First image should validate its own correct answer");
+        assertFalse(monaLisa.isCorrectAnswer("1889"),
+                "First image should not accept another image's answer");
+
+        assertTrue(starryNight.isCorrectAnswer("1889"),
+                "Second image should validate its own correct answer");
+        assertFalse(starryNight.isCorrectAnswer("1503"),
+                "Second image should not accept the first image's answer");
+    }
+
+    @Test
+    void testIsCorrectAnswerNullInput() {
+        // Passing null to isCorrectAnswer() should not throw,
+        // and should return false.
+        ArtImage image = new ArtImage(
+                "/test/path.jpg",
+                "1503",
+                "1503", "1495", "1510", "1520"
+        );
+
+        assertDoesNotThrow(() -> image.isCorrectAnswer(null),
+                "isCorrectAnswer(null) should not throw an exception");
+
+        assertFalse(image.isCorrectAnswer(null),
+                "Null should never be treated as a correct answer");
+    }
+
+
 }

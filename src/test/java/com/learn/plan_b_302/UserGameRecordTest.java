@@ -78,4 +78,76 @@ class UserGameRecordTest {
         assertEquals(2, record.getId(), "ID should be updated");
         assertEquals(20, record.getScore(), "Score should be updated");
     }
+
+    @Test
+    @DisplayName("Should default ID to 0 when not provided in constructor")
+    void testDefaultIdWhenNotProvided() {
+        UserGameRecord record = new UserGameRecord(123, "YEAR_GAME", 8, testDate);
+
+        // Common pattern: records created before persisting to DB have id=0
+        assertEquals(0, record.getId(),
+                "Record created without explicit ID should return default ID (expected 0)");
+    }
+
+    @Test
+    @DisplayName("Should provide readable game type display for location game")
+    void testGetGameTypeDisplayLocationGame() {
+        UserGameRecord record = new UserGameRecord(123, "LOCATION_GAME", 25, testDate);
+
+        String display = record.getGameTypeDisplay();
+
+        assertNotNull(display, "Display should not be null");
+        assertFalse(display.isEmpty(), "Display should not be empty");
+
+        // We don't lock to an exact emoji string here, just semantics.
+        assertTrue(display.toLowerCase().contains("location"),
+                "Display should mention 'Location'");
+        assertTrue(display.toLowerCase().contains("game"),
+                "Display should mention 'Game'");
+    }
+
+    @Test
+    @DisplayName("Should provide score display for location game that includes score")
+    void testGetScoreDisplayLocationGame() {
+        UserGameRecord record = new UserGameRecord(123, "LOCATION_GAME", 25, testDate);
+
+        String scoreDisplay = record.getScoreDisplay();
+
+        assertNotNull(scoreDisplay, "Score display should not be null");
+        assertFalse(scoreDisplay.isEmpty(), "Score display should not be empty");
+        assertTrue(scoreDisplay.contains("25"),
+                "Score display should include the score value for this record");
+    }
+
+    @Test
+    @DisplayName("toString() should return a non-empty summary for debugging/logging")
+    void testToStringNotEmpty() {
+        UserGameRecord record = new UserGameRecord(1, 999, "YEAR_GAME", 10, testDate);
+
+        String result = record.toString();
+
+        assertNotNull(result, "toString() should not return null");
+        assertFalse(result.trim().isEmpty(),
+                "toString() should not return empty string");
+        assertTrue(
+                result.contains("YEAR_GAME") ||
+                        result.contains("999") ||
+                        result.contains("10"),
+                "toString() should include identifying info like gameType, userId, or score"
+        );
+    }
+
+    @Test
+    @DisplayName("Should retain exact date played without mutation")
+    void testDatePlayedIntegrity() {
+        LocalDateTime customDate = LocalDateTime.of(2025, 10, 21, 22, 45);
+        UserGameRecord record = new UserGameRecord(777, "YEAR_GAME", 9, customDate);
+
+        assertEquals(customDate, record.getDatePlayed(),
+                "Record should store the exact LocalDateTime passed in");
+        assertEquals(9, record.getScore(),
+                "Score should match the value passed in");
+        assertEquals("YEAR_GAME", record.getGameType(),
+                "Game type should match the value passed in");
+    }
 }
