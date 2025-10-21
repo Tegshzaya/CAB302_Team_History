@@ -52,12 +52,12 @@
                 <!-- Enhanced Button Section -->
                 <VBox spacing="12" alignment="CENTER" styleClass="button-container">
                     <Button fx:id="signupButton" onAction="#handleSignup" text="🚀 Create Account" 
-                            styleClass="btn-primary" prefWidth="300" minHeight="40" />
+                            styleClass="btn-primary" prefWidth="320" minHeight="48" />
                     
                     <HBox alignment="CENTER" spacing="12">
                         <Label text="Already have an account?" styleClass="body-small" />
                         <Button fx:id="switchToLoginButton" onAction="#switchToLogin" text="Sign In"
-                                styleClass="btn-ghost" minHeight="32" />
+                                styleClass="btn-ghost" minHeight="40" minWidth="120" prefWidth="120" />
                     </HBox>
                 </VBox>
 

@@ -31,10 +31,10 @@
                                styleClass="body-small" wrapText="true" textAlignment="CENTER" maxWidth="300"/>
                         <VBox spacing="8" alignment="CENTER">
                             <HBox spacing="8" alignment="CENTER">
-                                <Button text="Submit" onAction="#onSubmit" fx:id="submitBtn" styleClass="btn-primary" minWidth="80" minHeight="32"/>
-                                <Button text="Next" onAction="#onNext" fx:id="nextBtn" disable="true" styleClass="btn-secondary" minWidth="80" minHeight="32"/>
+                                <Button text="Submit" onAction="#onSubmit" fx:id="submitBtn" styleClass="btn-primary" minWidth="100" minHeight="36"/>
+                                <Button text="Next" onAction="#onNext" fx:id="nextBtn" disable="true" styleClass="btn-secondary" minWidth="100" minHeight="36"/>
                             </HBox>
-                            <Button text="← Back" onAction="#onBackToMenu" styleClass="btn-ghost" minWidth="80" minHeight="28"/>
+                            <Button text="← Back" onAction="#onBackToMenu" styleClass="btn-ghost" minWidth="120" minHeight="32"/>
                         </VBox>
                         <Label fx:id="feedbackLabel" wrapText="true" styleClass="feedback-label" maxWidth="300"/>
                     </VBox>
@@ -70,14 +70,14 @@
                     </VBox>
 
                     <!-- Action Buttons -->
-                    <VBox alignment="CENTER" maxWidth="320" spacing="12">
+                    <VBox alignment="CENTER" maxWidth="380" spacing="12">
                         <children>
-                            <Button fx:id="checkAndLearnButton" onAction="#handleCheckAndLearn" prefWidth="240" 
-                                    styleClass="btn-primary" text="🗺️ Check and Learn" minHeight="40" />
-                            <Button fx:id="playAgainButton" onAction="#handlePlayAgain" prefWidth="240" 
-                                    styleClass="btn-secondary" text="🌍 Play Again" minHeight="40" />
-                            <Button onAction="#onBackToMenu" prefWidth="240" 
-                                    styleClass="btn-ghost" text="🏠 Back to Menu" minHeight="40" />
+                            <Button fx:id="checkAndLearnButton" onAction="#handleCheckAndLearn" prefWidth="280" 
+                                    styleClass="btn-primary" text="🗺️ Check and Learn" minHeight="48" />
+                            <Button fx:id="playAgainButton" onAction="#handlePlayAgain" prefWidth="280" 
+                                    styleClass="btn-secondary" text="🌍 Play Again" minHeight="48" />
+                            <Button onAction="#onBackToMenu" prefWidth="300" 
+                                    styleClass="btn-ghost" text="🏠 Back to Menu" minHeight="48" />
                         </children>
                     </VBox>
                 </children>

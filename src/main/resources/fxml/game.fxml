@@ -61,15 +61,15 @@
                                         <VBox spacing="12" alignment="CENTER" styleClass="button-container">
                                             <VBox alignment="CENTER" spacing="8">
                                                 <Button fx:id="option1Button" onAction="#handleOption1" text="Option 1"
-                                                        styleClass="answer-button interactive" minWidth="240" minHeight="40"/>
+                                                        styleClass="answer-button interactive" minWidth="280" minHeight="44" prefWidth="280"/>
                                                 <Button fx:id="option2Button" onAction="#handleOption2" text="Option 2"
-                                                        styleClass="answer-button interactive" minWidth="240" minHeight="40"/>
+                                                        styleClass="answer-button interactive" minWidth="280" minHeight="44" prefWidth="280"/>
                                             </VBox>
                                             <VBox alignment="CENTER" spacing="8">
                                                 <Button fx:id="option3Button" onAction="#handleOption3" text="Option 3"
-                                                        styleClass="answer-button interactive" minWidth="240" minHeight="40"/>
+                                                        styleClass="answer-button interactive" minWidth="280" minHeight="44" prefWidth="280"/>
                                                 <Button fx:id="option4Button" onAction="#handleOption4" text="Option 4"
-                                                        styleClass="answer-button interactive" minWidth="240" minHeight="40"/>
+                                                        styleClass="answer-button interactive" minWidth="280" minHeight="44" prefWidth="280"/>
                                             </VBox>
                                         </VBox>
 
@@ -77,12 +77,12 @@
                                         <VBox spacing="12" alignment="CENTER" styleClass="button-container">
                                             <HBox alignment="CENTER" spacing="12">
                                                 <Button fx:id="submitAnswerButton" onAction="#handleSubmitAnswer"
-                                                        text="✨ Submit" styleClass="btn-primary" minWidth="120" minHeight="40" disable="true"/>
+                                                        text="✨ Submit" styleClass="btn-primary" minWidth="140" minHeight="44" disable="true"/>
                                                 <Button fx:id="nextQuestionButton" onAction="#handleNextQuestion"
-                                                        text="Continue ➡️" styleClass="btn-secondary" minWidth="120" minHeight="40" disable="true"/>
+                                                        text="Continue ➡️" styleClass="btn-secondary" minWidth="150" minHeight="44" disable="true"/>
                                             </HBox>
                                             <Button onAction="#handleBackToMenu"
-                                                    text="← Back to Menu" styleClass="btn-ghost" minWidth="120" minHeight="32"/>
+                                                    text="← Back to Menu" styleClass="btn-ghost" minWidth="160" minHeight="40" prefWidth="160"/>
                                         </VBox>
 
                                         <!-- Enhanced Feedback Section -->
@@ -120,14 +120,14 @@
                         </VBox>
 
                         <!-- Action Buttons -->
-                        <VBox alignment="CENTER" maxWidth="320" spacing="12">
+                        <VBox alignment="CENTER" maxWidth="380" spacing="12">
                             <children>
-                                <Button fx:id="checkAndLearnButton" onAction="#handleCheckAndLearn" prefWidth="240" 
-                                        styleClass="btn-primary" text="📚 Check and Learn" minHeight="40" />
-                                <Button fx:id="playAgainButton" onAction="#handlePlayAgain" prefWidth="240" 
-                                        styleClass="btn-secondary" text="🎆 Play Again" minHeight="40" />
-                                <Button onAction="#handleLogoutFromEnd" prefWidth="240" 
-                                        styleClass="btn-ghost" text="🏠 Return to Menu" minHeight="40" />
+                                <Button fx:id="checkAndLearnButton" onAction="#handleCheckAndLearn" prefWidth="280" 
+                                        styleClass="btn-primary" text="📚 Check and Learn" minHeight="48" />
+                                <Button fx:id="playAgainButton" onAction="#handlePlayAgain" prefWidth="280" 
+                                        styleClass="btn-secondary" text="🎆 Play Again" minHeight="48" />
+                                <Button onAction="#handleLogoutFromEnd" prefWidth="300" 
+                                        styleClass="btn-ghost" text="🏠 Return to Menu" minHeight="48" />
                             </children>
                         </VBox>
                     </children>

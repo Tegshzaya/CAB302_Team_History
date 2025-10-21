@@ -25,8 +25,8 @@
                         <Label text="Art History Explorer" styleClass="caption" />
                     </VBox>
                     <HBox spacing="8" alignment="CENTER">
-                        <Button text="📈 History" onAction="#handleViewHistory" styleClass="btn-secondary btn-small" minWidth="80" />
-                        <Button text="🚪 Sign Out" onAction="#handleSignOut" styleClass="btn-ghost btn-small" minWidth="80" />
+                        <Button text="📈 History" onAction="#handleViewHistory" styleClass="btn-secondary btn-small" minWidth="110" />
+                        <Button text="🚪 Sign Out" onAction="#handleSignOut" styleClass="btn-ghost btn-small" minWidth="100" />
                     </HBox>
                 </VBox>
             
@@ -79,7 +79,7 @@
                     
                     <VBox spacing="12" alignment="CENTER" styleClass="button-container">
                         <Button text="✨ Start Adventure" onAction="#handleLocationGame" 
-                                styleClass="btn-primary btn-medium" minWidth="200" minHeight="40" />
+                                styleClass="btn-primary btn-medium" minWidth="220" minHeight="44" />
                         <VBox alignment="CENTER" spacing="4">
                             <Label text="📍 Interactive Map Experience" styleClass="caption" />
                             <Label text="Explore • Discover • Learn" styleClass="body-small" />
@@ -99,7 +99,7 @@
                     
                     <VBox spacing="12" alignment="CENTER" styleClass="button-container">
                         <Button text="🕰️ Begin Journey" onAction="#handleYearGame" 
-                                styleClass="btn-secondary btn-medium" minWidth="200" minHeight="40" />
+                                styleClass="btn-secondary btn-medium" minWidth="220" minHeight="44" />
                         <VBox alignment="CENTER" spacing="4">
                             <Label text="🎨 Artistic Timeline Quest" styleClass="caption" />
                             <Label text="Renaissance • Baroque • Modern" styleClass="body-small" />
