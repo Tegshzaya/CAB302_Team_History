@@ -3,9 +3,99 @@ package com.learn.plan_b_302;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 public class DatabaseManager {
     private static final String DB_URL = "jdbc:sqlite:artgame.db";
+    private static final SecureRandom random = new SecureRandom();
+    
+    /**
+     * Hash a password with a random salt using SHA-256
+     */
+    private String hashPassword(String password) {
+        try {
+            // Generate a random salt
+            byte[] salt = new byte[16];
+            random.nextBytes(salt);
+            
+            // Create MessageDigest instance for SHA-256
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            
+            // Add salt to the password
+            md.update(salt);
+            byte[] hashedPassword = md.digest(password.getBytes());
+            
+            // Combine salt and hashed password
+            byte[] combined = new byte[salt.length + hashedPassword.length];
+            System.arraycopy(salt, 0, combined, 0, salt.length);
+            System.arraycopy(hashedPassword, 0, combined, salt.length, hashedPassword.length);
+            
+            // Encode to Base64 for storage
+            return Base64.getEncoder().encodeToString(combined);
+            
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 algorithm not available", e);
+        }
+    }
+    
+    /**
+     * Verify a password against a stored hash
+     * Supports both new hashed passwords and legacy plain text passwords
+     */
+    private boolean verifyPassword(String password, String storedHash) {
+        try {
+            // Check if this is a legacy plain text password (short length, not Base64)
+            if (storedHash.length() < 50 || !isValidBase64(storedHash)) {
+                // Legacy plain text password - do simple string comparison
+                return password.equals(storedHash);
+            }
+            
+            // New hashed password - decode and verify
+            byte[] combined = Base64.getDecoder().decode(storedHash);
+            
+            // Check if we have enough bytes for salt + hash
+            if (combined.length < 48) { // 16 bytes salt + 32 bytes SHA-256 hash
+                // Fallback to plain text comparison for malformed hashes
+                return password.equals(storedHash);
+            }
+            
+            // Extract salt (first 16 bytes)
+            byte[] salt = new byte[16];
+            System.arraycopy(combined, 0, salt, 0, 16);
+            
+            // Extract hashed password (remaining bytes)
+            byte[] storedHashedPassword = new byte[combined.length - 16];
+            System.arraycopy(combined, 16, storedHashedPassword, 0, storedHashedPassword.length);
+            
+            // Hash the provided password with the same salt
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(salt);
+            byte[] hashedPassword = md.digest(password.getBytes());
+            
+            // Compare the hashes
+            return MessageDigest.isEqual(hashedPassword, storedHashedPassword);
+            
+        } catch (Exception e) {
+            // If anything goes wrong, fallback to plain text comparison
+            System.err.println("Password verification error, falling back to plain text: " + e.getMessage());
+            return password.equals(storedHash);
+        }
+    }
+    
+    /**
+     * Check if a string is valid Base64
+     */
+    private boolean isValidBase64(String str) {
+        try {
+            Base64.getDecoder().decode(str);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 
     public void initializeDatabase() {
         try (Connection conn = DriverManager.getConnection(DB_URL)) {
@@ -118,8 +208,11 @@ public class DatabaseManager {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            // Hash the password with salt
+            String hashedPassword = hashPassword(password);
+            
             stmt.setString(1, username);
-            stmt.setString(2, password); // In production, hash the password
+            stmt.setString(2, hashedPassword);
             stmt.executeUpdate();
 
             System.out.println("User created: " + username);
@@ -132,22 +225,26 @@ public class DatabaseManager {
     }
 
     public User authenticateUser(String username, String password) {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM users WHERE username = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
-            stmt.setString(2, password); // In production, hash and compare
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new User(
-                        rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getInt("high_score"),
-                        rs.getInt("games_played")
-                );
+                String storedHashedPassword = rs.getString("password");
+                
+                // Verify the password using our custom hashing
+                if (verifyPassword(password, storedHashedPassword)) {
+                    return new User(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            rs.getInt("high_score"),
+                            rs.getInt("games_played")
+                    );
+                }
             }
 
         } catch (SQLException e) {
