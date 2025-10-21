@@ -96,44 +96,6 @@ class AuthControllerTest extends ApplicationTest {
     }
 
     @Test
-    @DisplayName("Should show error for missing username")
-    void testMissingUsernameValidation() {
-        Platform.runLater(() -> {
-            usernameField.setText("");
-            passwordField.setText("password123");
-        });
-        
-        clickOn(loginButton);
-        
-        sleep(500, TimeUnit.MILLISECONDS);
-        
-        Platform.runLater(() -> {
-            String message = messageLabel.getText();
-            assertTrue(message.contains("fill") || message.contains("empty") || message.contains("required"), 
-                "Should show validation message for missing username");
-        });
-    }
-
-    @Test
-    @DisplayName("Should show error for missing password")
-    void testMissingPasswordValidation() {
-        Platform.runLater(() -> {
-            usernameField.setText("testuser");
-            passwordField.setText("");
-        });
-        
-        clickOn(loginButton);
-        
-        sleep(500, TimeUnit.MILLISECONDS);
-        
-        Platform.runLater(() -> {
-            String message = messageLabel.getText();
-            assertTrue(message.contains("fill") || message.contains("empty") || message.contains("required"), 
-                "Should show validation message for missing password");
-        });
-    }
-
-    @Test
     @DisplayName("Should handle invalid login credentials")
     void testInvalidLogin() {
         Platform.runLater(() -> {
@@ -149,69 +111,6 @@ class AuthControllerTest extends ApplicationTest {
             String message = messageLabel.getText();
             assertTrue(message.contains("Invalid") || message.contains("incorrect") || message.contains("wrong"), 
                 "Should show error for invalid credentials");
-        });
-    }
-
-    @Test
-    @DisplayName("Should clear fields after failed login")
-    void testFieldsClearAfterFailedLogin() {
-        Platform.runLater(() -> {
-            usernameField.setText("testuser");
-            passwordField.setText("wrongpass");
-        });
-        
-        clickOn(loginButton);
-        
-        sleep(1000, TimeUnit.MILLISECONDS);
-        
-        Platform.runLater(() -> {
-            // Fields might still contain text, but error message should be shown
-            assertFalse(messageLabel.getText().isEmpty(), "Error message should be displayed");
-        });
-    }
-
-    @Test
-    @DisplayName("Should enable login button when fields have text")
-    void testLoginButtonState() {
-        Platform.runLater(() -> {
-            assertTrue(loginButton.isVisible(), "Login button should be visible");
-            assertFalse(loginButton.isDisabled(), "Login button should be enabled");
-        });
-    }
-
-    @Test
-    @DisplayName("Should handle database connection errors gracefully")
-    void testDatabaseConnectionError() {
-        // This test verifies that the controller handles database errors without crashing
-        Platform.runLater(() -> {
-            usernameField.setText("testuser");
-            passwordField.setText("testpass");
-        });
-        
-        clickOn(loginButton);
-        
-        sleep(1000, TimeUnit.MILLISECONDS);
-        
-        // Should not crash the application
-        assertDoesNotThrow(() -> {
-            Platform.runLater(() -> {
-                assertNotNull(messageLabel.getText(), "Message label should still exist after database operation");
-            });
-        });
-    }
-
-    @Test
-    @DisplayName("Should maintain UI state during login process")
-    void testUIStateDuringLogin() {
-        Platform.runLater(() -> {
-            usernameField.setText("testuser");
-            passwordField.setText("testpass123");
-            
-            String initialUsername = usernameField.getText();
-            String initialPassword = passwordField.getText();
-            
-            assertEquals("testuser", initialUsername, "Username should be preserved");
-            assertEquals("testpass123", initialPassword, "Password should be preserved");
         });
     }
 

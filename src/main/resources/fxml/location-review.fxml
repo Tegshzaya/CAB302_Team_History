@@ -60,12 +60,12 @@
             </VBox>
 
             <!-- Action Buttons -->
-            <HBox spacing="20" alignment="CENTER">
+            <VBox spacing="12" alignment="CENTER" styleClass="button-container">
                 <Button onAction="#handlePlayAgain" text="🌍 Play Again" 
-                        styleClass="btn-primary" minWidth="180" minHeight="56"/>
+                        styleClass="btn-primary" prefWidth="280" minHeight="48"/>
                 <Button onAction="#handleBackToMenu" text="🏠 Back to Menu" 
-                        styleClass="btn-secondary" minWidth="180" minHeight="56"/>
-            </HBox>
+                        styleClass="btn-secondary" prefWidth="280" minHeight="48"/>
+            </VBox>
         </VBox>
     </center>
 </BorderPane>

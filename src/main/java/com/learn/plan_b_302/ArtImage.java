@@ -16,6 +16,7 @@ public class ArtImage {
         this.title = extractTitleFromPath(path);
         this.historicalContext = generateHistoricalContext(path, correctAnswer);
 
+        // Create list of all options (should be years for year game)
         List<String> options = new ArrayList<>(Arrays.asList(option1, option2, option3, option4));
 
         // Ensure the correct answer is present even if DB row has a mismatch
@@ -26,11 +27,13 @@ public class ArtImage {
         // De-duplicate by normalized text to avoid twins with different spacing/case
         LinkedHashMap<String, String> dedup = new LinkedHashMap<>();
         for (String s : options) {
-            dedup.put(normalize(s), s);
+            if (s != null && !s.trim().isEmpty()) {
+                dedup.put(normalize(s), s);
+            }
         }
 
         // Create shuffled list of all options
-        this.allOptions = new ArrayList<>(Arrays.asList(option1, option2, option3, option4));
+        this.allOptions = new ArrayList<>(dedup.values());
         Collections.shuffle(this.allOptions);
     }
 
@@ -126,6 +129,19 @@ public class ArtImage {
             case "death_of_marat_by_david": return "The Death of Marat";
             case "declaration_of_independence": return "Declaration of Independence";
             case "eugene_ferdinand": return "Liberty Leading the People";
+            case "thebattleofgrunwald": return "The Battle of Grunwald";
+            case "thebattleofsanromano": return "The Battle of San Romano";
+            case "thedeathofgeneralwarren": return "The Death of General Warren";
+            case "thedeathofgeneralwolfe": return "The Death of General Wolfe";
+            case "thedeathofsocrates": return "The Death of Socrates";
+            case "theexectionofemperormaximillian": return "The Execution of Emperor Maximilian";
+            case "theexecutionofladyjanegrey": return "The Execution of Lady Jane Grey";
+            case "themassacreatchios": return "The Massacre at Chios";
+            case "thenightattackonsanlorenzo": return "The Night Attack on San Lorenzo";
+            case "theschoolofathens": return "The School of Athens";
+            case "thesiegeofconstantinople": return "The Siege of Constantinople";
+            case "velazquez-the_surrender_of_breda": return "The Surrender of Breda";
+            case "jean_louis": return "Portrait of Jean-Louis David";
             default: return formatTitle(title);
         }
     }

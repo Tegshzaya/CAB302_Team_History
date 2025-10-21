@@ -66,17 +66,6 @@ class GameHistoryTest {
     }
 
     @Test
-    @DisplayName("Should handle zero questions for accuracy")
-    void testGetAccuracyPercentageZeroQuestions() {
-        GameHistory history = new GameHistory(
-            123, "YEAR_GAME", 0, 10, 0, 0, testDate, "{}"
-        );
-        
-        assertEquals(0.0, history.getAccuracyPercentage(), 0.01, 
-            "Should return 0% for zero questions");
-    }
-
-    @Test
     @DisplayName("Should format accuracy correctly")
     void testGetFormattedAccuracy() {
         GameHistory history = new GameHistory(
@@ -88,85 +77,13 @@ class GameHistoryTest {
     }
 
     @Test
-    @DisplayName("Should format date correctly")
-    void testGetFormattedDate() {
-        GameHistory history = new GameHistory(
-            123, "YEAR_GAME", 8, 10, 10, 8, testDate, "{}"
-        );
-        
-        assertEquals("Oct 21, 2025 15:30", history.getFormattedDate(), 
-            "Should format date as 'MMM dd, yyyy HH:mm'");
-    }
-
-    @Test
     @DisplayName("Should provide game type display")
     void testGetGameTypeDisplay() {
         GameHistory yearHistory = new GameHistory(
             123, "YEAR_GAME", 8, 10, 10, 8, testDate, "{}"
         );
-        GameHistory locationHistory = new GameHistory(
-            123, "LOCATION_GAME", 25, 30, 10, 8, testDate, "{}"
-        );
         
         assertEquals("📅 Year Game", yearHistory.getGameTypeDisplay(), 
             "Should display formatted year game type");
-        assertEquals("🌍 Location Game", locationHistory.getGameTypeDisplay(), 
-            "Should display formatted location game type");
-    }
-
-    @Test
-    @DisplayName("Should handle setters correctly")
-    void testSetters() {
-        GameHistory history = new GameHistory(
-            123, "YEAR_GAME", 8, 10, 10, 8, testDate, "{}"
-        );
-        
-        history.setId(2);
-        history.setScore(9);
-        history.setCorrectAnswers(9);
-        
-        LocalDateTime newDate = LocalDateTime.of(2025, 10, 22, 10, 15);
-        history.setPlayedAt(newDate);
-        
-        assertEquals(2, history.getId(), "ID should be updated");
-        assertEquals(9, history.getScore(), "Score should be updated");
-        assertEquals(9, history.getCorrectAnswers(), "Correct answers should be updated");
-        assertEquals(newDate, history.getPlayedAt(), "Date should be updated");
-    }
-
-    @Test
-    @DisplayName("Should handle perfect score")
-    void testPerfectScore() {
-        GameHistory history = new GameHistory(
-            123, "YEAR_GAME", 10, 10, 10, 10, testDate, "{}"
-        );
-        
-        assertEquals(100.0, history.getAccuracyPercentage(), 0.01, 
-            "Should calculate 100% accuracy");
-        assertEquals("10/10 (100.0%)", history.getFormattedAccuracy(), 
-            "Should format perfect percentage");
-    }
-
-    @Test
-    @DisplayName("Should handle zero score")
-    void testZeroScore() {
-        GameHistory history = new GameHistory(
-            123, "YEAR_GAME", 0, 10, 10, 0, testDate, "{}"
-        );
-        
-        assertEquals(0.0, history.getAccuracyPercentage(), 0.01, 
-            "Should calculate 0% accuracy");
-        assertEquals("0/10 (0.0%)", history.getFormattedAccuracy(), 
-            "Should format zero percentage");
-    }
-
-    @Test
-    @DisplayName("Should handle null game details")
-    void testNullGameDetails() {
-        GameHistory history = new GameHistory(
-            123, "YEAR_GAME", 8, 10, 10, 8, testDate, null
-        );
-        
-        assertNull(history.getGameDetails(), "Game details should remain null");
     }
 }

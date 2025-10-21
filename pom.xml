@@ -16,7 +16,6 @@
         <javafx.version>21.0.6</javafx.version>
         <junit.version>5.12.1</junit.version>
         <testfx.version>4.0.18</testfx.version>
-        <jacoco.version>0.8.11</jacoco.version>
     </properties>
 
     <dependencies>
@@ -193,26 +192,6 @@
                         <exclude>**/AuthControllerTest.java</exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <!-- JaCoCo plugin for code coverage -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

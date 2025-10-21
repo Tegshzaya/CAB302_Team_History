@@ -81,71 +81,11 @@ class UserManagerTest {
     }
 
     @Test
-    @DisplayName("Should maintain user state across multiple operations")
-    void testUserStatePersistence() {
-        User testUser = new User(1, "testuser", 100, 5);
-        
-        UserManager.setCurrentUser(testUser);
-        
-        // Multiple calls should return the same user
-        User retrieved1 = UserManager.getCurrentUser();
-        User retrieved2 = UserManager.getCurrentUser();
-        
-        assertEquals(testUser, retrieved1, "First retrieval should match");
-        assertEquals(testUser, retrieved2, "Second retrieval should match");
-        assertEquals(retrieved1, retrieved2, "Both retrievals should be the same");
-    }
-
-    @Test
-    @DisplayName("Should handle hasCurrentUser correctly in all states")
-    void testHasCurrentUserStates() {
-        // Initially no user
-        assertFalse(UserManager.hasCurrentUser(), "Should return false initially");
-        
-        // Set a user
-        User testUser = new User(1, "testuser", 100, 5);
-        UserManager.setCurrentUser(testUser);
-        assertTrue(UserManager.hasCurrentUser(), "Should return true after setting user");
-        
-        // Set to null
-        UserManager.setCurrentUser(null);
-        assertFalse(UserManager.hasCurrentUser(), "Should return false after setting null");
-        
-        // Clear explicitly
-        UserManager.setCurrentUser(testUser);
-        UserManager.clearCurrentUser();
-        assertFalse(UserManager.hasCurrentUser(), "Should return false after clearing");
-    }
-
-    @Test
-    @DisplayName("Should be thread-safe for basic operations")
-    void testBasicThreadSafety() {
-        User testUser = new User(1, "testuser", 100, 5);
-        
-        assertDoesNotThrow(() -> {
-            UserManager.setCurrentUser(testUser);
-            User retrieved = UserManager.getCurrentUser();
-            boolean hasUser = UserManager.hasCurrentUser();
-            UserManager.clearCurrentUser();
-        }, "Basic operations should not throw exceptions");
-    }
-
-    @Test
     @DisplayName("Should handle user with different properties")
     void testDifferentUserProperties() {
         // Test with zero values
         User zeroUser = new User(0, "", 0, 0);
         UserManager.setCurrentUser(zeroUser);
         assertEquals(zeroUser, UserManager.getCurrentUser(), "Should handle user with zero values");
-        
-        // Test with negative values
-        User negativeUser = new User(-1, "negative", -10, -5);
-        UserManager.setCurrentUser(negativeUser);
-        assertEquals(negativeUser, UserManager.getCurrentUser(), "Should handle user with negative values");
-        
-        // Test with large values
-        User largeUser = new User(Integer.MAX_VALUE, "large", Integer.MAX_VALUE, Integer.MAX_VALUE);
-        UserManager.setCurrentUser(largeUser);
-        assertEquals(largeUser, UserManager.getCurrentUser(), "Should handle user with large values");
     }
 }

@@ -376,6 +376,11 @@ public class GameController extends BaseController{
 
     @FXML
     private void handleBackToMenu(ActionEvent event) {
+        // Try to get user from UserManager if currentUser is null
+        if (currentUser == null) {
+            currentUser = UserManager.getCurrentUser();
+        }
+        
         navigate(event, "/fxml/Menu.fxml", controller -> {
             if (controller instanceof MenuController mc) {
                 mc.setCurrentUser(currentUser);
