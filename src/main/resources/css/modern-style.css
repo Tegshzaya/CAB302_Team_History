@@ -209,14 +209,16 @@
     -fx-text-fill: white;
     -fx-font-weight: 600;
     -fx-font-size: 15px;
-    -fx-padding: 16px 24px;
+    -fx-padding: 18px 28px;
     -fx-background-radius: 16px;
     -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(102, 126, 234, 0.4), 12, 0, 0, 6);
-    -fx-min-width: 200px;
-    -fx-min-height: 48px;
+    -fx-min-width: 220px;
+    -fx-min-height: 52px;
     -fx-pref-width: -1;
     -fx-max-width: -1;
+    -fx-wrap-text: false;
+    -fx-text-overrun: clip;
 }
 
 .btn-primary:hover {
@@ -259,16 +261,18 @@
     -fx-text-fill: #1a202c;
     -fx-font-weight: 600;
     -fx-font-size: 14px;
-    -fx-padding: 14px 22px;
+    -fx-padding: 16px 24px;
     -fx-background-radius: 12px;
     -fx-cursor: hand;
     -fx-border-color: rgba(255, 255, 255, 0.8);
     -fx-border-width: 1px;
     -fx-border-radius: 12px;
-    -fx-min-width: 140px;
-    -fx-min-height: 40px;
+    -fx-min-width: 160px;
+    -fx-min-height: 44px;
     -fx-pref-width: -1;
     -fx-max-width: -1;
+    -fx-wrap-text: false;
+    -fx-text-overrun: clip;
 }
 
 .btn-ghost:hover {
