@@ -39,7 +39,14 @@ public class AuthController extends BaseController{
         User user = dbManager.authenticateUser(username, password);
         if (user != null) {
             showMessage("Login successful!", true);
-            navigate(event, "/fxml/Menu.fxml",controller -> {});
+            // Store user in UserManager for global access
+            UserManager.setCurrentUser(user);
+            // Pass user to MenuController
+            navigate(event, "/fxml/Menu.fxml", controller -> {
+                if (controller instanceof MenuController mc) {
+                    mc.setCurrentUser(user);
+                }
+            });
         } else {
             showMessage("Invalid username or password", false);
         }

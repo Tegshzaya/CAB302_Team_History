@@ -32,9 +32,39 @@ public class DatabaseManager {
                             option4 TEXT NOT NULL
                         )
                     """;
+            
+            // Create game_history table (detailed tracking)
+            String createGameHistoryTable = """
+                        CREATE TABLE IF NOT EXISTS game_history (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            user_id INTEGER NOT NULL,
+                            game_type TEXT NOT NULL,
+                            score INTEGER NOT NULL,
+                            max_possible_score INTEGER NOT NULL,
+                            questions_answered INTEGER NOT NULL,
+                            correct_answers INTEGER NOT NULL,
+                            played_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            game_details TEXT,
+                            FOREIGN KEY (user_id) REFERENCES users (id)
+                        )
+                    """;
+            
+            // Create simple user_games table (basic tracking)
+            String createUserGamesTable = """
+                        CREATE TABLE IF NOT EXISTS user_games (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            user_id INTEGER NOT NULL,
+                            game_type TEXT NOT NULL,
+                            score INTEGER NOT NULL,
+                            date_played TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            FOREIGN KEY (user_id) REFERENCES users (id)
+                        )
+                    """;
 
             conn.createStatement().execute(createUsersTable);
             conn.createStatement().execute(createImagesTable);
+            conn.createStatement().execute(createGameHistoryTable);
+            conn.createStatement().execute(createUserGamesTable);
 
             // ✅ Add unique index for path to handle old DBs without UNIQUE constraint
             conn.createStatement().execute(
@@ -221,32 +251,33 @@ public class DatabaseManager {
                 "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(insertSql)) {
             Object[][] sampleData = {
-                    {"/images/mona_lisa.jpg", "Mona Lisa", "Mona Lisa", "The Last Supper", "The Birth of Venus", "The Persistence of Memory"},
-                    {"/images/starry_night.jpg", "The Starry Night", "The Starry Night", "Sunflowers", "The Potato Eaters", "Café Terrace at Night"},
-                    {"/images/scream.jpg", "The Scream", "The Scream", "The Kiss", "Madonna", "The Dance of Life"},
-                    {"/images/girl_pearl.jpg", "Girl with a Pearl Earring", "Girl with a Pearl Earring", "The Milkmaid", "View of Delft", "The Lacemaker"},
-                    {"/images/american_gothic.jpg", "American Gothic", "American Gothic", "Nighthawks", "A Sunday Afternoon", "Christina's World"},
+                    // Format: {image_path, correct_year, option1_year, option2_year, option3_year, option4_year}
+                    {"/images/mona_lisa.jpg", "1503", "1503", "1495", "1510", "1520"},
+                    {"/images/starry_night.jpg", "1889", "1889", "1885", "1892", "1900"},
+                    {"/images/scream.jpg", "1893", "1893", "1888", "1895", "1900"},
+                    {"/images/girl_pearl.jpg", "1665", "1665", "1650", "1675", "1680"},
+                    {"/images/american_gothic.jpg", "1930", "1930", "1925", "1935", "1940"},
 
-                    // Your extended list
-                    {"/images/Battle_of_Borodino.png", "Battle of Borodino", "Battle of Borodino", "Battle of Austerlitz", "Battle of Leipzig", "Battle of Smolensk"},
-                    {"/images/Battle_of_Trafalgar.jpeg", "Battle of Trafalgar", "Battle of Trafalgar", "Battle of Waterloo", "Battle of the Nile", "Battle of Copenhagen"},
-                    {"/images/BattleOfWaterloo.jpeg", "Battle of Waterloo", "Battle of Waterloo", "Battle of Borodino", "Battle of Trafalgar", "Battle of Gettysburg"},
-                    {"/images/Death_of_Marat_by_David.jpg", "The Death of Marat", "The Death of Marat", "Napoleon Crossing the Alps", "Liberty Leading the People", "The Oath of the Horatii"},
-                    {"/images/Declaration_of_Independence.jpg", "Declaration of Independence", "Declaration of Independence", "Washington Crossing the Delaware", "Signing of the Constitution", "Boston Tea Party"},
-                    {"/images/Eugène_Ferdinand.jpg", "Portrait of Eugène Ferdinand Victor Delacroix", "Portrait of Eugène Ferdinand Victor Delacroix", "Portrait of Napoleon", "Portrait of Goethe", "Portrait of Chopin"},
-                    {"/images/JEAN_LOUIS.jpg", "Portrait of Jean-Louis David", "Portrait of Jean-Louis David", "Self-Portrait of Rembrandt", "Portrait of Voltaire", "Portrait of Robespierre"},
-                    {"/images/TheBattleOfGrunwald.jpg", "The Battle of Grunwald", "The Battle of Grunwald", "The Battle of Varna", "The Siege of Vienna", "The Battle of Legnica"},
-                    {"/images/TheBattleOfSanRomano.jpeg", "The Battle of San Romano", "The Battle of San Romano", "The Battle of Anghiari", "The Battle of Cascina", "The Battle of Lepanto"},
-                    {"/images/TheDeathOfGeneralWarren.jpeg", "The Death of General Warren", "The Death of General Warren", "The Death of General Wolfe", "Washington at Princeton", "The Battle of Bunker Hill"},
-                    {"/images/TheDeathOfGeneralWolfe.jpg", "The Death of General Wolfe", "The Death of General Wolfe", "The Death of General Warren", "The Death of Nelson", "Washington Crossing the Delaware"},
-                    {"/images/TheDeathOfSocrates.jpeg", "The Death of Socrates", "The Death of Socrates", "The School of Athens", "The Trial of Socrates", "The Death of Seneca"},
-                    {"/images/TheExectionOfEmperorMaximillian.jpeg", "The Execution of Emperor Maximilian", "The Execution of Emperor Maximilian", "The Execution of Lady Jane Grey", "The Massacre at Chios", "Liberty Leading the People"},
-                    {"/images/TheExecutionOfLadyJaneGrey.jpg", "The Execution of Lady Jane Grey", "The Execution of Lady Jane Grey", "The Execution of Emperor Maximilian", "Marie Antoinette on the Way to the Guillotine", "The Death of Marat"},
-                    {"/images/TheMassacreatChios.jpg", "The Massacre at Chios", "The Massacre at Chios", "Liberty Leading the People", "The Raft of the Medusa", "Scenes from the Chios War"},
-                    {"/images/TheNightAttackOnSanLorenzo.jpg", "The Night Attack on San Lorenzo", "The Night Attack on San Lorenzo", "The Battle of San Romano", "The Siege of Constantinople", "The Surrender of Breda"},
-                    {"/images/TheSchoolOfAthens.jpeg", "The School of Athens", "The School of Athens", "The Last Supper", "The Creation of Adam", "Primavera"},
-                    {"/images/TheSiegeOfConstantinople.jpg", "The Siege of Constantinople", "The Siege of Constantinople", "The Fall of Constantinople", "The Capture of Constantinople", "The Battle of Lepanto"},
-                    {"/images/Velazquez-The_Surrender_of_Breda.jpg", "The Surrender of Breda", "The Surrender of Breda", "Las Meninas", "The Triumph of Bacchus", "The Coronation of the Virgin"}
+                    // Historical battle paintings with their actual years
+                    {"/images/Battle_of_Borodino.png", "1812", "1812", "1805", "1815", "1820"},
+                    {"/images/Battle_of_Trafalgar.jpeg", "1805", "1805", "1800", "1810", "1815"},
+                    {"/images/BattleOfWaterloo.jpeg", "1815", "1815", "1810", "1820", "1825"},
+                    {"/images/Death_of_Marat_by_David.jpg", "1793", "1793", "1789", "1795", "1800"},
+                    {"/images/Declaration_of_Independence.jpg", "1776", "1776", "1770", "1780", "1785"},
+                    {"/images/Eugène_Ferdinand.jpg", "1832", "1832", "1825", "1840", "1845"},
+                    {"/images/JEAN_LOUIS.jpg", "1794", "1794", "1790", "1800", "1805"},
+                    {"/images/TheBattleOfGrunwald.jpg", "1410", "1410", "1400", "1420", "1430"},
+                    {"/images/TheBattleOfSanRomano.jpeg", "1432", "1432", "1425", "1440", "1450"},
+                    {"/images/TheDeathOfGeneralWarren.jpeg", "1775", "1775", "1770", "1780", "1785"},
+                    {"/images/TheDeathOfGeneralWolfe.jpg", "1759", "1759", "1755", "1765", "1770"},
+                    {"/images/TheDeathOfSocrates.jpeg", "1787", "1787", "1780", "1790", "1795"},
+                    {"/images/TheExectionOfEmperorMaximillian.jpeg", "1867", "1867", "1860", "1870", "1875"},
+                    {"/images/TheExecutionOfLadyJaneGrey.jpg", "1554", "1554", "1550", "1560", "1565"},
+                    {"/images/TheMassacreatChios.jpg", "1824", "1824", "1820", "1830", "1835"},
+                    {"/images/TheNightAttackOnSanLorenzo.jpg", "1432", "1432", "1425", "1440", "1450"},
+                    {"/images/TheSchoolOfAthens.jpeg", "1511", "1511", "1505", "1515", "1520"},
+                    {"/images/TheSiegeOfConstantinople.jpg", "1453", "1453", "1440", "1460", "1470"},
+                    {"/images/Velazquez-The_Surrender_of_Breda.jpg", "1635", "1635", "1630", "1640", "1645"}
             };
 
             for (Object[] data : sampleData) {

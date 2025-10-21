@@ -63,4 +63,22 @@ public class User {
     public int getHighScoreInt() {
         return highScore;
     }
+    
+    // Estimate location game best score (for display purposes)
+    // This is a rough approximation - ideally you'd track location scores separately
+    public int getLocationBestScore() {
+        // Convert year game score (0-10) to location score estimate (0-30)
+        // This assumes good year game performance correlates with good location game performance
+        return Math.min(highScore * 3, 30);
+    }
+    
+    // Get formatted location best score string
+    public String getLocationBestScoreString() {
+        return getLocationBestScore() + "/30";
+    }
+    
+    // Get formatted year best score string  
+    public String getYearBestScoreString() {
+        return highScore + "/10";
+    }
 }

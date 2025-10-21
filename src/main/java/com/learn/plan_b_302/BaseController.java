@@ -28,7 +28,19 @@ public abstract class BaseController {
             }
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
+            
+            // Create new scene and add modern CSS
+            Scene newScene = new Scene(root, 1200, 750);
+            newScene.getStylesheets().add(
+                    Objects.requireNonNull(getClass().getResource("/css/modern-style.css"),
+                            "Missing CSS: /css/modern-style.css").toExternalForm());
+            
+            // Keep window resizable with consistent sizing
+            stage.setResizable(true);
+            stage.setMinWidth(900);
+            stage.setMinHeight(600);
+            
+            stage.setScene(newScene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

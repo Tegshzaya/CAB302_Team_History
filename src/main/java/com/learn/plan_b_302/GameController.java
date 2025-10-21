@@ -1,6 +1,5 @@
 package com.learn.plan_b_302;
 
-import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -38,12 +36,14 @@ public class GameController extends BaseController{
     @FXML private Button option2Button;
     @FXML private Button option3Button;
     @FXML private Button option4Button;
+    @FXML private Button submitAnswerButton;
     @FXML private Label feedbackLabel;
     @FXML private Button nextQuestionButton;
 
     @FXML private Label finalScoreLabel;
     @FXML private Label finalPercentageLabel;
     @FXML private Label newBestScoreLabel;
+    @FXML private Button checkAndLearnButton;
     @FXML private Button playAgainButton;
     @FXML private Button returnToMenuButton;
     @FXML private Button logoutButton;
@@ -57,31 +57,63 @@ public class GameController extends BaseController{
     private Button[] optionButtons;
     private boolean questionReady = false;
     private boolean gameOver = false;
+    private String selectedAnswer = null;
+    private List<ReviewResult> gameResults = new ArrayList<>();
 
 
     @FXML
     private void initialize() {
         optionButtons = new Button[]{option1Button, option2Button, option3Button, option4Button};
         for (Button b : optionButtons) b.setDisable(true);
-        nextQuestionButton.setVisible(false);
+        nextQuestionButton.setDisable(true); // Start disabled like Location game
+        submitAnswerButton.setDisable(true); // Start disabled, not hidden
 
         System.out.println("[INIT] GameController@" + System.identityHashCode(this));
-
+        
+        // Try to get user from UserManager if not set
+        if (currentUser == null) {
+            currentUser = UserManager.getCurrentUser();
+            if (currentUser != null) {
+                // Don't call updateUserInfo here since FXML elements may not be ready
+                // Will be called later in setCurrentUser or when game starts
+                System.out.println("GameController: Got user from UserManager: " + currentUser.getUsername());
+            }
+        }
     }
 
     public void setCurrentUser(User user) {
         this.currentUser = user;
-        updateUserInfo();
-
-        // Start once we have the user
-        startNewGame();
+        if (currentUser != null) {
+            updateUserInfo();
+            // Start once we have the user
+            startNewGame();
+        }
+    }
+    
+    // Method to start game for user already set in initialize
+    public void startGameIfUserReady() {
+        if (currentUser != null) {
+            updateUserInfo();
+            startNewGame();
+        }
     }
 
     private void updateUserInfo() {
+        System.out.println("GameController.updateUserInfo() called. User: " + (currentUser != null ? currentUser.getUsername() : "null"));
+        System.out.println("  welcomeLabel: " + (welcomeLabel != null ? "OK" : "null"));
+        System.out.println("  bestScoreLabel: " + (bestScoreLabel != null ? "OK" : "null"));
+        
         if (currentUser != null) {
-            welcomeLabel.setText("Welcome, " + currentUser.getUsername() + "!");
-            bestScoreLabel.setText("Best Score: " + currentUser.getBestScore());
-            gamesPlayedLabel.setText("Games Played: " + currentUser.getGamesPlayed());
+            // Add null checks for FXML elements in case they're not loaded yet
+            if (welcomeLabel != null) {
+                welcomeLabel.setText("Welcome, " + currentUser.getUsername() + "!");
+            }
+            if (bestScoreLabel != null) {
+                bestScoreLabel.setText("Best Score: " + currentUser.getBestScore());
+            }
+            if (gamesPlayedLabel != null) {
+                gamesPlayedLabel.setText("Games Played: " + currentUser.getGamesPlayed());
+            }
         }
     }
 
@@ -97,6 +129,7 @@ public class GameController extends BaseController{
     private void startNewGame() {
         questionReady = false;
         gameOver = false;
+        gameResults.clear(); // Clear previous game results
 
         artImages = DatabaseManager.getAllImages();
         System.out.println("[DEBUG] artImages size = " + (artImages == null ? "null" : artImages.size()));
@@ -149,21 +182,23 @@ public class GameController extends BaseController{
         for (int i = 0; i < optionButtons.length && i < options.size(); i++) {
             optionButtons[i].setText(options.get(i));
             optionButtons[i].setDisable(false);
-            optionButtons[i].getStyleClass().removeAll("correct-answer", "wrong-answer");
-            optionButtons[i].getStyleClass().add("option-button");
+            optionButtons[i].getStyleClass().removeAll("correct-answer", "wrong-answer", "selected-answer");
+            optionButtons[i].getStyleClass().add("answer-button");
         }
 
-        // Clear feedback and hide next button
+        // Clear feedback and reset buttons
         feedbackLabel.setText("");
-        nextQuestionButton.setVisible(false);
+        nextQuestionButton.setVisible(true); // Ensure next button is visible
+        nextQuestionButton.setDisable(true); // Disable next button like Location game
+        submitAnswerButton.setDisable(true); // Disable submit button
+        selectedAnswer = null;
 
         // Change button text depending on whether this is the last question
         if (currentQuestionIndex == totalQuestions - 1) {
             nextQuestionButton.setText("Finish 🎯");
         } else {
-            nextQuestionButton.setText("Next Question");
+            nextQuestionButton.setText("Next");
         }
-
 
         questionReady = true;
     }
@@ -189,40 +224,77 @@ public class GameController extends BaseController{
     }
 
     private void handleAnswerSelection(Button selectedButton) {
-
         if (!questionReady || currentImage == null) return; // guard
 
-        String selectedAnswer = selectedButton.getText();
-        boolean isCorrect = currentImage.isCorrectAnswer(selectedAnswer);
+        // Clear previous selection
+        for (Button button : optionButtons) {
+            button.getStyleClass().removeAll("selected-answer");
+        }
 
+        // Mark the selected answer
+        selectedAnswer = selectedButton.getText();
+        selectedButton.getStyleClass().add("selected-answer");
+        
+        // Enable submit button
+        submitAnswerButton.setDisable(false);
+    }
+
+    @FXML
+    private void handleSubmitAnswer() {
+        if (selectedAnswer == null || currentImage == null) return;
+
+        boolean isCorrect = currentImage.isCorrectAnswer(selectedAnswer);
+        
+        // Store result for review
+        ReviewResult result = new ReviewResult(
+            currentImage, 
+            selectedAnswer, 
+            currentImage.getCorrectAnswer(), 
+            isCorrect, 
+            currentQuestionIndex + 1
+        );
+        gameResults.add(result);
 
         // Disable all buttons
         for (Button button : optionButtons) {
             button.setDisable(true);
         }
+        submitAnswerButton.setDisable(true);
 
         // Style the buttons based on correctness
         if (isCorrect) {
-            selectedButton.getStyleClass().removeAll("option-button");
-            selectedButton.getStyleClass().add("correct-answer");
-            feedbackLabel.setText("Correct! ✓");
+            for (Button button : optionButtons) {
+                if (button.getText().equals(selectedAnswer)) {
+                    button.getStyleClass().removeAll("selected-answer");
+                    button.getStyleClass().add("correct-answer");
+                    break;
+                }
+            }
+            feedbackLabel.setText("Correct! ✓ The artwork was created in " + currentImage.getCorrectAnswer());
             feedbackLabel.getStyleClass().removeAll("wrong-feedback");
             feedbackLabel.getStyleClass().add("correct-feedback");
             score++;
         } else {
-            selectedButton.getStyleClass().removeAll("option-button");
-            selectedButton.getStyleClass().add("wrong-answer");
+            // Highlight the selected wrong answer
+            for (Button button : optionButtons) {
+                if (button.getText().equals(selectedAnswer)) {
+                    button.getStyleClass().removeAll("selected-answer");
+                    button.getStyleClass().add("wrong-answer");
+                    break;
+                }
+            }
 
             // Highlight the correct answer
             for (Button button : optionButtons) {
                 if (currentImage.isCorrectAnswer(button.getText())) {
-                    button.getStyleClass().removeAll("option-button");
+                    button.getStyleClass().removeAll("answer-button");
                     button.getStyleClass().add("correct-answer");
                     break;
                 }
             }
 
-            feedbackLabel.setText("Wrong! The correct answer is: " + currentImage.getCorrectAnswer());
+            feedbackLabel.setText("Wrong! The correct answer is " + currentImage.getCorrectAnswer() + 
+                                ". The artwork was created in " + currentImage.getCorrectAnswer());
             feedbackLabel.getStyleClass().removeAll("correct-feedback");
             feedbackLabel.getStyleClass().add("wrong-feedback");
         }
@@ -230,10 +302,8 @@ public class GameController extends BaseController{
         // Update score display
         scoreLabel.setText("Score: " + score);
 
-        // Show next button after a short delay
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
-        pause.setOnFinished(e -> nextQuestionButton.setVisible(true));
-        pause.play();
+        // Enable next button like Location game
+        nextQuestionButton.setDisable(false);
     }
 
     @FXML
@@ -255,6 +325,12 @@ public class GameController extends BaseController{
         if (currentUser != null) {
             DatabaseManager.updateUserScore(currentUser.getId(), score, totalQuestions);
             currentUser = DatabaseManager.refreshUser(currentUser.getId());
+            
+            // Save game to history
+            saveGameToHistory();
+            
+            // Save simple game record
+            saveSimpleGameRecord();
         } else {
             System.out.println("[WARN] endGame(): currentUser is null — skipping score update.");
         }
@@ -278,6 +354,15 @@ public class GameController extends BaseController{
 
 
     @FXML
+    private void handleCheckAndLearn(ActionEvent event) {
+        navigate(event, "/fxml/review.fxml", controller -> {
+            if (controller instanceof ReviewController rc) {
+                rc.setReviewData(new ArrayList<>(gameResults), currentUser);
+            }
+        });
+    }
+    
+    @FXML
     private void handlePlayAgain() {
         startNewGame();
     }
@@ -289,14 +374,87 @@ public class GameController extends BaseController{
     }
 
 
+    @FXML
+    private void handleBackToMenu(ActionEvent event) {
+        navigate(event, "/fxml/Menu.fxml", controller -> {
+            if (controller instanceof MenuController mc) {
+                mc.setCurrentUser(currentUser);
+                mc.refreshStatistics();
+            }
+        });
+    }
+
+
 
     private void showGamePane() {
         gamePane.setVisible(true);
         endGamePane.setVisible(false);
+        
+        // Ensure next button is visible and properly configured for new game
+        nextQuestionButton.setVisible(true);
+        nextQuestionButton.setDisable(true); // Start disabled until answer is submitted
     }
 
     private void showEndGamePane() {
         gamePane.setVisible(false);
         endGamePane.setVisible(true);
+    }
+    
+    private void saveGameToHistory() {
+        if (currentUser == null || gameResults == null || gameResults.isEmpty()) {
+            return;
+        }
+        
+        try {
+            // Create JSON details of the game (simplified version)
+            StringBuilder gameDetails = new StringBuilder("{");
+            gameDetails.append("\"results\":[");
+            
+            for (int i = 0; i < gameResults.size(); i++) {
+                ReviewResult result = gameResults.get(i);
+                if (i > 0) gameDetails.append(",");
+                gameDetails.append("{");
+                gameDetails.append("\"question\":").append(result.getQuestionNumber()).append(",");
+                gameDetails.append("\"artwork\":\"").append(result.getArtworkTitle().replace("\"", "\\\"")).append("\",");
+                gameDetails.append("\"userAnswer\":\"").append(result.getUserAnswer().replace("\"", "\\\"")).append("\",");
+                gameDetails.append("\"correctAnswer\":\"").append(result.getCorrectAnswer().replace("\"", "\\\"")).append("\",");
+                gameDetails.append("\"correct\":").append(result.isCorrect());
+                gameDetails.append("}");
+            }
+            
+            gameDetails.append("]}");
+            
+            // Create GameHistory object
+            GameHistory gameHistory = new GameHistory(
+                currentUser.getId(),
+                "YEAR_GAME",
+                score,
+                totalQuestions, // Max possible score for year game
+                totalQuestions,
+                score, // For year game, score equals correct answers
+                java.time.LocalDateTime.now(),
+                gameDetails.toString()
+            );
+            
+            // Save to database
+            GameHistoryManager.saveGameHistory(gameHistory);
+            
+        } catch (Exception e) {
+            System.err.println("Error saving game history: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    private void saveSimpleGameRecord() {
+        if (currentUser == null) return;
+        
+        UserGameRecord record = new UserGameRecord(
+            currentUser.getId(),
+            "YEAR_GAME",
+            score,
+            java.time.LocalDateTime.now()
+        );
+        
+        UserGameManager.saveGameRecord(record);
     }
 }

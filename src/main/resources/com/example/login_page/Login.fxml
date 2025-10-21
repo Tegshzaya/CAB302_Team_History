@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.example.login_page.LogInController" 
+           prefHeight="900.0" prefWidth="1200.0" styleClass="login-container main-layout" 
+           stylesheets="@styles.css">
+
+    <!-- Main Content Container -->
+    <VBox alignment="CENTER" spacing="40" styleClass="centered-content">
+        <!-- Header Section -->
+        <VBox spacing="16" alignment="CENTER" styleClass="padding-2xl">
+            <Label text="🎨 Historical Art Guesser" styleClass="title"/>
+            <Label text="Welcome back! Please sign in to continue" styleClass="subtitle"/>
+        </VBox>
+
+        <!-- Login Form Card -->
+        <VBox styleClass="card form-layout" spacing="24" alignment="CENTER" prefWidth="450">
+            <Label text="🔐 Sign In" styleClass="h2"/>
+            
+            <!-- Username Field -->
+            <VBox spacing="12" alignment="CENTER">
+                <Label text="Username:" styleClass="form-label"/>
+                <TextField fx:id="usernameField" promptText="Enter your username" 
+                           prefWidth="350" styleClass="text-field"/>
+            </VBox>
+            
+            <!-- Password Field -->
+            <VBox spacing="12" alignment="CENTER">
+                <Label text="Password:" styleClass="form-label"/>
+                <PasswordField fx:id="passwordField" promptText="Enter your password" 
+                               prefWidth="350" styleClass="text-field"/>
+            </VBox>
+            
+            <!-- Login Button -->
+            <Button text="Sign In" onAction="#onLogin" styleClass="btn-primary" 
+                    prefWidth="350" minHeight="48"/>
+            
+            <!-- Sign Up Link -->
+            <HBox spacing="12" alignment="CENTER">
+                <Label text="Don't have an account?" styleClass="muted"/>
+                <Button text="Sign Up" onAction="#onSignup" styleClass="btn-link"/>
+            </HBox>
+        </VBox>
+
+        <!-- Demo Users Info -->
+        <VBox styleClass="card" spacing="16" alignment="CENTER" prefWidth="450">
+            <Label text="🧪 Demo Accounts" styleClass="h3"/>
+            <VBox spacing="8" alignment="CENTER">
+                <Label text="Username: demo | Password: demo123" styleClass="demo-account"/>
+                <Label text="Username: test | Password: test123" styleClass="demo-account"/>
+                <Label text="Username: admin | Password: admin123" styleClass="demo-account"/>
+            </VBox>
+        </VBox>
+
+        <!-- Footer -->
+        <Label text="Test your knowledge of famous artworks and their history!" 
+               styleClass="muted" wrapText="true" maxWidth="500"/>
+    </VBox>
+</StackPane>

@@ -15,16 +15,26 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(
                 Objects.requireNonNull(getClass().getResource("/fxml/login.fxml"),
-                        "Missing FXML: /fxml/game.fxml"));
+                        "Missing FXML: /fxml/login.fxml"));
 
-        Scene scene = new Scene(loader.load(), 800, 600);
+        Scene scene = new Scene(loader.load(), 1200, 750);
 
-        // Add CSS stylesheet (with null-safety)
+        // Add modern CSS stylesheet (with null-safety)
         scene.getStylesheets().add(
-                Objects.requireNonNull(getClass().getResource("/css/style.css"),
-                        "Missing CSS: /css/style.css").toExternalForm());
+                Objects.requireNonNull(getClass().getResource("/css/modern-style.css"),
+                        "Missing CSS: /css/modern-style.css").toExternalForm());
 
-        stage.setTitle("Art Guessing Game");
+        stage.setTitle("Historical Art Guesser");
+
+        // Make window resizable with minimum and preferred sizes
+        stage.setResizable(true);
+        stage.setMinWidth(900);
+        stage.setMinHeight(600);
+        
+        // Set preferred size but allow maximizing
+        stage.setWidth(1200);
+        stage.setHeight(750);
+        
         stage.setScene(scene);
         stage.show();
     }
