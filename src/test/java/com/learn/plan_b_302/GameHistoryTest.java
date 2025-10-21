@@ -77,14 +77,14 @@ class GameHistoryTest {
     }
 
     @Test
-    @DisplayName("Should format percentage correctly")
-    void testGetFormattedPercentage() {
+    @DisplayName("Should format accuracy correctly")
+    void testGetFormattedAccuracy() {
         GameHistory history = new GameHistory(
             123, "YEAR_GAME", 7, 10, 10, 7, testDate, "{}"
         );
         
-        assertEquals("70.0%", history.getFormattedPercentage(), 
-            "Should format percentage with one decimal place");
+        assertEquals("7/10 (70.0%)", history.getFormattedAccuracy(), 
+            "Should format accuracy with correct format");
     }
 
     @Test
@@ -143,7 +143,7 @@ class GameHistoryTest {
         
         assertEquals(100.0, history.getAccuracyPercentage(), 0.01, 
             "Should calculate 100% accuracy");
-        assertEquals("100.0%", history.getFormattedPercentage(), 
+        assertEquals("10/10 (100.0%)", history.getFormattedAccuracy(), 
             "Should format perfect percentage");
     }
 
@@ -156,7 +156,7 @@ class GameHistoryTest {
         
         assertEquals(0.0, history.getAccuracyPercentage(), 0.01, 
             "Should calculate 0% accuracy");
-        assertEquals("0.0%", history.getFormattedPercentage(), 
+        assertEquals("0/10 (0.0%)", history.getFormattedAccuracy(), 
             "Should format zero percentage");
     }
 

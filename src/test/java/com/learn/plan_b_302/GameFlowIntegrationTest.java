@@ -85,7 +85,9 @@ class GameFlowIntegrationTest {
             "Should save game record successfully");
         
         // Update user score
-        assertDoesNotThrow(() -> DatabaseManager.updateUserScore(testUser.getId(), score, totalQuestions),
+        final int finalScore = score;
+        final int finalTotalQuestions = totalQuestions;
+        assertDoesNotThrow(() -> DatabaseManager.updateUserScore(testUser.getId(), finalScore, finalTotalQuestions),
             "Should update user score successfully");
         
         // Verify score was recorded
