@@ -134,6 +134,41 @@
 }
 
 /* ========================================
+   SCROLL CONTAINERS & RESPONSIVE LAYOUT
+   ======================================== */
+.scroll-container {
+    -fx-background-color: transparent;
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: as-needed;
+}
+
+.scroll-container .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-container .scroll-bar:vertical {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-background-radius: 8px;
+    -fx-padding: 4px;
+    -fx-opacity: 0.6;
+}
+
+.scroll-container .scroll-bar:vertical .track {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 6px;
+}
+
+.scroll-container .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-background-radius: 6px;
+}
+
+.centered-content {
+    -fx-max-width: 1200px;
+    -fx-alignment: center;
+}
+
+/* ========================================
    GLASSMORPHISM COMPONENTS
    ======================================== */
 .glass-card {
@@ -240,6 +275,20 @@
     -fx-font-size: 18px;
     -fx-min-width: 240px;
     -fx-min-height: 64px;
+}
+
+.btn-medium {
+    -fx-padding: 14px 28px;
+    -fx-font-size: 16px;
+    -fx-min-width: 160px;
+    -fx-min-height: 44px;
+}
+
+.btn-small {
+    -fx-padding: 10px 20px;
+    -fx-font-size: 14px;
+    -fx-min-width: 120px;
+    -fx-min-height: 36px;
 }
 
 /* ========================================

@@ -10,63 +10,68 @@
            styleClass="auth-container main-layout" stylesheets="@../css/modern-style.css">
 
     <!-- Main Content Container -->
-    <VBox alignment="CENTER" spacing="20" styleClass="centered-content">
-        <!-- Header Section with Enhanced Typography -->
-        <VBox alignment="CENTER" spacing="16" styleClass="padding-lg">
-            <Label text="🎨" styleClass="display-2" />
-            <VBox alignment="CENTER" spacing="8">
-                <Label text="Historical Art Guesser" styleClass="title-label" />
-                <Label text="Discover the stories behind masterpieces" styleClass="body" textAlignment="CENTER" />
-            </VBox>
-        </VBox>
-
-        <!-- Modern Glassmorphism Login Form -->
-        <VBox alignment="CENTER" spacing="24" styleClass="glass-card-elevated form-container">
-            <!-- Welcome Header -->
-            <VBox alignment="CENTER" spacing="16">
-                <Label text="Welcome Back" styleClass="subtitle-label" />
-                <Label text="Sign in to continue your art journey" styleClass="body" textAlignment="CENTER" />
-            </VBox>
-
-            <!-- Enhanced Input Fields -->
-            <VBox spacing="20" styleClass="spacing-md">
-                <VBox spacing="8" alignment="CENTER">
-                    <Label text="Username" styleClass="field-label" />
-                    <TextField fx:id="usernameField" promptText="👤 Enter your username"
-                               styleClass="input-field" prefWidth="350" />
-                </VBox>
-
-                <VBox spacing="8" alignment="CENTER">
-                    <Label text="Password" styleClass="field-label" />
-                    <PasswordField fx:id="passwordField" promptText="🔒 Enter your password"
-                                   styleClass="input-field" prefWidth="350" />
-                </VBox>
-            </VBox>
-
-            <!-- Message Label -->
-            <Label fx:id="messageLabel" styleClass="message-label" />
-
-            <!-- Enhanced Button Section -->
-            <VBox spacing="16" alignment="CENTER" styleClass="button-container">
-                <Button fx:id="loginButton" onAction="#handleLogin" text="✨ Sign In"
-                        styleClass="btn-primary" prefWidth="350" />
-
-                <HBox alignment="CENTER" spacing="16">
-                    <Label text="Don't have an account?" styleClass="body" />
-                    <Button fx:id="switchToSignupButton" onAction="#switchToSignup" text="Create Account"
-                            styleClass="btn-ghost" />
-                </HBox>
-            </VBox>
-
-            <!-- Enhanced Demo Account Info -->
-            <VBox spacing="8" alignment="CENTER" styleClass="glass-card-subtle padding-sm">
-                <Label text="DEMO ACCOUNT" styleClass="caption" />
+    <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-container">
+        <VBox alignment="CENTER" spacing="16" styleClass="centered-content">
+            <padding><Insets top="20" bottom="20" left="20" right="20"/></padding>
+            
+            <!-- Header Section with Enhanced Typography -->
+            <VBox alignment="CENTER" spacing="12" styleClass="padding-md">
+                <Label text="🎨" styleClass="display-3" />
                 <VBox alignment="CENTER" spacing="4">
-                    <Label text="Username: demo" styleClass="body-small" />
-                    <Label text="Password: demo" styleClass="body-small" />
+                    <Label text="Historical Art Guesser" styleClass="heading-2" />
+                    <Label text="Discover the stories behind masterpieces" styleClass="body-small" textAlignment="CENTER" />
                 </VBox>
-                <Label text="👉 Try it now!" styleClass="body-small" />
+            </VBox>
+
+            <!-- Modern Glassmorphism Login Form -->
+            <VBox alignment="CENTER" spacing="16" styleClass="glass-card-elevated form-container" maxWidth="400">
+                <!-- Welcome Header -->
+                <VBox alignment="CENTER" spacing="8">
+                    <Label text="Welcome Back" styleClass="heading-3" />
+                    <Label text="Sign in to continue your art journey" styleClass="body-small" textAlignment="CENTER" />
+                </VBox>
+
+                <!-- Enhanced Input Fields -->
+                <VBox spacing="12" styleClass="spacing-md">
+                    <VBox spacing="6" alignment="CENTER">
+                        <Label text="Username" styleClass="body-small" />
+                        <TextField fx:id="usernameField" promptText="👤 Enter your username"
+                                   styleClass="input-field" prefWidth="300" minHeight="36" />
+                    </VBox>
+
+                    <VBox spacing="6" alignment="CENTER">
+                        <Label text="Password" styleClass="body-small" />
+                        <PasswordField fx:id="passwordField" promptText="🔒 Enter your password"
+                                       styleClass="input-field" prefWidth="300" minHeight="36" />
+                    </VBox>
+                </VBox>
+
+                <!-- Message Label -->
+                <Label fx:id="messageLabel" styleClass="message-label" />
+
+                <!-- Enhanced Button Section -->
+                <VBox spacing="12" alignment="CENTER" styleClass="button-container">
+                    <Button fx:id="loginButton" onAction="#handleLogin" text="✨ Sign In"
+                            styleClass="btn-primary" prefWidth="300" minHeight="40" />
+
+                    <HBox alignment="CENTER" spacing="12">
+                        <Label text="Don't have an account?" styleClass="body-small" />
+                        <Button fx:id="switchToSignupButton" onAction="#switchToSignup" text="Create Account"
+                                styleClass="btn-ghost" minHeight="32" />
+                    </HBox>
+                </VBox>
+
+                <!-- Enhanced Demo Account Info -->
+                <VBox spacing="6" alignment="CENTER" styleClass="glass-card-subtle" maxWidth="280">
+                    <padding><Insets topRightBottomLeft="12"/></padding>
+                    <Label text="DEMO ACCOUNT" styleClass="caption" />
+                    <VBox alignment="CENTER" spacing="3">
+                        <Label text="Username: demo" styleClass="body-small" />
+                        <Label text="Password: demo" styleClass="body-small" />
+                    </VBox>
+                    <Label text="👉 Try it now!" styleClass="body-small" />
+                </VBox>
             </VBox>
         </VBox>
-    </VBox>
+    </ScrollPane>
 </StackPane>

@@ -10,60 +10,65 @@
            styleClass="auth-container main-layout" stylesheets="@../css/modern-style.css">
 
     <!-- Main Content Container -->
-    <VBox alignment="CENTER" spacing="20" styleClass="centered-content">
-        <!-- Enhanced Header Section -->
-        <VBox alignment="CENTER" spacing="16" styleClass="padding-lg">
-            <Label text="🎨" styleClass="display-2" />
-            <VBox alignment="CENTER" spacing="8">
-                <Label text="Historical Art Guesser" styleClass="title-label" />
-                <Label text="Join the art discovery adventure" styleClass="body" textAlignment="CENTER" />
-            </VBox>
-        </VBox>
-
-        <!-- Modern Glassmorphism Signup Form -->
-        <VBox alignment="CENTER" spacing="24" styleClass="glass-card-elevated form-container">
-            <!-- Welcome Header -->
-            <VBox alignment="CENTER" spacing="16">
-                <Label text="Create Account" styleClass="subtitle-label" />
-                <Label text="Start your journey into art history" styleClass="body" textAlignment="CENTER" />
-            </VBox>
-
-            <!-- Enhanced Input Fields -->
-            <VBox spacing="20" styleClass="spacing-md">
-                <VBox spacing="8" alignment="CENTER">
-                    <Label text="Username" styleClass="field-label" />
-                    <TextField fx:id="usernameField" promptText="👤 Create your username (min 3 characters)" 
-                               styleClass="input-field" prefWidth="350" />
-                </VBox>
-
-                <VBox spacing="8" alignment="CENTER">
-                    <Label text="Password" styleClass="field-label" />
-                    <PasswordField fx:id="passwordField" promptText="🔒 Create secure password (min 6 characters)" 
-                                   styleClass="input-field" prefWidth="350" />
+    <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-container">
+        <VBox alignment="CENTER" spacing="16" styleClass="centered-content">
+            <padding><Insets top="20" bottom="20" left="20" right="20"/></padding>
+            
+            <!-- Enhanced Header Section -->
+            <VBox alignment="CENTER" spacing="12" styleClass="padding-md">
+                <Label text="🎨" styleClass="display-3" />
+                <VBox alignment="CENTER" spacing="4">
+                    <Label text="Historical Art Guesser" styleClass="heading-2" />
+                    <Label text="Join the art discovery adventure" styleClass="body-small" textAlignment="CENTER" />
                 </VBox>
             </VBox>
 
-            <!-- Message Label -->
-            <Label fx:id="messageLabel" styleClass="message-label" />
+            <!-- Modern Glassmorphism Signup Form -->
+            <VBox alignment="CENTER" spacing="16" styleClass="glass-card-elevated form-container" maxWidth="400">
+                <!-- Welcome Header -->
+                <VBox alignment="CENTER" spacing="8">
+                    <Label text="Create Account" styleClass="heading-3" />
+                    <Label text="Start your journey into art history" styleClass="body-small" textAlignment="CENTER" />
+                </VBox>
 
-            <!-- Enhanced Button Section -->
-            <VBox spacing="16" alignment="CENTER" styleClass="button-container">
-                <Button fx:id="signupButton" onAction="#handleSignup" text="🚀 Create Account" 
-                        styleClass="btn-primary" prefWidth="350" />
-                
-                <HBox alignment="CENTER" spacing="16">
-                    <Label text="Already have an account?" styleClass="body" />
-                    <Button fx:id="switchToLoginButton" onAction="#switchToLogin" text="Sign In"
-                            styleClass="btn-ghost" />
-                </HBox>
-            </VBox>
+                <!-- Enhanced Input Fields -->
+                <VBox spacing="12" styleClass="spacing-md">
+                    <VBox spacing="6" alignment="CENTER">
+                        <Label text="Username" styleClass="body-small" />
+                        <TextField fx:id="usernameField" promptText="👤 Create username (min 3 chars)" 
+                                   styleClass="input-field" prefWidth="300" minHeight="36" />
+                    </VBox>
 
-            <!-- Enhanced Terms Info -->
-            <VBox spacing="16" alignment="CENTER" styleClass="glass-card-subtle padding-md">
-                <Label text="📋 Terms &amp; Privacy" styleClass="caption" />
-                <Label text="By creating an account, you agree to explore art history responsibly" 
-                       styleClass="body-small" textAlignment="CENTER" wrapText="true" maxWidth="320" />
+                    <VBox spacing="6" alignment="CENTER">
+                        <Label text="Password" styleClass="body-small" />
+                        <PasswordField fx:id="passwordField" promptText="🔒 Create password (min 6 chars)" 
+                                       styleClass="input-field" prefWidth="300" minHeight="36" />
+                    </VBox>
+                </VBox>
+
+                <!-- Message Label -->
+                <Label fx:id="messageLabel" styleClass="message-label" />
+
+                <!-- Enhanced Button Section -->
+                <VBox spacing="12" alignment="CENTER" styleClass="button-container">
+                    <Button fx:id="signupButton" onAction="#handleSignup" text="🚀 Create Account" 
+                            styleClass="btn-primary" prefWidth="300" minHeight="40" />
+                    
+                    <HBox alignment="CENTER" spacing="12">
+                        <Label text="Already have an account?" styleClass="body-small" />
+                        <Button fx:id="switchToLoginButton" onAction="#switchToLogin" text="Sign In"
+                                styleClass="btn-ghost" minHeight="32" />
+                    </HBox>
+                </VBox>
+
+                <!-- Enhanced Terms Info -->
+                <VBox spacing="6" alignment="CENTER" styleClass="glass-card-subtle" maxWidth="280">
+                    <padding><Insets topRightBottomLeft="12"/></padding>
+                    <Label text="📋 Terms &amp; Privacy" styleClass="caption" />
+                    <Label text="By creating an account, you agree to explore art history responsibly" 
+                           styleClass="body-small" textAlignment="CENTER" wrapText="true" maxWidth="260" />
+                </VBox>
             </VBox>
         </VBox>
-    </VBox>
+    </ScrollPane>
 </StackPane>

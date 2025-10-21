@@ -10,115 +10,119 @@
            styleClass="auth-container main-layout" stylesheets="@../css/modern-style.css">
 
     <!-- Main Content Container -->
-    <VBox alignment="CENTER" spacing="40" styleClass="centered-content">
-        <!-- Player Profile Header -->
-        <HBox spacing="40" alignment="CENTER" styleClass="profile-header">
-            <!-- Profile Card -->
-            <VBox spacing="16" styleClass="glass-card profile-card" alignment="CENTER" minWidth="300">
-                <padding><Insets topRightBottomLeft="24"/></padding>
-                <Label text="👤" styleClass="display-3" />
-                <VBox alignment="CENTER" spacing="8">
-                    <Label fx:id="welcomeLabel" text="Welcome, Player!" styleClass="heading-3" />
-                    <Label text="Art History Explorer" styleClass="caption" />
-                </VBox>
-                <HBox spacing="12" alignment="CENTER">
-                    <Button text="📈 View History" onAction="#handleViewHistory" styleClass="btn-secondary btn-small" minWidth="110" />
-                    <Button text="🚪 Sign Out" onAction="#handleSignOut" styleClass="btn-ghost btn-small" minWidth="100" />
-                </HBox>
-            </VBox>
+    <ScrollPane fitToWidth="true" fitToHeight="true" styleClass="scroll-container">
+        <VBox alignment="CENTER" spacing="20" styleClass="centered-content">
+            <padding><Insets top="20" bottom="20" left="20" right="20"/></padding>
             
-            <!-- Stats Cards -->
-            <HBox spacing="24" alignment="CENTER">
-                <!-- Year Game Stats -->
-                <VBox spacing="12" styleClass="glass-card stat-card" alignment="CENTER" minWidth="200">
-                    <padding><Insets topRightBottomLeft="20"/></padding>
-                    <Label text="📅" styleClass="display-4" />
-                    <VBox alignment="CENTER" spacing="6">
-                        <Label text="Year Game" styleClass="caption" />
-                        <Label fx:id="yearBestScoreLabel" text="Best: 0/10" styleClass="body" />
-                        <Label fx:id="yearGamesPlayedLabel" text="Played: 0" styleClass="body-small" />
+            <!-- Player Profile Header -->
+            <HBox spacing="24" alignment="CENTER" styleClass="profile-header">
+                <!-- Profile Card -->
+                <VBox spacing="12" styleClass="glass-card profile-card" alignment="CENTER" minWidth="280" maxWidth="320">
+                    <padding><Insets topRightBottomLeft="16"/></padding>
+                    <Label text="👤" styleClass="display-4" />
+                    <VBox alignment="CENTER" spacing="4">
+                        <Label fx:id="welcomeLabel" text="Welcome, Player!" styleClass="heading-4" />
+                        <Label text="Art History Explorer" styleClass="caption" />
+                    </VBox>
+                    <HBox spacing="8" alignment="CENTER">
+                        <Button text="📈 History" onAction="#handleViewHistory" styleClass="btn-secondary btn-small" minWidth="80" />
+                        <Button text="🚪 Sign Out" onAction="#handleSignOut" styleClass="btn-ghost btn-small" minWidth="80" />
+                    </HBox>
+                </VBox>
+            
+                <!-- Stats Cards -->
+                <HBox spacing="16" alignment="CENTER">
+                    <!-- Year Game Stats -->
+                    <VBox spacing="8" styleClass="glass-card stat-card" alignment="CENTER" minWidth="160" maxWidth="180">
+                        <padding><Insets topRightBottomLeft="12"/></padding>
+                        <Label text="📅" styleClass="heading-1" />
+                        <VBox alignment="CENTER" spacing="4">
+                            <Label text="Year Game" styleClass="body-small" />
+                            <Label fx:id="yearBestScoreLabel" text="Best: 0/10" styleClass="body" />
+                            <Label fx:id="yearGamesPlayedLabel" text="Played: 0" styleClass="caption" />
+                        </VBox>
+                    </VBox>
+                    
+                    <!-- Location Game Stats -->
+                    <VBox spacing="8" styleClass="glass-card stat-card" alignment="CENTER" minWidth="160" maxWidth="180">
+                        <padding><Insets topRightBottomLeft="12"/></padding>
+                        <Label text="🌍" styleClass="heading-1" />
+                        <VBox alignment="CENTER" spacing="4">
+                            <Label text="Location Game" styleClass="body-small" />
+                            <Label fx:id="locationBestScoreLabel" text="Best: 0/30" styleClass="body" />
+                            <Label fx:id="locationGamesPlayedLabel" text="Played: 0" styleClass="caption" />
+                        </VBox>
+                    </VBox>
+                </HBox>
+        </HBox>
+            
+            <!-- App Title Section -->
+            <VBox alignment="CENTER" spacing="12" styleClass="app-header">
+                <Label text="🎨" styleClass="display-3" />
+                <VBox alignment="CENTER" spacing="4">
+                    <Label text="Historical Art Guesser" styleClass="heading-2" />
+                    <Label text="Choose your adventure in art history" styleClass="body" textAlignment="CENTER" />
+                </VBox>
+            </VBox>
+
+            <!-- Modern Game Selection Cards -->
+            <HBox spacing="32" alignment="CENTER" styleClass="button-row">
+                <!-- Enhanced Location Game Card -->
+                <VBox spacing="20" styleClass="glass-card-elevated interactive" alignment="CENTER" 
+                      minWidth="300" minHeight="280" maxWidth="380" prefWidth="340">
+                    <VBox spacing="12" alignment="CENTER">
+                        <Label text="🌍" styleClass="display-4" />
+                        <Label text="Guess the Location" styleClass="heading-3" />
+                        <Label text="Embark on a geographical journey through art history. Test your knowledge by identifying where famous artworks originated." 
+                               styleClass="body-small" textAlignment="CENTER" wrapText="true" maxWidth="280" />
+                    </VBox>
+                    
+                    <VBox spacing="12" alignment="CENTER" styleClass="button-container">
+                        <Button text="✨ Start Adventure" onAction="#handleLocationGame" 
+                                styleClass="btn-primary btn-medium" minWidth="200" minHeight="40" />
+                        <VBox alignment="CENTER" spacing="4">
+                            <Label text="📍 Interactive Map Experience" styleClass="caption" />
+                            <Label text="Explore • Discover • Learn" styleClass="body-small" />
+                        </VBox>
                     </VBox>
                 </VBox>
-                
-                <!-- Location Game Stats -->
-                <VBox spacing="12" styleClass="glass-card stat-card" alignment="CENTER" minWidth="200">
-                    <padding><Insets topRightBottomLeft="20"/></padding>
-                    <Label text="🌍" styleClass="display-4" />
-                    <VBox alignment="CENTER" spacing="6">
-                        <Label text="Location Game" styleClass="caption" />
-                        <Label fx:id="locationBestScoreLabel" text="Best: 0/30" styleClass="body" />
-                        <Label fx:id="locationGamesPlayedLabel" text="Played: 0" styleClass="body-small" />
+
+                <!-- Enhanced Year Game Card -->
+                <VBox spacing="20" styleClass="glass-card-elevated interactive" alignment="CENTER" 
+                      minWidth="300" minHeight="280" maxWidth="380" prefWidth="340">
+                    <VBox spacing="12" alignment="CENTER">
+                        <Label text="📅" styleClass="display-4" />
+                        <Label text="Guess the Year" styleClass="heading-3" />
+                        <Label text="Travel through time with masterpieces from across the centuries. Challenge yourself to guess when these works were created." 
+                               styleClass="body-small" textAlignment="CENTER" wrapText="true" maxWidth="280" />
+                    </VBox>
+                    
+                    <VBox spacing="12" alignment="CENTER" styleClass="button-container">
+                        <Button text="🕰️ Begin Journey" onAction="#handleYearGame" 
+                                styleClass="btn-secondary btn-medium" minWidth="200" minHeight="40" />
+                        <VBox alignment="CENTER" spacing="4">
+                            <Label text="🎨 Artistic Timeline Quest" styleClass="caption" />
+                            <Label text="Renaissance • Baroque • Modern" styleClass="body-small" />
+                        </VBox>
                     </VBox>
                 </VBox>
             </HBox>
-        </HBox>
-        
-        <!-- App Title Section -->
-        <VBox alignment="CENTER" spacing="16" styleClass="app-header">
-            <Label text="🎨" styleClass="display-2" />
-            <VBox alignment="CENTER" spacing="8">
-                <Label text="Historical Art Guesser" styleClass="title-label" />
-                <Label text="Choose your adventure in art history" styleClass="body-large" textAlignment="CENTER" />
+
+            <!-- Recent Games Section -->
+            <VBox spacing="12" alignment="CENTER" styleClass="recent-games-section" maxWidth="600">
+                <Label text="📈 Recent Games" styleClass="body" />
+                <VBox fx:id="recentGamesContainer" spacing="6" styleClass="recent-games-list" maxWidth="600">
+                    <Label text="No games played yet. Start playing to see your recent games here!" styleClass="body-small" />
+                </VBox>
+            </VBox>
+            
+            <!-- Enhanced Footer -->
+            <VBox spacing="8" alignment="CENTER" styleClass="button-container">
+                <VBox alignment="CENTER" spacing="4">
+                    <Label text="Ready to explore the fascinating world of art history?" styleClass="body-small" textAlignment="CENTER" />
+                    <Label text="Each game offers unique challenges and discoveries" styleClass="caption" textAlignment="CENTER" />
+                </VBox>
             </VBox>
         </VBox>
-
-        <!-- Modern Game Selection Cards -->
-        <HBox spacing="56" alignment="CENTER" styleClass="button-row">
-            <!-- Enhanced Location Game Card -->
-            <VBox spacing="28" styleClass="glass-card-elevated interactive" alignment="CENTER" 
-                  minWidth="420" minHeight="380" maxWidth="500">
-                <VBox spacing="20" alignment="CENTER">
-                    <Label text="🌍" styleClass="display-2" />
-                    <Label text="Guess the Location" styleClass="heading-2" />
-                    <Label text="Embark on a geographical journey through art history. Test your knowledge by identifying where famous artworks originated." 
-                           styleClass="body" textAlignment="CENTER" wrapText="true" maxWidth="380" />
-                </VBox>
-                
-                <VBox spacing="16" alignment="CENTER" styleClass="button-container">
-                    <Button text="✨ Start Adventure" onAction="#handleLocationGame" 
-                            styleClass="btn-primary btn-large" minWidth="260" minHeight="52" />
-                    <VBox alignment="CENTER" spacing="6">
-                        <Label text="📍 Interactive Map Experience" styleClass="caption" />
-                        <Label text="Explore • Discover • Learn" styleClass="body-small" />
-                    </VBox>
-                </VBox>
-            </VBox>
-
-            <!-- Enhanced Year Game Card -->
-            <VBox spacing="28" styleClass="glass-card-elevated interactive" alignment="CENTER" 
-                  minWidth="420" minHeight="380" maxWidth="500">
-                <VBox spacing="20" alignment="CENTER">
-                    <Label text="📅" styleClass="display-2" />
-                    <Label text="Guess the Year" styleClass="heading-2" />
-                    <Label text="Travel through time with masterpieces from across the centuries. Challenge yourself to guess when these works were created." 
-                           styleClass="body" textAlignment="CENTER" wrapText="true" maxWidth="380" />
-                </VBox>
-                
-                <VBox spacing="16" alignment="CENTER" styleClass="button-container">
-                    <Button text="🕰️ Begin Journey" onAction="#handleYearGame" 
-                            styleClass="btn-secondary btn-large" minWidth="260" minHeight="52" />
-                    <VBox alignment="CENTER" spacing="6">
-                        <Label text="🎨 Artistic Timeline Quest" styleClass="caption" />
-                        <Label text="Renaissance • Baroque • Modern" styleClass="body-small" />
-                    </VBox>
-                </VBox>
-            </VBox>
-        </HBox>
-
-        <!-- Recent Games Section -->
-        <VBox spacing="16" alignment="CENTER" styleClass="recent-games-section">
-            <Label text="📈 Recent Games" styleClass="caption" />
-            <VBox fx:id="recentGamesContainer" spacing="8" styleClass="recent-games-list">
-                <Label text="No games played yet. Start playing to see your recent games here!" styleClass="body-small" />
-            </VBox>
-        </VBox>
-        
-        <!-- Enhanced Footer -->
-        <VBox spacing="16" alignment="CENTER" styleClass="button-container">
-            <VBox alignment="CENTER" spacing="8">
-                <Label text="Ready to explore the fascinating world of art history?" styleClass="body" textAlignment="CENTER" />
-                <Label text="Each game offers unique challenges and discoveries" styleClass="body-small" textAlignment="CENTER" />
-            </VBox>
-        </VBox>
-    </VBox>
+    </ScrollPane>
 </StackPane>

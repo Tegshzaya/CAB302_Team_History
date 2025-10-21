@@ -10,9 +10,9 @@
             styleClass="auth-container main-layout" stylesheets="@../css/modern-style.css">
 
     <top>
-        <HBox spacing="24" styleClass="game-header" alignment="CENTER">
-            <padding><Insets topRightBottomLeft="24"/></padding>
-            <Label text="🌍 Guess the Location" styleClass="heading-2"/>
+        <HBox spacing="16" styleClass="game-header" alignment="CENTER">
+            <padding><Insets topRightBottomLeft="16"/></padding>
+            <Label text="🌍 Guess the Location" styleClass="heading-3"/>
             <Pane HBox.hgrow="ALWAYS"/>
             <Label fx:id="roundLabel" text="Round 1 / 1" styleClass="game-info"/>
             <Label fx:id="scoreLabel" text="Score: 0" styleClass="score-label"/>
@@ -22,25 +22,27 @@
     <center>
         <StackPane>
             <!-- GAME PANE -->
-            <SplitPane fx:id="gamePane" dividerPositions="0.45" visible="true">
+            <SplitPane fx:id="gamePane" dividerPositions="0.4" visible="true">
                 <items>
-                    <VBox spacing="20" styleClass="modern-card" alignment="CENTER">
-                        <padding><Insets topRightBottomLeft="24"/></padding>
-                        <ImageView fx:id="photoView" preserveRatio="true" fitWidth="420" fitHeight="320" styleClass="art-image"/>
+                    <VBox spacing="16" styleClass="modern-card" alignment="CENTER">
+                        <padding><Insets topRightBottomLeft="16"/></padding>
+                        <ImageView fx:id="photoView" preserveRatio="true" fitWidth="320" fitHeight="240" styleClass="art-image"/>
                         <Label text="Drop a pin on the map where you think this photo was taken." 
-                               styleClass="body" wrapText="true" textAlignment="CENTER"/>
-                        <HBox spacing="12" alignment="CENTER">
-                            <Button text="Submit Guess" onAction="#onSubmit" fx:id="submitBtn" styleClass="btn-primary"/>
-                            <Button text="Next" onAction="#onNext" fx:id="nextBtn" disable="true" styleClass="btn-secondary"/>
-                            <Button text="Back to Menu" onAction="#onBackToMenu" styleClass="btn-ghost"/>
-                        </HBox>
-                        <Label fx:id="feedbackLabel" wrapText="true" styleClass="feedback-label"/>
+                               styleClass="body-small" wrapText="true" textAlignment="CENTER" maxWidth="300"/>
+                        <VBox spacing="8" alignment="CENTER">
+                            <HBox spacing="8" alignment="CENTER">
+                                <Button text="Submit" onAction="#onSubmit" fx:id="submitBtn" styleClass="btn-primary" minWidth="80" minHeight="32"/>
+                                <Button text="Next" onAction="#onNext" fx:id="nextBtn" disable="true" styleClass="btn-secondary" minWidth="80" minHeight="32"/>
+                            </HBox>
+                            <Button text="← Back" onAction="#onBackToMenu" styleClass="btn-ghost" minWidth="80" minHeight="28"/>
+                        </VBox>
+                        <Label fx:id="feedbackLabel" wrapText="true" styleClass="feedback-label" maxWidth="300"/>
                     </VBox>
 
                     <VBox fillWidth="true" VBox.vgrow="ALWAYS" minWidth="0" minHeight="0">
-                        <padding><Insets topRightBottomLeft="12"/></padding>
+                        <padding><Insets topRightBottomLeft="8"/></padding>
                         <WebView fx:id="mapView"
-                                 prefWidth="560" prefHeight="560"
+                                 prefWidth="400" prefHeight="400"
                                  minWidth="0" minHeight="0"
                                  VBox.vgrow="ALWAYS"/>
                     </VBox>
@@ -48,39 +50,39 @@
             </SplitPane>
             
             <!-- END GAME PANE -->
-            <VBox fx:id="endGamePane" alignment="CENTER" spacing="40" styleClass="end-game-container" visible="false">
+            <VBox fx:id="endGamePane" alignment="CENTER" spacing="24" styleClass="end-game-container" visible="false">
                 <children>
                     <!-- Celebration Header -->
-                    <VBox alignment="CENTER" spacing="20">
+                    <VBox alignment="CENTER" spacing="12">
                         <children>
-                            <Label styleClass="end-game-title" text="🌍 Geography Challenge Complete!" />
-                            <Label text="You've explored amazing locations around the world" styleClass="body-large" textAlignment="CENTER" />
+                            <Label styleClass="heading-2" text="🌍 Geography Challenge Complete!" />
+                            <Label text="You've explored amazing locations around the world" styleClass="body" textAlignment="CENTER" />
                         </children>
                     </VBox>
 
                     <!-- Enhanced Stats Display -->
-                    <VBox alignment="CENTER" spacing="16" styleClass="final-stats">
+                    <VBox alignment="CENTER" spacing="12" styleClass="final-stats">
                         <children>
-                            <Label text="📊 Your Results" styleClass="caption" />
-                            <Label fx:id="finalScoreLabel" styleClass="final-score" text="Final Score: 0 / 30" />
-                            <Label fx:id="finalAccuracyLabel" styleClass="final-percentage" text="Average Distance: 0 km" />
+                            <Label text="📈 Your Results" styleClass="body" />
+                            <Label fx:id="finalScoreLabel" styleClass="heading-3" text="Final Score: 0 / 30" />
+                            <Label fx:id="finalAccuracyLabel" styleClass="body" text="Average Distance: 0 km" />
                         </children>
                     </VBox>
 
                     <!-- Action Buttons -->
-                    <VBox alignment="CENTER" maxWidth="400" spacing="20">
+                    <VBox alignment="CENTER" maxWidth="320" spacing="12">
                         <children>
-                            <Button fx:id="checkAndLearnButton" onAction="#handleCheckAndLearn" prefWidth="280" 
-                                    styleClass="btn-primary btn-large" text="🗺️ Check and Learn" />
-                            <Button fx:id="playAgainButton" onAction="#handlePlayAgain" prefWidth="280" 
-                                    styleClass="btn-secondary" text="🌍 Play Again" />
-                            <Button onAction="#onBackToMenu" prefWidth="280" 
-                                    styleClass="btn-ghost" text="🏠 Back to Menu" />
+                            <Button fx:id="checkAndLearnButton" onAction="#handleCheckAndLearn" prefWidth="240" 
+                                    styleClass="btn-primary" text="🗺️ Check and Learn" minHeight="40" />
+                            <Button fx:id="playAgainButton" onAction="#handlePlayAgain" prefWidth="240" 
+                                    styleClass="btn-secondary" text="🌍 Play Again" minHeight="40" />
+                            <Button onAction="#onBackToMenu" prefWidth="240" 
+                                    styleClass="btn-ghost" text="🏠 Back to Menu" minHeight="40" />
                         </children>
                     </VBox>
                 </children>
                 <padding>
-                    <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                    <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
                 </padding>
             </VBox>
         </StackPane>
