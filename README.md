@@ -77,3 +77,6 @@ To see test coverage: `mvn jacoco:report`
 This was built for CAB302 coursework. The artwork images are from public domain sources, and the project uses Leaflet.js for the map functionality. The UI uses JavaFX with custom CSS styling.
 
 The code follows Java conventions and includes proper documentation. All the important design decisions are documented in the docs folder.
+
+## Licence
+This project is licensed under the MIT License. See the LICENSE file for details.
